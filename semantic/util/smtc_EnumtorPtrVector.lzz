@@ -1,0 +1,24 @@
+// smtc_EnumtorPtrVector.lzz
+//
+
+$hdr
+// std lib
+#include <vector>
+
+// semantic
+#include "smtc_EnumtorPtr.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // EnumtorPtrVector
+  typedef std::vector <EnumtorPtr> EnumtorPtrVector;
+  typedef std::vector <EnumtorPtr>::iterator EnumtorPtrVectorIter;
+  typedef std::vector <EnumtorPtr>::const_iterator EnumtorPtrVectorConstIter;
+  typedef std::vector <EnumtorPtr>::reverse_iterator EnumtorPtrVectorRevIter;
+  typedef std::vector <EnumtorPtr>::const_reverse_iterator EnumtorPtrVectorConstRevIter;
+}

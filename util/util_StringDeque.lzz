@@ -1,0 +1,17 @@
+// util_StringDeque.c++
+//
+
+$hdr
+#include <deque>
+#include "util_String.h"
+$end
+
+//
+// util
+//
+namespace util
+{
+  typedef std::deque <String> StringDeque;
+  typedef std::deque <String>::iterator StringDequeIter;
+  typedef std::deque <String>::const_iterator StringDequeConstIter;
+}

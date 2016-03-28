@@ -1,0 +1,22 @@
+// smtc_CreateGlobalNs.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NsPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_GlobalNs.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create named namespace
+  NsPtr createGlobalNs ()
+  {
+    return new GlobalNs ();
+  }
+}

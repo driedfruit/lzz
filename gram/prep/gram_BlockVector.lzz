@@ -1,0 +1,14 @@
+// gram_BlockVector.lzz
+//
+
+#hdr
+#include <vector>
+#include "gram_Block.h"
+#end
+
+namespace gram
+{
+  typedef std::vector <Block> BlockVector;
+  typedef std::vector <Block>::iterator BlockVectorIter;
+  typedef std::vector <Block>::const_iterator BlockVectorConstIter;
+}

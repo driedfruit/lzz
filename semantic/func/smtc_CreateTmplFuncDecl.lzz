@@ -1,0 +1,41 @@
+// smtc_CreateTmplFuncDecl.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FuncDeclPtr.h"
+#include "smtc_NamePtr.h"
+#include "smtc_ParamPtrVector.h"
+#include "smtc_ThrowSpecPtr.h"
+#include "smtc_TmplFuncDeclPtr.h"
+#include "smtc_TmplSpecPtrVector.h"
+$end
+
+$src
+// semantic
+#include "smtc_CreateFuncDecl.h"
+#include "smtc_TmplFuncDecl.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class Linkage;
+  class CvType;
+  class Cv;
+
+  // create template func decl
+  TmplFuncDeclPtr createTmplFuncDecl (TmplSpecPtrVector const & tmpl_spec_set, Linkage const & linkage, int flags, CvType const & ret_type,
+      NamePtr const & name, ParamPtrVector const & param_set, bool vararg, Cv const & cv, ThrowSpecPtr const & throw_spec)
+  {
+    FuncDeclPtr func_decl = createFuncDecl (linkage, flags, ret_type, name, param_set, vararg, cv, throw_spec);
+    return createTmplFuncDecl (tmpl_spec_set, func_decl);
+  }
+
+  // create template func decl
+  TmplFuncDeclPtr createTmplFuncDecl (TmplSpecPtrVector const & tmpl_spec_set, FuncDeclPtr const & func_decl)
+  {
+    return new TmplFuncDecl (tmpl_spec_set, func_decl);
+  }
+}

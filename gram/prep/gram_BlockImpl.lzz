@@ -1,0 +1,66 @@
+// gram_BlockImpl.lzz
+//
+
+#hdr
+// util
+#include "util_Loc.h"
+#include "util_String.h"
+#end
+
+#src
+#end
+
+namespace gram
+{
+  // BlockImpl
+  class BlockImpl
+  {
+    // start location of block
+    util::Loc m_loc;
+
+  public:
+    // constructor
+    BlockImpl (util::Loc const & loc)
+      : m_loc (loc)
+    {
+    }
+
+    // destructor
+    virtual ~ BlockImpl ()
+    {
+    }
+
+    // true if chararacter block
+    virtual bool isCharBlock () const = 0;
+
+    // true if token block
+    inline bool isTokenBlock () const
+    {
+      return ! isCharBlock ();
+    }
+
+    // set location (used to set location of left brace for correct indentation)
+    void setLoc (util::Loc const & loc)
+    {
+      m_loc = loc;
+    }
+
+    // get location
+    inline util::Loc const & getLoc () const
+    {
+      return m_loc;
+    }
+
+    // to string
+    virtual util::String toString () const = 0;
+
+    // trim string, if applicable
+    virtual void trim ()
+    {
+      // do nothing
+    }
+
+    // true if empty (has only white space characters, if any)
+    virtual bool isEmpty () const = 0;
+  }
+}

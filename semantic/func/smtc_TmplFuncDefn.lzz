@@ -1,0 +1,37 @@
+// smtc_TmplFuncDefn.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FuncDefnPtr.h"
+#include "smtc_TmplFuncDecl.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // TmplFuncDefn
+  class TmplFuncDefn : public TmplFuncDecl
+  {
+  public:
+    // constructor
+    inline TmplFuncDefn (TmplSpecPtrVector const & tmpl_spec_set, FuncDefnPtr const & func_defn)
+      : TmplFuncDecl (tmpl_spec_set, func_defn)
+    {
+    }
+
+    // destructor
+    ~ TmplFuncDefn ()
+    {
+    }
+
+    // get func defn 
+    inline FuncDefnPtr getFuncDefn () const
+    {
+      return getFuncDecl ();
+    }
+  }
+}

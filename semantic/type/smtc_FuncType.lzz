@@ -1,0 +1,115 @@
+// smtc_FuncType.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CvTypeVector.h"
+#include "smtc_ThrowSpecPtr.h"
+#include "smtc_Type.h"
+$end
+
+$src
+// semantic
+#include "smtc_AppendCv.h"
+#include "smtc_CvTypeSetToString.h"
+#include "smtc_ThrowSpecToString.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // FuncType
+  class FuncType : public Type
+  {
+    // return type
+    CvType m_ret_type;
+
+    // param type set
+    CvTypeVector m_param_type_set;
+
+    // true if has variable number of args
+    bool m_vararg;
+
+    // cv
+    Cv m_cv;
+
+    // throw set
+    ThrowSpecPtr m_throw_spec;
+    
+  public:
+    // constructor
+    FuncType (CvType const & ret_type, CvTypeVector const & param_type_set, bool vararg, Cv const & cv, ThrowSpecPtr const & throw_spec)
+      : m_ret_type (ret_type), m_param_type_set (param_type_set), m_vararg (vararg), m_cv (cv), m_throw_spec (throw_spec)
+    {
+    }
+
+    // get kind
+    TypeKind getKind () const
+    {
+      return FUNC_TYPE;
+    }
+
+    // to string
+    util::String toString (util::String const & dcl, bool c, bool v) const
+    {
+      using namespace util;
+      String str;
+      if (! dcl.empty ())
+      {
+        str += '(';
+        str += dcl;
+        str += ')';
+      }
+      appendWithSpace (str, '(');
+      str += cvTypeSetToString (m_param_type_set);
+      if (m_vararg)
+      {
+        if (! m_param_type_set.empty ())
+        {
+          str += ", ";
+        }
+        str += "...";
+      }
+      str += ')';
+      appendCv (str, m_cv);
+      if (m_throw_spec.isSet ())
+      {
+        appendWithSpace (str, throwSpecToString (m_throw_spec));
+      }
+      return m_ret_type.toString (str);
+    }
+
+    // get ret type
+    inline CvType const & getReturnCvType () const
+    {
+      return m_ret_type;
+    }
+
+    // get param type set
+    inline CvTypeVector const & getParamTypeSet () const
+    {
+      return m_param_type_set;
+    }
+
+    // true if has vararg
+    inline bool hasVarArgs () const
+    {
+      return m_vararg;
+    }
+
+    // get cv
+    inline Cv const & getCv () const
+    {
+      return m_cv;
+    }
+
+    // get throw spec
+    inline ThrowSpecPtr const & getThrowSpec () const
+    {
+      return m_throw_spec;
+    }
+  }
+}

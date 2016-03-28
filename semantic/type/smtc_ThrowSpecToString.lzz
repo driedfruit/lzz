@@ -1,0 +1,33 @@
+// smtc_ThrowSpecToString.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ThrowSpecPtr.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// semantic
+#include "smtc_CvTypeSetToString.h"
+#include "smtc_ThrowSpec.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // throw spec to string
+  util::String throwSpecToString (ThrowSpecPtr const & throw_spec)
+  {
+    util::String str = "throw";
+    util::appendWithSpace (str, '(');
+    str += cvTypeSetToString (throw_spec->getCvTypeSet ());
+    str += ')';
+    return str;
+  }
+}

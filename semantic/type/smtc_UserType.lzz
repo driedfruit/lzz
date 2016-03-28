@@ -1,0 +1,72 @@
+// smtc_UserType.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+#include "smtc_Type.h"
+$end
+
+$src
+// semantic
+#include "smtc_NameToString.h"
+#include "smtc_AppendCv.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // UserType
+  class UserType : public Type
+  {
+    // name
+    NamePtr m_name;
+
+  public:
+    // constructor
+    UserType (NamePtr const & name)
+      : m_name (name)
+    {
+    }
+
+    // destructor
+    ~ UserType ()
+    {
+    }
+
+    // get kind
+    TypeKind getKind () const
+    {
+      return USER_TYPE;
+    }
+
+    // to string
+    util::String toString (util::String const & dcl, bool c, bool v) const
+    {
+      using namespace util;
+      String str = nameToString (m_name);
+      appendCv (str, c, v);
+      // enclose dcl if starts with global scope operator
+      if (! (c || v) && dcl [0] == ':')
+      {
+        appendWithSpace (str, '(');
+        str += dcl;
+        str += ')';
+      }
+      else
+      {
+        appendWithSpace (str, dcl);
+      }
+      return str;
+    }
+
+    // get name
+    inline NamePtr const & getName () const
+    {
+      return m_name;
+    }
+  }
+}

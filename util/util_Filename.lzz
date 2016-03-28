@@ -1,0 +1,82 @@
+// util_Filename.lzz
+//
+
+$hdr
+// util
+#include "util_FilenameImpl.h"
+$end
+
+$src
+$end
+
+// util
+namespace util
+{
+  // types
+  struct FilenameImpl; 
+
+  // Filename
+  class Filename
+  {
+    // default filename impl
+    static FilenameImpl def_impl _dinit ("nofile", "nofile");
+
+    // impl
+    FilenameImpl const * m_impl;
+
+  public:
+    // default constructor
+    inline Filename ()
+      : m_impl (& def_impl)
+    {
+    }
+
+    // constructor
+    explicit Filename (FilenameImpl const * impl)
+      : m_impl (impl)
+    {
+    }
+
+    // is set
+    inline bool isSet () const
+    {
+      return m_impl != & def_impl;
+    }
+          
+    // get name
+    inline char const * getName () const
+    {
+      return m_impl->name;
+    }
+
+    // get real name
+    inline char const * getRealName () const
+    {
+      return m_impl->realname;
+    }
+
+    // data
+    FilenameImpl const * getImpl () const
+    {
+      return m_impl;
+    }
+  }
+
+  // a == b
+  bool operator == (Filename const & a, Filename const & b)
+  {
+    return a.getImpl () == b.getImpl ();
+  }
+
+  // a != b
+  inline bool operator != (Filename const & a, Filename const & b)
+  {
+    return ! (a == b);
+  }
+
+  // a <  b
+  bool operator <  (Filename const & a, Filename const & b)
+  {
+    return a.getImpl () <  b.getImpl ();
+  }
+}

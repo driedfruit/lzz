@@ -1,0 +1,29 @@
+// smtc_PrintNsFuncInst.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FuncDeclPtr.h"
+#include "smtc_NsPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_PrintFuncDecl.h"
+#include "smtc_Output.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class Output;
+
+  // print namespace function template explicit instantiation
+  void printNsFuncInst (Output & out, FuncDeclPtr const & func_decl, NsPtr const & ns)
+  {
+    PrintFuncDecl printer;
+    printer.is_inst = true;
+    printer.print (out.getSrcFile (), BODY_SECTION, func_decl, ns);
+  }
+}

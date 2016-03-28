@@ -1,0 +1,23 @@
+// smtc_CreateNavSubmitFuncDefnEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EntityPtr.h"
+#include "smtc_NavSubmitFuncDefnPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_NavSubmitFuncDefnEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create func defn entity
+  EntityPtr createNavSubmitFuncDefnEntity (NavSubmitFuncDefnPtr const & nav_submit_func_defn)
+  {
+    return new NavSubmitFuncDefnEntity (nav_submit_func_defn);
+  }
+}

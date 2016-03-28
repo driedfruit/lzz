@@ -1,0 +1,44 @@
+// smtc_TmplSpecToArgString.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_TmplSpecPtr.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// semantic
+#include "smtc_NameToString.h"
+#include "smtc_Param.h"
+#include "smtc_TmplSpec.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // using util
+  using namespace util;
+
+  // get tmpl spec as template arg
+  util::String tmplSpecToArgString (TmplSpecPtr const & tmpl_spec)
+  {
+    String str;
+    ParamPtrVector const & param_set = tmpl_spec->getParamSet ();
+    for (ParamPtrVectorConstIter beg = param_set.begin (), end = param_set.end (); beg != end; ++ beg)
+    {
+      ParamPtr const & param = * beg;
+      appendWithSpace (str, nameToString (param->getName ()));
+      if (beg + 1 != end)
+      {
+        str += ',';
+      }
+    }
+    return str;
+  }
+}

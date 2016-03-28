@@ -1,0 +1,18 @@
+// gram_IsHexDigit.lzz
+//
+
+$hdr
+$end
+
+$src
+$end
+
+// gram
+namespace gram
+{
+  // true if char is a hex digit
+  inline bool isHexDigit (char ch)
+  {
+    return (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F');
+  }
+}

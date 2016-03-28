@@ -1,0 +1,75 @@
+// gram_DirKind.lzz
+//
+
+$hdr
+$end
+
+$src
+$end
+
+// gram
+namespace gram
+{
+  // DirKind
+  enum DirKind
+  {
+    // define
+    DEFINE_DIR,
+
+    // include
+    INCLUDE_DIR,
+
+    // if
+    IF_DIR,
+
+    // ifdef
+    IFDEF_DIR,
+
+    // ifndef
+    IFNDEF_DIR,
+
+    // elif
+    ELIF_DIR,
+
+    // else
+    ELSE_DIR,
+
+    // endif
+    ENDIF_DIR,
+
+    // undef
+    UNDEF_DIR,
+
+    // line
+    LINE_DIR,
+
+    // error
+    ERROR_DIR,
+
+    // pragma
+    PRAGMA_DIR,
+
+    // warning
+    WARNING_DIR,
+
+    // special lzz directives below
+
+    // insert
+    INSERT_DIR,
+
+    // hdr or header
+    HDR_DIR,
+
+    // src or source
+    SRC_DIR,
+
+    // inl or inline
+    INL_DIR,
+
+    // tpl or template
+    TPL_DIR,
+
+    // tnl or template_inline
+    TNL_DIR,
+  }
+}

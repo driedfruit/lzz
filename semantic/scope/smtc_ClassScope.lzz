@@ -1,0 +1,50 @@
+// smtc_ClassScope.lzz
+//
+// class scope
+//
+
+$hdr
+// semantic
+#include "smtc_ClassDefnPtr.h"
+#include "smtc_Scope.h"
+$end
+
+$src
+// semantic
+#include "smtc_ScopeVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // ClassScope
+  class ClassScope : public Scope
+  {
+    // class defn
+    ClassDefnPtr m_class_defn;
+
+  public:
+    // constructor
+    ClassScope (ClassDefnPtr const & class_defn)
+      : m_class_defn (class_defn)
+    {
+    }
+
+    // destructor
+    ~ ClassScope ()
+    {
+    }
+
+    // accept visitor
+    void accept (ScopeVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get class defn
+    inline ClassDefnPtr const & getClassDefn () const
+    {
+      return m_class_defn;
+    }
+  }
+}

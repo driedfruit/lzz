@@ -1,0 +1,28 @@
+// smtc_CreateNavClass.lzz
+//
+
+#hdr
+// semantic
+#include "smtc_BaseSpecPtrVector.h"
+#include "smtc_ClassKey.h"
+#include "smtc_CvType.h"
+#include "smtc_NamePtr.h"
+#include "smtc_NavClassPtr.h"
+#include "smtc_ParamPtrVector.h"
+#end
+
+#src
+// semantic
+#include "smtc_NavClass.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // create nav class
+  NavClassPtr createNavClass (int flags, NamePtr const & name, ParamPtrVector const & ctor_param_set, BaseSpecPtrVector const & base_spec_set,
+      CvType const & ret_type, CvType const & node_type, ParamPtrVector const & submit_param_set)
+  {
+    return new NavClass (flags, name, ctor_param_set, base_spec_set, ret_type, node_type, submit_param_set);
+  }
+}

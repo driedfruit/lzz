@@ -1,0 +1,23 @@
+// basl_GetSymbolName.lzz
+//
+
+$hdr
+$end
+
+$src
+// basil
+#include "basl_LRData.h"
+$end
+
+// basil
+namespace basl
+{
+  // types
+  struct LRData;
+
+  // get symbol name
+  char const * getSymbolName (LRData const & data, int number)
+  {
+    return data.symbol_set [number].name;
+  }
+}

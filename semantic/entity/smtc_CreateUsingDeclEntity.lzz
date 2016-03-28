@@ -1,0 +1,23 @@
+// smtc_CreateUsingDeclEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EntityPtr.h"
+#include "smtc_UsingDeclPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_UsingDeclEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create using decl entity
+  EntityPtr createUsingDeclEntity (UsingDeclPtr const & using_decl)
+  {
+    return new UsingDeclEntity (using_decl);
+  }
+}

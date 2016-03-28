@@ -1,0 +1,30 @@
+// smtc_IsObjStaticConstItegral.lzz
+//
+
+#hdr
+// semantic
+#include "smtc_ObjPtr.h"
+#end
+
+#src
+// semantic
+#include "smtc_IsIntegralType.h"
+#include "smtc_Obj.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // true if object has const integral type
+  bool isObjConstIntegral (ObjPtr const & obj)
+  {
+    CvType const & cv_type = obj->getCvType ();
+    return cv_type.getCv ().isConstOnly () && isIntegralType (cv_type.getType ());
+  }
+
+  // true if object is static and has const integral type
+  bool isObjStaticConstIntegral (ObjPtr const & obj)
+  {
+    return obj->isStatic () && isObjConstIntegral (obj);
+  }
+}

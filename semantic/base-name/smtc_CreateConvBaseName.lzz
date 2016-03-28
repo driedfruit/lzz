@@ -1,0 +1,33 @@
+// smtc_CreateConvBaseName.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_BaseNamePtr.h"
+#include "smtc_CvType.h"
+
+// util
+#include "util_Ident.h"
+#include "util_Loc.h"
+$end
+
+$src
+// semantic
+#include "smtc_ConvBaseName.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create conv base name
+  inline BaseNamePtr createConvBaseName (util::Loc const & loc, CvType const & cv_type)
+  {
+    return createConvBaseName (loc, util::Ident (), cv_type);
+  }
+
+  // create conv base name
+  BaseNamePtr createConvBaseName (util::Loc const & loc, util::Ident const & macro, CvType const & cv_type)
+  {
+    return new ConvBaseName (loc, macro, cv_type);
+  }
+}

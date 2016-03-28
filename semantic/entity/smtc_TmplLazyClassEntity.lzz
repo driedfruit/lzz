@@ -1,0 +1,45 @@
+// smtc_TmplLazyClassEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_TmplClassDefnEntity.h"
+#include "smtc_TmplLazyClassPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_EntityVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // TmplLazyClassEntity
+  class TmplLazyClassEntity : public TmplClassDefnEntity
+  {
+  public:
+    // constructor
+    inline TmplLazyClassEntity (TmplLazyClassPtr const & tmpl_lazy_class)
+      : TmplClassDefnEntity (tmpl_lazy_class)
+    {
+    }
+
+    // destructor
+    ~ TmplLazyClassEntity ()
+    {
+    }
+
+    // accept visitor
+    void accept (EntityVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get class decl
+    TmplLazyClassPtr getTmplLazyClass () const
+    {
+      return getTmplClassDecl ();
+    }
+  }
+}

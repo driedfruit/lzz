@@ -1,0 +1,166 @@
+// smtc_FuncDecl.lzz
+//
+// function declaration
+//
+
+$hdr
+// semantic
+#include "smtc_CvType.h"
+#include "smtc_Linkage.h"
+#include "smtc_NamePtr.h"
+#include "smtc_ParamPtrVector.h"
+#include "smtc_ThrowSpecPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_SpecFlags.h"
+
+// util
+#include "util_BitOp.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // FuncDecl
+  class FuncDecl
+  {
+    // linkage (possible only in ns declarations)
+    Linkage m_linkage; 
+
+    // flags
+    int m_flags;
+
+    // return type
+    CvType m_ret_type;
+
+    // name
+    NamePtr m_name;
+
+    // param set
+    ParamPtrVector m_param_set;
+
+    // true if has variable number of args
+    bool m_vararg;
+
+    // cv
+    Cv m_cv;
+
+    // throw spec
+    ThrowSpecPtr m_throw_spec;
+
+    // alternate return type (for member function definitions)
+    CvType m_alt_ret_type;
+
+  public:
+    // constructor
+    FuncDecl (Linkage const & linkage, int flags, CvType const & ret_type, NamePtr const & name, ParamPtrVector const & param_set,
+        bool vararg, Cv const & cv, ThrowSpecPtr const & throw_spec)
+      : m_linkage (linkage), m_flags (flags), m_ret_type (ret_type), m_name (name), m_param_set (param_set), m_vararg (vararg),
+        m_cv (cv), m_throw_spec (throw_spec)
+    {
+    }
+
+    // destructor
+    virtual ~ FuncDecl ()
+    {
+    }
+
+    // true if has linkage
+    inline bool hasLinkage () const
+    {
+      return m_linkage.isSet ();
+    }
+
+    // get linkage
+    inline Linkage const & getLinkage () const
+    {
+      return m_linkage;
+    }
+
+    // get flags
+    inline int getFlags () const
+    {
+      return m_flags;
+    }
+
+    // true if pure
+    bool isPure () const
+    {
+      return util::hasFlag (m_flags, PURE_SPEC);
+    }
+
+    // true if static
+    bool isStatic () const
+    {
+      return util::hasFlag (m_flags, STATIC_SPEC);
+    }
+
+    // true if inline
+    bool isInline () const
+    {
+      return util::hasFlag (m_flags, INLINE_SPEC);
+    }
+
+    // true if extern
+    bool isExtern () const
+    {
+      return util::hasFlag (m_flags, EXTERN_SPEC);
+    }
+
+    // get return type
+    inline CvType const & getReturnType () const
+    {
+      return m_ret_type;
+    }
+
+    // get name
+    inline NamePtr const & getName () const
+    {
+      return m_name;
+    }
+
+    // get param set
+    inline ParamPtrVector const & getParamSet () const
+    {
+      return m_param_set;
+    }
+
+    // true if has varargs
+    inline bool hasVarArg () const
+    {
+      return m_vararg;
+    }
+    
+    // get cv
+    inline Cv const & getCv () const
+    {
+      return m_cv;
+    }
+
+    // get throw spec
+    inline ThrowSpecPtr const & getThrowSpec () const
+    {
+      return m_throw_spec;
+    }
+
+    // set alternate return type
+    void setAltReturnType (CvType const & alt_ret_type)
+    {
+      m_alt_ret_type = alt_ret_type;
+    }
+
+    // true if has alt return type
+    inline bool hasAltReturnType () const
+    {
+      return m_alt_ret_type.isSet ();
+    }
+
+    // get alt return type
+    inline CvType const & getAltReturnType () const
+    {
+      return m_alt_ret_type;
+    }
+  }
+}

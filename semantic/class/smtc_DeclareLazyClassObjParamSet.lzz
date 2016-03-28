@@ -1,0 +1,37 @@
+// smtc_DeclareLazyClassObjParamSet.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_BaseSpecPtrVector.h"
+#include "smtc_LazyClassPtr.h"
+#include "smtc_ParamPtrVector.h"
+$end
+
+$src
+// std lib
+#include <algorithm>
+
+// semantic
+#include "smtc_BuildLazyClassObjParamSet.h"
+#include "smtc_DeclareParamAsMbrObj.h"
+#include "smtc_LazyClass.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // declare lazy class obj param set
+  // as_ref true if parameters should params should be declared as references (for navigators)
+  void declareLazyClassObjParamSet (LazyClassPtr const & lazy_class, ParamPtrVector const & param_set,
+      BaseSpecPtrVector const & base_spec_set, bool as_ref = false)
+  {
+    ParamPtrVector obj_param_set;
+    buildLazyClassObjParamSet (param_set, base_spec_set, obj_param_set);
+    if (! obj_param_set.empty ())
+    {
+      // TBD: private or protected ... then change back to default?
+      std::for_each (obj_param_set.begin (), obj_param_set.end (), DeclareParamAsMbrObj (lazy_class, as_ref));
+    }
+  }
+}

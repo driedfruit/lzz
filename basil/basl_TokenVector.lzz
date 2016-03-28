@@ -1,0 +1,23 @@
+// basl_TokenVector.lzz
+//
+
+$hdr
+// std lib
+#include <vector>
+
+// basl
+#include "basl_Token.h"
+$end
+
+$src
+$end
+
+// basl
+namespace basl
+{
+  typedef std::vector <Token> TokenVector;
+  typedef std::vector <Token>::iterator TokenVectorIter;
+  typedef std::vector <Token>::const_iterator TokenVectorConstIter;
+  typedef std::vector <Token>::reverse_iterator TokenVectorRevIter;
+  typedef std::vector <Token>::const_reverse_iterator TokenVectorConstRevIter;
+}

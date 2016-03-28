@@ -1,0 +1,19 @@
+// smtc_TypePtr.lzz
+//
+
+$hdr
+#include "util_BPtr.h"
+$end
+
+$src
+#include "smtc_Type.h"
+#include "util_BPtr.tpl"
+$end
+
+// semantic
+namespace smtc
+{
+  class Type;
+  typedef util::BPtr <Type> TypePtr;
+}
+template class util::BPtr <smtc::Type>;

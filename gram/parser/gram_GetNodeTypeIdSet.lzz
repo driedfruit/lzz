@@ -1,0 +1,46 @@
+// gram_GetNodeTypeIdSet.lzz
+//
+
+$hdr
+// basil
+#include "basl_Nonterm.h"
+
+// semantic
+#include "smtc_CvTypeVector.h"
+$end
+
+$src
+// gram
+#include "gram_GetNodeDcl.h"
+#include "gram_Nonterm.h"
+#include "gram_Visitor.h"
+$end
+
+// private namespace
+namespace
+{
+  // using gram
+  using namespace gram;
+
+  // GetNodeTypeIdSet
+  struct GetNodeTypeIdSet (smtc::CvTypeVector & cv_type_set) : Visitor
+  {
+    // type-id -> abstract-decl
+    void visit (TypeIdNode & node) const
+    {
+      smtc::CvType cv_type;
+      getNodeAbstractDcl (node.getAbstractDecl (), cv_type);
+      cv_type_set.push_back (cv_type);
+    }
+  }
+}
+
+// gram
+namespace gram
+{
+  // get node type-id set
+  void getNodeTypeIdSet (basl::Nonterm & nonterm, smtc::CvTypeVector & cv_type_set)
+  {
+    nonterm.accept (GetNodeTypeIdSet (cv_type_set));
+  }
+}

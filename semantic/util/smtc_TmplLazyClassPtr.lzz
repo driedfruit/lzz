@@ -1,0 +1,24 @@
+// smtc_TmplLazyClassPtr.lzz
+//
+
+$hdr
+// util
+#include "util_DPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_TmplLazyClass.h"
+
+// util
+#include "util_DPtr.tpl"
+$end
+
+// semantic
+namespace smtc
+{
+  class TmplClassDecl;
+  class TmplLazyClass;
+  typedef util::DPtr <TmplLazyClass, TmplClassDecl> TmplLazyClassPtr;
+}
+template class util::DPtr <smtc::TmplLazyClass, smtc::TmplClassDecl>;

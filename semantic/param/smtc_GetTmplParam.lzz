@@ -1,0 +1,29 @@
+// smtc_GetTmplParam.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+#include "smtc_ParamPtr.h"
+#include "smtc_ParamPtrVector.h"
+$end
+
+$src
+// semantic
+#include "smtc_CheckParamName.h"
+#include "smtc_CreateTmplParam.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // get tmpl param
+  ParamPtr getTmplParam (NamePtr const & name, ParamPtrVector const & param_set, NamePtr const & def_name)
+  {
+    // check name
+    checkParamName (name);
+
+    // create tmpl param
+    return createTmplParam (name, param_set, def_name);
+  }
+}

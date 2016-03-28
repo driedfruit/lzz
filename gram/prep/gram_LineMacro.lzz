@@ -1,0 +1,38 @@
+// gram_LineMacro.lzz
+//
+// __LINE__ macro
+//
+
+$hdr
+// gram
+#include "gram_Macro.h"
+$end
+
+$src
+$end
+
+// gram
+namespace gram
+{
+  // LineMacro
+  class LineMacro : public Macro
+  {
+  public:
+    // constructor
+    inline LineMacro (util::Loc const & loc, util::Ident const & name)
+      : Macro (loc, name)
+    {
+    }
+
+    // destructor
+    ~ LineMacro ()
+    {
+    }
+
+    // get kind
+    MacroKind getKind () const
+    {
+      return LINE_MACRO;
+    }
+  }
+}

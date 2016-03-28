@@ -1,0 +1,18 @@
+CC=gcc
+CXX=g++
+STRIP=strip
+ifeq ($(DEBUG),)
+  DEBUG=-O3
+endif
+ifeq ($(COMPILERFLAGS),)
+  COMPILERFLAGS = -Wreturn-type -Wunused -Wno-deprecated -DLZZ_ENABLE_INLINE
+endif
+DEPENDFLAGS=-MM
+INCFLAGS=-I$(GENCODEDIR) -I$(INCDIR)
+DEFFLAGS=
+ifneq ($(STATIC_BUILD),)
+LINKOPTIONS=-static
+endif
+
+
+

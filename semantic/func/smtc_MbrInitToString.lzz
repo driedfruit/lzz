@@ -1,0 +1,36 @@
+// smtc_MbrInitToString.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_MbrInitPtr.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// semantic
+#include "smtc_MbrInit.h"
+#include "smtc_NameToString.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // using util
+  using namespace util;
+
+  // mbr init to string
+  util::String mbrInitToString (MbrInitPtr const & mbr_init)
+  {
+    String str = nameToString (mbr_init->getName ());
+    appendWithSpace (str, '(');
+    str += mbr_init->getArgSet ();
+    str += ')';
+    return str;
+  }
+}

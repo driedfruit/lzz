@@ -1,0 +1,30 @@
+// smtc_GetCvTypeAsConst.lzz
+//
+// get cv type as const, unless it is a reference
+//
+
+#hdr
+// semantic
+#include "smtc_CvType.h"
+#end
+
+#src
+// semantic
+#include "smtc_Type.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // get type as const, if type is a reference type just return it
+  CvType getCvTypeAsConst (CvType const & cv_type)
+  {
+    CvType res_cv_type = cv_type;
+    if (res_cv_type.getType ()->getKind () != REF_TYPE)
+    {
+      Cv const & cv = res_cv_type.getCv ();
+      res_cv_type = CvType (res_cv_type.getType (), Cv (true, cv.isVolatile ()));
+    }
+    return res_cv_type;
+  }
+}

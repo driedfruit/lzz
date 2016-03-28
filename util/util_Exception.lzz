@@ -1,0 +1,29 @@
+// util_Exception.lzz
+//
+// base class of all exceptions
+//
+
+$hdr
+$end
+
+$src
+$end
+
+// util
+namespace util
+{
+  // Exception
+  class Exception
+  {
+  public:
+    // constructor
+    Exception ()
+    {
+    }
+
+    // destructor
+    virtual ~ Exception ()
+    {
+    }
+  }
+}

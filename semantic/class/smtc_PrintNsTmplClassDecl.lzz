@@ -1,0 +1,30 @@
+// smtc_PrintNsTmplClassDecl.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NsPtr.h"
+#include "smtc_TmplClassDeclPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_IsNsEnclUnmd.h"
+#include "smtc_Output.h"
+#include "smtc_PrintTmplClassDecl.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class Output;
+
+  // print ns tmpl class decl
+  void printNsTmplClassDecl (Output & out, TmplClassDeclPtr const & tmpl_class_decl, NsPtr const & ns)
+  {
+    FilePtr const & file = isNsEnclUnmd (ns) ? out.getSrcFile () : out.getHdrFile ();
+    PrintTmplClassDecl printer;
+    printer.print (file, tmpl_class_decl, ns);
+  }
+}

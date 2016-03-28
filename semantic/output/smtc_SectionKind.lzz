@@ -1,0 +1,53 @@
+// smtc_SectionKind.lzz
+//
+// section kinds
+//
+
+#hdr
+#end
+
+#src
+#end
+
+namespace smtc
+{
+  // SectionKind
+  enum SectionKind
+  {
+    // header section
+    HEADER_SECTION,
+
+    // user section, for user include blocks
+    USER_SECTION,
+
+    // top, code that must be before declarations and body but after user code
+    TOP_SECTION,
+
+    // declarations
+    DECLARATION_SECTION,
+
+    // body, definitions
+    BODY_SECTION,
+
+    // inline sections for inlining inline file in header and source
+
+    // inline header section
+    INLINE_HEADER_SECTION,
+
+    // inline user section
+    INLINE_USER_SECTION,
+
+    // inline section
+    INLINE_TOP_SECTION,
+
+    // inline section
+    INLINE_BODY_SECTION,
+
+    // inline tail section
+    INLINE_TAIL_SECTION,
+
+    // tail
+    TAIL_SECTION,
+  }
+}
+

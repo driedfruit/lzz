@@ -1,0 +1,30 @@
+// smtc_PrintNsClassDecl.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ClassDeclPtr.h"
+#include "smtc_NsPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_IsNsEnclUnmd.h"
+#include "smtc_Output.h"
+#include "smtc_PrintClassDecl.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class Output;
+
+  // print ns class decl
+  void printNsClassDecl (Output & out, ClassDeclPtr const & class_decl, NsPtr const & ns)
+  {
+    FilePtr const & file = isNsEnclUnmd (ns) ? out.getSrcFile () : out.getHdrFile ();
+    PrintClassDecl printer;
+    printer.print (file, class_decl, ns);
+  }
+}

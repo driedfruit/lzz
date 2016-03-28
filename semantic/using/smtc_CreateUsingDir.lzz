@@ -1,0 +1,23 @@
+// smtc_CreateUsingDir.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_UsingDirPtr.h"
+#include "smtc_NamePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_UsingDir.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create using dir
+  UsingDirPtr createUsingDir (NamePtr const & name)
+  {
+    return new UsingDir (name);
+  }
+}

@@ -1,0 +1,30 @@
+// gram_MacroKind.lzz
+//
+
+$hdr
+// gram
+$end
+
+$src
+// gram
+$end
+
+// gram
+namespace gram
+{
+  // MacroKind
+  enum MacroKind
+  {
+    // object
+    OBJ_MACRO,
+
+    // function
+    FUNC_MACRO,
+
+    // __FILE__
+    FILE_MACRO,
+
+    // __LINE__
+    LINE_MACRO,
+  }
+}

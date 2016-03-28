@@ -1,0 +1,30 @@
+// smtc_GetCvTypeAsRef.lzz
+//
+// get cv type as reference
+//
+
+#hdr
+// semantic
+#include "smtc_CvType.h"
+#end
+
+#src
+// semantic
+#include "smtc_GetRefType.h"
+#include "smtc_Type.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // get type as ref, if type is a reference type just return it
+  CvType getCvTypeAsRef (CvType const & cv_type)
+  {
+    CvType res_cv_type = cv_type;
+    if (res_cv_type.getType ()->getKind () != REF_TYPE)
+    {
+      res_cv_type = CvType (getRefType (res_cv_type));
+    }
+    return res_cv_type;
+  }
+}

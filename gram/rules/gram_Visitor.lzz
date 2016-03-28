@@ -1,0 +1,678 @@
+// gram_Visitor.lzz
+//
+
+$hdr
+#include "basl_Visitor.h"
+$end
+
+$src
+#include "gram_Nonterm.h"
+$end
+
+namespace gram
+{
+  // node forward declarations
+  class SimpleDeclNode;
+  class NestedSimpleDecl1Node;
+  class NestedSimpleDecl2Node;
+  class NestedSimpleDecl3Node;
+  class NestedDeclNode;
+  class ObjInit1Node;
+  class ObjInit2Node;
+  class ObjInit3Node;
+  class BlockNode;
+  class NestedName1Node;
+  class NestedName2Node;
+  class Name1Node;
+  class Name2Node;
+  class Name3Node;
+  class BaseName1Node;
+  class Name4Node;
+  class Name5Node;
+  class BaseName2Node;
+  class BaseName3Node;
+  class BaseName4Node;
+  class Oper1Node;
+  class Oper2Node;
+  class Oper3Node;
+  class Oper4Node;
+  class Oper5Node;
+  class DeclSpecNode;
+  class CVSpecNode;
+  class SeqNode;
+  class FtorSpecNode;
+  class UserTypeNode;
+  class ElabTypeNode;
+  class BuiltInTypeNode;
+  class DclNode;
+  class DirectDcl1Node;
+  class DirectDcl2Node;
+  class DirectDcl3Node;
+  class PureDclNode;
+  class PureNode;
+  class DirectDcl4Node;
+  class PtrOper1Node;
+  class PtrOper2Node;
+  class PtrOper3Node;
+  class IdNode;
+  class ParamDeclBody1Node;
+  class ParamDeclBody2Node;
+  class ParamDeclBody3Node;
+  class ParamDeclBody4Node;
+  class ParamDecl1Node;
+  class ParamDecl2Node;
+  class Decl2Node;
+  class Decl1Node;
+  class TypeIdNode;
+  class NamespaceDefNode;
+  class NamespaceHead1Node;
+  class NamespaceHead2Node;
+  class ClassDefNode;
+  class ClassHeadNode;
+  class BaseSpec1Node;
+  class BaseSpec2Node;
+  class BaseSpec3Node;
+  class AccessSpecNode;
+  class ClassDeclNode;
+  class FriendClassDeclNode;
+  class FuncDefNode;
+  class MbrInitNode;
+  class HandlerNode;
+  class TmplDeclNode;
+  class TmplSpecNode;
+  class TypeParam1Node;
+  class TypeParam2Node;
+  class TmplTmplParam1Node;
+  class TmplTmplParam2Node;
+  class TmplInstNode;
+  class TmplInstBeginNode;
+  class LazyCtorNode;
+  class LazyCtorBegin1Node;
+  class LazyCtorBegin2Node;
+  class LazyBaseSpec1Node;
+  class LazyBaseSpec2Node;
+  class LazyBaseSpec3Node;
+  class DirectDcl5Node;
+  class FunctorDefNode;
+  class FunctorDeclTypeNode;
+  class EnumDefNode;
+  class EnumtorDecl1Node;
+  class EnumtorDecl2Node;
+  class UsingDeclNode;
+  class UsingDirNode;
+  class LinkageSpecNode;
+  class LinkageBlockBeginNode;
+  class LinkageDeclBeginNode;
+  class NavDefNode;
+  class NavHeadNode;
+  class NavDirectDcl1Node;
+  class NavVisitFuncDefNode;
+  class ReturnStmtNode;
+  class VdfDefNode;
+  class VdfHeadNode;
+  class VdfFunctorDefNode;
+  class VdfShortData1DefNode;
+  class VdfShortData2DefNode;
+  class VdfDataParamListNode;
+  class ObjInit4Node;
+  class VdfBlockDataDefNode;
+  class VdfBlockDataHead1Node;
+  class VdfBlockDataHead2Node;
+  class DirectDcl6Node;
+}
+
+namespace gram
+{
+  // base visitor
+  class Visitor : public basl::Visitor
+  {
+    // true if slippery
+    bool m_slippery;
+
+  public:
+    // constructor
+    inline Visitor (bool slippery = true)
+      : m_slippery (slippery)
+    {
+    }
+
+    // simple-decl * -> nested-simple-decl SEMI_TOKEN
+    virtual void visit (gram::SimpleDeclNode & node) const
+    {
+    }
+
+    // nested-simple-decl <* -> nested-obj-decl obj-init-opt
+    virtual void visit (gram::NestedSimpleDecl1Node & node) const
+    {
+    }
+
+    // nested-simple-decl <* -> nested-func-decl
+    virtual void visit (gram::NestedSimpleDecl2Node & node) const
+    {
+    }
+
+    // nested-simple-decl <* -> nested-bitf-decl
+    virtual void visit (gram::NestedSimpleDecl3Node & node) const
+    {
+    }
+
+    // nested-obj-decl -> nested-simple-decl COMMA_TOKEN obj-dcl
+    virtual void visit (gram::NestedDeclNode & node) const
+    {
+    }
+
+    // obj-init -> ASSIGN_TOKEN BLOCK_TOKEN 3
+    virtual void visit (gram::ObjInit1Node & node) const
+    {
+    }
+
+    // obj-init -> DINIT_TOKEN LPAREN_TOKEN expr-list RPAREN_TOKEN
+    virtual void visit (gram::ObjInit2Node & node) const
+    {
+    }
+
+    // obj-init -> direct-expr-list RPAREN_TOKEN
+    virtual void visit (gram::ObjInit3Node & node) const
+    {
+    }
+
+    // block -> BLOCK_TOKEN
+    virtual void visit (gram::BlockNode & node) const
+    {
+    }
+
+    // nested-name -> DCOLON_TOKEN
+    virtual void visit (gram::NestedName1Node & node) const
+    {
+    }
+
+    // nested-name -> obj-name DCOLON_TOKEN >!
+    virtual void visit (gram::NestedName2Node & node) const
+    {
+    }
+
+    // obj-name -> nested-name-opt obj-base-name
+    virtual void visit (gram::Name1Node & node) const
+    {
+    }
+
+    // obj-name -> nested-name-opt obj-base-name LT_TOKEN >! block-opt 1 GT_TOKEN
+    virtual void visit (gram::Name2Node & node) const
+    {
+    }
+
+    // obj-name -> nested-name TEMPLATE_TOKEN obj-base-name LT_TOKEN >! block-opt 1 GT_TOKEN
+    virtual void visit (gram::Name3Node & node) const
+    {
+    }
+
+    // obj-base-name -> macro-opt IDENT_TOKEN
+    virtual void visit (gram::BaseName1Node & node) const
+    {
+    }
+
+    // bitf-name -> nested-name-opt macro-opt IDENT_TOKEN COLON_TOKEN BLOCK_TOKEN 4
+    virtual void visit (gram::Name4Node & node) const
+    {
+    }
+
+    // bitf-name -> COLON_TOKEN BLOCK_TOKEN 4
+    virtual void visit (gram::Name5Node & node) const
+    {
+    }
+
+    // func-base-name -> macro-opt BITNOT_TOKEN IDENT_TOKEN
+    virtual void visit (gram::BaseName2Node & node) const
+    {
+    }
+
+    // func-base-name -> macro-opt OPERATOR_TOKEN oper
+    virtual void visit (gram::BaseName3Node & node) const
+    {
+    }
+
+    // func-base-name -> macro-opt OPERATOR_TOKEN abstract-decl >
+    virtual void visit (gram::BaseName4Node & node) const
+    {
+    }
+
+    // oper -> LPAREN_TOKEN RPAREN_TOKEN
+    virtual void visit (gram::Oper1Node & node) const
+    {
+    }
+
+    // oper -> LBRACK_TOKEN RBRACK_TOKEN
+    virtual void visit (gram::Oper2Node & node) const
+    {
+    }
+
+    // oper -> NEW_TOKEN LBRACK_TOKEN RBRACK_TOKEN
+    virtual void visit (gram::Oper3Node & node) const
+    {
+    }
+
+    // oper -> DELETE_TOKEN LBRACK_TOKEN RBRACK_TOKEN
+    virtual void visit (gram::Oper4Node & node) const
+    {
+    }
+
+    // oper -> single-oper
+    virtual void visit (gram::Oper5Node & node) const
+    {
+    }
+
+    // typedef-spec -> TYPEDEF_TOKEN
+    virtual void visit (gram::DeclSpecNode & node) const
+    {
+    }
+
+    // cv-spec -> cv-token
+    virtual void visit (gram::CVSpecNode & node) const
+    {
+    }
+
+    // cv-spec-seq -> cv-spec-seq cv-spec
+    virtual void visit (gram::SeqNode & node) const
+    {
+      if (m_slippery)
+      {
+        node.visitChildren (* this);
+      }
+    }
+
+    // ftor-spec -> ftor-token
+    virtual void visit (gram::FtorSpecNode & node) const
+    {
+    }
+
+    // user-type -> obj-name
+    virtual void visit (gram::UserTypeNode & node) const
+    {
+    }
+
+    // elaborated-type -> class-key dll-api-opt obj-name
+    virtual void visit (gram::ElabTypeNode & node) const
+    {
+    }
+
+    // built-in-type -> built-in-type-token
+    virtual void visit (gram::BuiltInTypeNode & node) const
+    {
+    }
+
+    // obj-a-dcl -> ptr-oper obj-a-dcl
+    virtual void visit (gram::DclNode & node) const
+    {
+    }
+
+    // obj-b-direct-dcl -> obj-b-direct-dcl param-decl-1-body > RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+    virtual void visit (gram::DirectDcl1Node & node) const
+    {
+    }
+
+    // obj-b-direct-dcl -> obj-a-direct-dcl LBRACK_TOKEN block-opt 5 RBRACK_TOKEN
+    virtual void visit (gram::DirectDcl2Node & node) const
+    {
+    }
+
+    // obj-b-direct-dcl -> LPAREN_TOKEN obj-b-dcl RPAREN_TOKEN
+    virtual void visit (gram::DirectDcl3Node & node) const
+    {
+    }
+
+    // pure-func-dcl -> func-dcl pure-opt
+    virtual void visit (gram::PureDclNode & node) const
+    {
+    }
+
+    // pure -> ASSIGN_TOKEN ZERO_TOKEN
+    virtual void visit (gram::PureNode & node) const
+    {
+    }
+
+    // func-a-direct-dcl -> obj-dcl-id param-decl-1-body > RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+    virtual void visit (gram::DirectDcl4Node & node) const
+    {
+    }
+
+    // ptr-oper -> TIMES_TOKEN cv-spec-seq-opt
+    virtual void visit (gram::PtrOper1Node & node) const
+    {
+    }
+
+    // ptr-oper -> BITAND_TOKEN
+    virtual void visit (gram::PtrOper2Node & node) const
+    {
+    }
+
+    // ptr-oper -> obj-name DCOLON_TOKEN TIMES_TOKEN cv-spec-seq-opt
+    virtual void visit (gram::PtrOper3Node & node) const
+    {
+    }
+
+    // obj-id -> obj-name
+    virtual void visit (gram::IdNode & node) const
+    {
+    }
+
+    // param-decl-1-body -> param-decl-1-list ellipse-opt
+    virtual void visit (gram::ParamDeclBody1Node & node) const
+    {
+    }
+
+    // param-decl-1-body -> param-decl-1-list COMMA_TOKEN ELLIPSE_TOKEN
+    virtual void visit (gram::ParamDeclBody2Node & node) const
+    {
+    }
+
+    // param-decl-1-body -> LPAREN_TOKEN ellipse-opt
+    virtual void visit (gram::ParamDeclBody3Node & node) const
+    {
+    }
+
+    // param-decl-1-body -> LPAREN_TOKEN VOID_TOKEN
+    virtual void visit (gram::ParamDeclBody4Node & node) const
+    {
+    }
+
+    // param-init-decl <* -> param-decl
+    virtual void visit (gram::ParamDecl1Node & node) const
+    {
+    }
+
+    // param-init-decl <* -> param-decl ASSIGN_TOKEN BLOCK_TOKEN 4
+    virtual void visit (gram::ParamDecl2Node & node) const
+    {
+    }
+
+    // obj-decl -> xBxx-decl-spec-seq obj-dcl
+    virtual void visit (gram::Decl2Node & node) const
+    {
+    }
+
+    // ctor-decl -> pure-ctor-dcl
+    virtual void visit (gram::Decl1Node & node) const
+    {
+    }
+
+    // type-id -> abstract-decl
+    virtual void visit (gram::TypeIdNode & node) const
+    {
+    }
+
+    // namespace-def * -> namespace-head <* LBRACE_TOKEN decl-seq-opt RBRACE_TOKEN
+    virtual void visit (gram::NamespaceDefNode & node) const
+    {
+    }
+
+    // namespace-head -> NAMESPACE_TOKEN obj-name
+    virtual void visit (gram::NamespaceHead1Node & node) const
+    {
+    }
+
+    // namespace-head -> NAMESPACE_TOKEN
+    virtual void visit (gram::NamespaceHead2Node & node) const
+    {
+    }
+
+    // class-def * -> class-head <* LBRACE_TOKEN mbr-decl-seq-opt RBRACE_TOKEN semi-opt
+    virtual void visit (gram::ClassDefNode & node) const
+    {
+    }
+
+    // class-head -> class-key dll-api-opt obj-name base-clause-opt
+    virtual void visit (gram::ClassHeadNode & node) const
+    {
+    }
+
+    // base-spec * -> obj-name
+    virtual void visit (gram::BaseSpec1Node & node) const
+    {
+    }
+
+    // base-spec * -> VIRTUAL_TOKEN access-opt obj-name
+    virtual void visit (gram::BaseSpec2Node & node) const
+    {
+    }
+
+    // base-spec * -> access virtual-opt obj-name
+    virtual void visit (gram::BaseSpec3Node & node) const
+    {
+    }
+
+    // access-spec * -> access COLON_TOKEN
+    virtual void visit (gram::AccessSpecNode & node) const
+    {
+    }
+
+    // class-decl -> xExx-decl-spec-seq SEMI_TOKEN
+    virtual void visit (gram::ClassDeclNode & node) const
+    {
+    }
+
+    // friend-class-decl -> FExx-decl-spec-seq SEMI_TOKEN
+    virtual void visit (gram::FriendClassDeclNode & node) const
+    {
+    }
+
+    // func-def * -> func-decl try-opt ctor-init-opt LBRACE_TOKEN block-opt 7 RBRACE_TOKEN handler-seq-opt
+    virtual void visit (gram::FuncDefNode & node) const
+    {
+    }
+
+    // mbr-init * -> obj-name LPAREN_TOKEN expr-list-opt RPAREN_TOKEN
+    virtual void visit (gram::MbrInitNode & node) const
+    {
+    }
+
+    // handler * -> CATCH_TOKEN LPAREN_TOKEN catch-decl RPAREN_TOKEN LBRACE_TOKEN block-opt 7 RBRACE_TOKEN
+    virtual void visit (gram::HandlerNode & node) const
+    {
+    }
+
+    // tmpl-decl * -> tmpl-spec tmpl-spec-decl
+    virtual void visit (gram::TmplDeclNode & node) const
+    {
+    }
+
+    // tmpl-spec * -> TEMPLATE_TOKEN LT_TOKEN tmpl-param-list-opt GT_TOKEN
+    virtual void visit (gram::TmplSpecNode & node) const
+    {
+    }
+
+    // type-param <* -> type-key + obj-name
+    virtual void visit (gram::TypeParam1Node & node) const
+    {
+    }
+
+    // type-param <* -> type-key + obj-name ASSIGN_TOKEN abstract-decl
+    virtual void visit (gram::TypeParam2Node & node) const
+    {
+    }
+
+    // tmpl-tmpl-param <* -> TEMPLATE_TOKEN LT_TOKEN tmpl-param-list-opt GT_TOKEN CLASS_TOKEN obj-name
+    virtual void visit (gram::TmplTmplParam1Node & node) const
+    {
+    }
+
+    // tmpl-tmpl-param <* -> TEMPLATE_TOKEN LT_TOKEN tmpl-param-list-opt GT_TOKEN CLASS_TOKEN obj-name ASSIGN_TOKEN obj-name
+    virtual void visit (gram::TmplTmplParam2Node & node) const
+    {
+    }
+
+    // tmpl-inst * -> tmpl-inst-begin tmpl-inst-decl
+    virtual void visit (gram::TmplInstNode & node) const
+    {
+    }
+
+    // tmpl-inst-begin <* -> TEMPLATE_TOKEN
+    virtual void visit (gram::TmplInstBeginNode & node) const
+    {
+    }
+
+    // lazy-ctor * -> lazy-ctor-begin <* LBRACE_TOKEN mbr-decl-seq-opt RBRACE_TOKEN semi-opt
+    virtual void visit (gram::LazyCtorNode & node) const
+    {
+    }
+
+    // lazy-ctor-begin -> class-key dll-api-opt obj-name param-decl-1-body > RPAREN_TOKEN lazy-base-clause-opt
+    virtual void visit (gram::LazyCtorBegin1Node & node) const
+    {
+    }
+
+    // lazy-ctor-begin -> xxxS-decl-spec-seq class-key dll-api-opt obj-name param-decl-1-body > RPAREN_TOKEN lazy-base-clause-opt
+    virtual void visit (gram::LazyCtorBegin2Node & node) const
+    {
+    }
+
+    // lazy-base-spec * -> obj-name base-init
+    virtual void visit (gram::LazyBaseSpec1Node & node) const
+    {
+    }
+
+    // lazy-base-spec * -> VIRTUAL_TOKEN access-opt obj-name base-init
+    virtual void visit (gram::LazyBaseSpec2Node & node) const
+    {
+    }
+
+    // lazy-base-spec * -> access virtual-opt obj-name base-init
+    virtual void visit (gram::LazyBaseSpec3Node & node) const
+    {
+    }
+
+    // functor-direct-dcl -> obj-dcl-id param-decl-1-body param-decl-2-body RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+    virtual void visit (gram::DirectDcl5Node & node) const
+    {
+    }
+
+    // functor-def * -> functor-decl lazy-base-clause-opt try-opt LBRACE_TOKEN block-opt 7 RBRACE_TOKEN handler-seq-opt
+    virtual void visit (gram::FunctorDefNode & node) const
+    {
+    }
+
+    // simple-functor-decl -> functor-decl lazy-base-clause-opt SEMI_TOKEN
+    virtual void visit (gram::FunctorDeclTypeNode & node) const
+    {
+    }
+
+    // enum-def * -> ENUM_TOKEN obj-name-opt <* LBRACE_TOKEN enum-body-opt RBRACE_TOKEN semi-opt
+    virtual void visit (gram::EnumDefNode & node) const
+    {
+    }
+
+    // enumtor-decl <* -> obj-name
+    virtual void visit (gram::EnumtorDecl1Node & node) const
+    {
+    }
+
+    // enumtor-decl <* -> obj-name ASSIGN_TOKEN BLOCK_TOKEN 9
+    virtual void visit (gram::EnumtorDecl2Node & node) const
+    {
+    }
+
+    // using-decl * -> USING_TOKEN obj-name SEMI_TOKEN
+    virtual void visit (gram::UsingDeclNode & node) const
+    {
+    }
+
+    // using-dir * -> USING_TOKEN NAMESPACE_TOKEN obj-name SEMI_TOKEN
+    virtual void visit (gram::UsingDirNode & node) const
+    {
+    }
+
+    // linkage-spec * -> linkage-block-begin <* LBRACE_TOKEN decl-seq-opt RBRACE_TOKEN
+    virtual void visit (gram::LinkageSpecNode & node) const
+    {
+    }
+
+    // linkage-block-begin -> EXTERN_TOKEN LITERAL_STRING_TOKEN
+    virtual void visit (gram::LinkageBlockBeginNode & node) const
+    {
+    }
+
+    // linkage-decl-begin -> EXTERN_TOKEN LITERAL_STRING_TOKEN
+    virtual void visit (gram::LinkageDeclBeginNode & node) const
+    {
+    }
+
+    // nav-def * -> nav-head LBRACE_TOKEN nav-spec-seq-opt RBRACE_TOKEN
+    virtual void visit (gram::NavDefNode & node) const
+    {
+    }
+
+    // nav-head * -> NAVIGATOR_TOKEN nav-decl lazy-base-clause-opt
+    virtual void visit (gram::NavHeadNode & node) const
+    {
+    }
+
+    // nav-direct-dcl -> obj-dcl-id LPAREN_TOKEN nav-node-type RPAREN_TOKEN param-decl-1-body RPAREN_TOKEN
+    virtual void visit (gram::NavDirectDcl1Node & node) const
+    {
+    }
+
+    // nav-visit-func-def * -> obj-name LPAREN_TOKEN (>)3 obj-name RPAREN_TOKEN LBRACE_TOKEN block-opt 7 RBRACE_TOKEN
+    virtual void visit (gram::NavVisitFuncDefNode & node) const
+    {
+    }
+
+    // return-stmt * -> RETURN_TOKEN BLOCK_TOKEN 10 SEMI_TOKEN
+    virtual void visit (gram::ReturnStmtNode & node) const
+    {
+    }
+
+    // vdf-def * -> vdf-head LBRACE_TOKEN vdf-spec-seq-opt RBRACE_TOKEN
+    virtual void visit (gram::VdfDefNode & node) const
+    {
+    }
+
+    // vdf-head * -> VDF_TOKEN func-decl
+    virtual void visit (gram::VdfHeadNode & node) const
+    {
+    }
+
+    // vdf-functor-def * -> obj-name > param-decl-1-body RPAREN_TOKEN try-opt LBRACE_TOKEN block-opt 7 RBRACE_TOKEN handler-seq-opt
+    virtual void visit (gram::VdfFunctorDefNode & node) const
+    {
+    }
+
+    // vdf-short-data-def * -> xUxx-decl-spec-seq IDENT_TOKEN vdf-data-param-list-alt-opt vdf-direct-obj-init-opt SEMI_TOKEN
+    virtual void visit (gram::VdfShortData1DefNode & node) const
+    {
+    }
+
+    // vdf-short-data-def * -> xUxx-decl-spec-seq LITERAL_STRING_TOKEN vdf-data-param-list-alt-opt vdf-direct-obj-init-opt SEMI_TOKEN
+    virtual void visit (gram::VdfShortData2DefNode & node) const
+    {
+    }
+
+    // vdf-data-param-list -> LPAREN_TOKEN block-opt 2 RPAREN_TOKEN
+    virtual void visit (gram::VdfDataParamListNode & node) const
+    {
+    }
+
+    // vdf-direct-obj-init -> LPAREN_TOKEN BLOCK_TOKEN 2 RPAREN_TOKEN
+    virtual void visit (gram::ObjInit4Node & node) const
+    {
+    }
+
+    // vdf-block-data-def * -> vdf-block-data-head LBRACE_TOKEN simple-vdf-obj-decl-seq-opt return-stmt-opt RBRACE_TOKEN
+    virtual void visit (gram::VdfBlockDataDefNode & node) const
+    {
+    }
+
+    // vdf-block-data-head <* -> IDENT_TOKEN vdf-data-param-list-alt-opt
+    virtual void visit (gram::VdfBlockDataHead1Node & node) const
+    {
+    }
+
+    // vdf-block-data-head <* -> LITERAL_STRING_TOKEN vdf-data-param-list-alt-opt
+    virtual void visit (gram::VdfBlockDataHead2Node & node) const
+    {
+    }
+
+    // vdf-obj-b-direct-dcl -> vdf-obj-b-direct-dcl vdf-data-param-list cv-spec-seq-opt throw-spec-opt
+    virtual void visit (gram::DirectDcl6Node & node) const
+    {
+    }
+  }
+}

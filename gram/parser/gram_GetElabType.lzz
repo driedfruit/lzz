@@ -1,0 +1,56 @@
+// gram_GetElabType.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ClassKey.h"
+#include "smtc_NamePtr.h"
+
+// basil
+#include "basl_Nonterm.h"
+$end
+
+$src
+// gram
+#include "gram_GetClassKey.h"
+#include "gram_GetNodeName.h"
+#include "gram_Nonterm.h"
+#include "gram_Visitor.h"
+$end
+
+// private namespace
+namespace
+{
+  // using gram
+  using namespace gram;
+
+  // get elab type
+  struct GetElabType (smtc::ClassKey & key, smtc::NamePtr & name, bool & is_dll_api)
+    : Visitor
+  {
+    // elaborated-type -> class-key dll-api-opt obj-name
+    void visit (ElabTypeNode & node) const
+    {
+      key = getClassKey (node.getClassKey ().getNumber ());
+      name = getNodeName (node.getObjName ());
+      is_dll_api = node.getDllApiOpt ().isSet ();
+    }
+  }
+}
+
+// gram
+namespace gram
+{
+  // get elab key and name
+  void getElabType (basl::Nonterm & nonterm, smtc::ClassKey & key, smtc::NamePtr & name)
+  {
+    bool is_dll_api = false;
+    getElabType (nonterm, key, name, is_dll_api);
+  }
+
+  // get elab key and name
+  void getElabType (basl::Nonterm & nonterm, smtc::ClassKey & key, smtc::NamePtr & name, bool & is_dll_api)
+  {
+    nonterm.accept (GetElabType (key, name, is_dll_api));
+  }
+}

@@ -1,0 +1,23 @@
+// smtc_CreateFrndClassDeclEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ClassDeclPtr.h"
+#include "smtc_EntityPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_FrndClassDeclEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create friend class decl entity
+  EntityPtr createFrndClassDeclEntity (ClassDeclPtr const & class_decl)
+  {
+    return new FrndClassDeclEntity (class_decl);
+  }
+}

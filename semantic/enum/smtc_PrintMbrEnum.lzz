@@ -1,0 +1,23 @@
+// smtc_PrintMbrEnum.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EnumPtr.h"
+#include "smtc_FilePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_PrintEnum.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // print mbr enum
+  void printMbrEnum (FilePtr const & file, EnumPtr const & en)
+  {
+    printEnum (file, en);
+  }
+}

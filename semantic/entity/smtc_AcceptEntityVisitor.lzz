@@ -1,0 +1,23 @@
+// smtc_AcceptEntityVisitor.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EntityVisitor.h"
+#include "smtc_EntityPtr.h"
+$end
+
+$inl
+// semantic
+#include "smtc_Entity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // functor: accept entity visitor
+  inline void AcceptEntityVisitor (EntityVisitor const & visitor; EntityPtr const & entity)
+  {
+    entity->accept (visitor);
+  }
+}

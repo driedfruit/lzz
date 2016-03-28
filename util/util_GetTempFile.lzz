@@ -1,0 +1,61 @@
+// util_GetTempFile.lzz
+//
+// return a temporary filename
+//
+// File is created using mkstemp then closed. The filename is returned.
+//
+
+// do not preprocess blocks in this file (lzz does not define __GNUC__)
+#pragma preprocess_block off 
+
+#hdr
+// util
+#include "util_String.h"
+#end
+
+#src
+// std lib
+#include <cassert>
+#include <cstdio>
+#include <unistd.h>
+#include <cstring>
+#include <cstdlib>
+
+#if __GNUC__ < 3 || defined WIN32
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#endif
+#end
+
+// util
+namespace util
+{
+  // get temp filename with prefix
+  // return true if successful
+  bool getTempFile (char const * prefix, util::String & temp_filename)
+  {
+    enum { MAXLEN = 64 };
+    assert (strlen (prefix) < MAXLEN - 7);
+    char filename [MAXLEN];
+    sprintf (filename, "%sXXXXXX", prefix);
+
+    // gcc 2.95 doesn't support mkstemp ... so do it manually
+#if __GNUC__ < 3 || defined WIN32
+    if (mktemp (filename) == NULL)
+    {
+      return false;
+    }
+    int fd = open (filename, O_RDWR|O_CREAT|O_EXCL, 0666);
+#else
+    int fd = mkstemp (filename);
+#endif
+    if (fd == -1)
+    {
+      return false;
+    }
+    close (fd);
+    temp_filename = filename;
+    return true;
+  }
+}

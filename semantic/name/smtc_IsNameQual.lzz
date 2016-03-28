@@ -1,0 +1,42 @@
+// smtc_IsNameQual.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_Name.h"
+#include "smtc_NameVisitor.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // IsNameQual
+  struct IsNameQual (bool & result) : NameVisitor
+  {
+    // qual name
+    void visit (QualName const & name) const
+    {
+      result = true;
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // true if name is qualified
+  bool isNameQual (NamePtr const & name)
+  {
+    bool result = false;
+    name->accept (IsNameQual (result));
+    return result;
+  }
+}

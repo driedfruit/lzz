@@ -1,0 +1,48 @@
+// smtc_SpecFlags.lzz
+//
+
+$hdr
+// gram
+#include "gram_DclSpecFlags.h"
+$end
+
+$src
+$end
+
+// smtc
+namespace smtc
+{
+  // specifier flags
+  enum
+  {
+    // inline
+    INLINE_SPEC    = gram::INLINE_SPEC,
+
+    // virtual
+    VIRTUAL_SPEC   = gram::VIRTUAL_SPEC,
+
+    // explicit
+    EXPLICIT_SPEC  = gram::EXPLICIT_SPEC,
+
+    // static
+    STATIC_SPEC    = gram::STATIC_SPEC,
+
+    // extern
+    EXTERN_SPEC    = gram::EXTERN_SPEC,
+
+    // mutable
+    MUTABLE_SPEC   = gram::MUTABLE_SPEC,
+
+    // auto
+    AUTO_SPEC      = gram::AUTO_SPEC,
+
+    // register
+    REGISTER_SPEC  = gram::REGISTER_SPEC,
+
+    // function pure specifier
+    PURE_SPEC      = gram::PURE_SPEC,
+
+    // dll api specifier
+    DLL_API_SPEC   = gram::DLL_API_SPEC,
+  }
+}

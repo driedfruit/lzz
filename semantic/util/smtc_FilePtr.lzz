@@ -1,0 +1,19 @@
+// smtc_FilePtr.lzz
+//
+
+$hdr
+#include "util_BPtr.h"
+$end
+
+$src
+#include "smtc_File.h"
+#include "util_BPtr.tpl"
+$end
+
+// semantic
+namespace smtc
+{
+  class File;
+  typedef util::BPtr <File> FilePtr;
+}
+template class util::BPtr <smtc::File>;

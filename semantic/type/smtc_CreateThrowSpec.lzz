@@ -1,0 +1,23 @@
+// smtc_CreateThrowSpec.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CvTypeVector.h"
+#include "smtc_ThrowSpecPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_ThrowSpec.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create throw spec
+  ThrowSpecPtr createThrowSpec (CvTypeVector const & cv_type_set)
+  {
+    return new ThrowSpec (cv_type_set);
+  }
+}

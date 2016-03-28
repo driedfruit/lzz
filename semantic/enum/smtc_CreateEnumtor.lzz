@@ -1,0 +1,26 @@
+// smtc_CreateEnumtor.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+#include "smtc_EnumtorPtr.h"
+
+// gram
+#include "gram_Block.h"
+$end
+
+$src
+// semantic
+#include "smtc_Enumtor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create enumtor
+  EnumtorPtr createEnumtor (NamePtr const & name, gram::Block const & init = gram::Block ())
+  {
+    return new Enumtor (name, init);
+  }
+}

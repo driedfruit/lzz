@@ -1,0 +1,47 @@
+// smtc_LazyClassScope.lzz
+//
+// class scope
+//
+
+$hdr
+// semantic
+#include "smtc_ClassScope.h"
+#include "smtc_LazyClassPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_ScopeVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // LazyClassScope
+  class LazyClassScope : public ClassScope
+  {
+  public:
+    // constructor
+    LazyClassScope (LazyClassPtr const & lazy_class)
+      : ClassScope (lazy_class)
+    {
+    }
+
+    // destructor
+    ~ LazyClassScope ()
+    {
+    }
+
+    // accept visitor
+    void accept (ScopeVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get lazy class
+    inline LazyClassPtr getLazyClass () const
+    {
+      return getClassDefn ();
+    }
+  }
+}

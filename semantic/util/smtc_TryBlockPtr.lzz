@@ -1,0 +1,19 @@
+// smtc_TryBlockPtr.lzz
+//
+
+$hdr
+#include "util_BPtr.h"
+$end
+
+$src
+#include "smtc_TryBlock.h"
+#include "util_BPtr.tpl"
+$end
+
+// semantic
+namespace smtc
+{
+  class TryBlock;
+  typedef util::BPtr <TryBlock> TryBlockPtr;
+}
+template class util::BPtr <smtc::TryBlock>;

@@ -1,0 +1,40 @@
+// gram_MacroArg.lzz
+//
+
+$hdr
+// basl
+#include "basl_TokenVector.h"
+$end
+
+$src
+// gram
+$end
+
+// gram
+namespace gram
+{
+  // MacroArg
+  class MacroArg
+  {
+    // token set
+    basl::TokenVector m_token_set;
+
+  public:
+    // constructor
+    MacroArg (basl::TokenVector const & token_set)
+      : m_token_set (token_set)
+    {
+    }
+
+    // destructor
+    ~ MacroArg ()
+    {
+    }
+
+    // get token set
+    inline basl::TokenVector const & getTokenSet () const
+    {
+      return m_token_set;
+    }
+  }
+}

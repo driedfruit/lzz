@@ -1,0 +1,60 @@
+// gram_TokenBlock.lzz
+//
+
+#hdr
+// gram
+#include "gram_Block.h"
+
+// basil
+#include "basl_TokenDeque.h"
+#end
+
+#inl
+// gram
+#include "gram_TokenBlockImpl.h"
+#end
+
+#src
+#end
+
+namespace gram
+{
+  // types
+  class TokenBlockImpl;
+
+  // TokenBlock
+  class TokenBlock : public Block
+  {
+  public:
+    // constructor
+    TokenBlock (util::Loc const & loc)
+      : Block (BlockImplPtr (new TokenBlockImpl (loc)))
+    {
+    }
+
+    // constructor
+    TokenBlock (Block const & block)
+      : Block (block)
+    {
+    }
+
+    // append token
+    inline void append (basl::Token const & token) const
+    {
+      getTokenBlockImpl ().append (token);
+    }
+
+    // get tokens
+    inline basl::TokenDeque const & getTokens () const
+    {
+      return getTokenBlockImpl ().getTokens ();
+    }
+
+  private:
+    // get token block impl
+    inline TokenBlockImpl & getTokenBlockImpl () const
+    {
+      return static_cast <TokenBlockImpl &> (* getImpl ());
+    }
+  }
+}

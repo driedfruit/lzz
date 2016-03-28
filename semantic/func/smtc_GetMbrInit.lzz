@@ -1,0 +1,30 @@
+// smtc_GetMbrInit.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_MbrInitPtr.h"
+#include "smtc_NamePtr.h"
+
+// gram
+#include "gram_BlockVector.h"
+$end
+
+$src
+// std lib
+#include <algorithm>
+
+// semantic
+#include "smtc_CreateMbrInit.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // get mbr init
+  MbrInitPtr getMbrInit (NamePtr const & name, gram::BlockVector const & arg_set)
+  {
+    std::for_each (arg_set.begin (), arg_set.end (), gram::TrimBlock ());
+    return createMbrInit (name, arg_set);
+  }
+}

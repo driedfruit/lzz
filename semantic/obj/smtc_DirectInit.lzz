@@ -1,0 +1,63 @@
+// smtc_DirectInit.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Init.h"
+
+// gram
+#include "gram_BlockVector.h"
+$end
+
+$src
+// semantic
+#include "smtc_ArgListToString.h"
+#include "smtc_File.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // DirectInit
+  class DirectInit : public Init
+  {
+    // init block set
+    gram::BlockVector m_block_set;
+
+  public:
+    // constructor
+    inline DirectInit (util::Loc const & loc, gram::BlockVector const & block_set)
+      : Init (loc), m_block_set (block_set)
+    {
+    }
+
+    // destructor
+    ~ DirectInit ()
+    {
+    }
+
+    // true if copy init
+    bool isCopy () const
+    {
+      return false;
+    }
+
+    // get block set
+    inline gram::BlockVector const & getBlockSet () const
+    {
+      return m_block_set;
+    }
+
+    // to string (for lazy class init)
+    util::String toString () const
+    {
+      return argListToString (m_block_set);
+    }
+
+    // print to file
+    void print (FilePtr const & file, SectionKind skind) const
+    {
+      file->getStream (skind) << '(' << toString () << ')';
+    }    
+  }
+}

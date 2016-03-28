@@ -1,0 +1,112 @@
+// smtc_Obj.lzz
+//
+// object
+//
+
+#hdr
+// semantic
+#include "smtc_CvType.h"
+#include "smtc_InitPtr.h"
+#include "smtc_Linkage.h"
+#include "smtc_NamePtr.h"
+#end
+
+#src
+// semantic
+#include "smtc_SpecFlags.h"
+
+// util
+#include "util_BitOp.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // using util
+  using namespace util;
+
+  // Obj
+  class Obj
+  {
+    // linkage (will be set only for namespace declared objects)
+    Linkage m_linkage;
+
+    // flags
+    int m_flags;
+
+    // type
+    CvType m_cv_type;
+
+    // name
+    NamePtr m_name;
+
+    // initializer (may be null)
+    InitPtr m_init;
+
+  public:
+    // constructor
+    Obj (Linkage const & linkage, int flags, CvType const & cv_type, NamePtr const & name, InitPtr const & init)
+      : m_linkage (linkage), m_flags (flags), m_cv_type (cv_type), m_name (name), m_init (init)
+    {
+    }
+
+    // destructor
+    ~ Obj ()
+    {
+    }
+
+    // true if has linkage
+    inline bool hasLinkage () const
+    {
+      return m_linkage.isSet ();
+    }
+
+    // get linkage
+    inline Linkage const & getLinkage () const
+    {
+      return m_linkage;
+    }
+
+    // get flags
+    inline int getFlags () const
+    {
+      return m_flags;
+    }
+
+    // true if static
+    bool isStatic () const
+    {
+      return hasFlag (m_flags, STATIC_SPEC);
+    }
+
+    // true if extern
+    bool isExtern () const
+    {
+      return hasFlag (m_flags, EXTERN_SPEC);
+    }
+
+    // true if has init
+    bool hasInit () const
+    {
+      return m_init.isSet ();
+    }
+
+    // get cv type
+    inline CvType const & getCvType () const
+    {
+      return m_cv_type;
+    }
+
+    // get name
+    inline NamePtr const & getName () const
+    {
+      return m_name;
+    }
+
+    // get init
+    inline InitPtr const & getInit () const
+    {
+      return m_init;
+    }
+  }
+}

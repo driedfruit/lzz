@@ -1,0 +1,23 @@
+// smtc_IsIntegralType.lzz
+//
+
+#hdr
+// semantic
+#include "smtc_TypePtr.h"
+#end
+
+#src
+// semantic
+#include "smtc_Type.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // return true if type an integral type
+  bool isIntegralType (TypePtr const & type)
+  {
+    TypeKind kind = type->getKind ();
+    return kind >= BOOL_TYPE && kind <= UNSIGNED_LONG_LONG_INT_TYPE;
+  }   
+}

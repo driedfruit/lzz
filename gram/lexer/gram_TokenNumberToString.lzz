@@ -1,0 +1,23 @@
+// gram_TokenNumberToString.lzz
+//
+
+$hdr
+$end
+
+$src
+// gram
+#include "gram_ParserData.h"
+
+// basil
+#include "basl_GetSymbolName.h"
+$end
+
+// gram
+namespace gram
+{
+  // token number to string
+  char const * tokenNumberToString (int number)
+  {
+    return basl::getSymbolName (* getParserData (), number);
+  }
+}

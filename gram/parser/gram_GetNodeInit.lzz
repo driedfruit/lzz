@@ -1,0 +1,89 @@
+// gram_GetNodeInit.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_InitPtr.h"
+
+// basil
+#include "basl_Nonterm.h"
+$end
+
+$src
+// gram
+#include "gram_BlockTable.h"
+#include "gram_GetNodeBlockSet.h"
+#include "gram_Nonterm.h"
+#include "gram_Parser.h"
+#include "gram_Visitor.h"
+
+// basil
+#include "basl_GetFirstToken.h"
+#include "basl_Node.h"
+
+// semantic
+#include "smtc_CreateCopyInit.h"
+#include "smtc_CreateDirectInit.h"
+$end
+
+// private namespace
+namespace
+{
+  // using gram
+  using namespace gram;
+    
+  // get node init
+  struct GetNodeInit (smtc::InitPtr & init) : Visitor
+  {
+    // obj-init -> ASSIGN BLOCK 3
+    void visit (ObjInit1Node & node) const
+    {
+      Block block = getBlock (node.getBLOCK_TOKEN ().getLexeme ());
+      block.setLoc (node.getASSIGN_TOKEN ().getLoc ());
+      init = smtc::createCopyInit (node.getASSIGN_TOKEN ().getLoc (), block);
+    }
+
+    // obj-init -> DINIT LPAREN expr-list RPAREN
+    void visit (ObjInit2Node & node) const
+    {
+      BlockVector block_set;
+      getNodeBlockSet (node.getExprList (), block_set);
+      init = smtc::createDirectInit (node.getDINIT_TOKEN ().getLoc (), block_set);
+    }
+
+    // obj-init -> direct-expr-list RPAREN
+    void visit (ObjInit3Node & node) const
+    {
+      BlockVector block_set;
+      getNodeBlockSet (node.getDirectExprList (), block_set);
+      init = smtc::createDirectInit (basl::getFirstLoc (node.getDirectExprList ()), block_set);
+    }
+
+    // vdf-direct-obj-init -> LPAREN BLOCK 2 RPAREN
+    void visit (ObjInit4Node & node) const
+    {
+      // parse block as expr-list, start state 2
+      Block block = getBlock (node.getBLOCK_TOKEN ().getLexeme ());
+      // OK to use unset scope as it won't be used by anything
+      basl::SyntaxTree tree = parseString (block.toString (), block.getLoc (), 2, smtc::ScopePtr ());
+      if (! tree.isEmpty ())
+      {
+        BlockVector block_set;
+        getNodeBlockSet (tree.getNode ().getNonterm (), block_set);
+        init = smtc::createDirectInit (node.getLPAREN_TOKEN ().getLoc (), block_set);
+      }
+    }
+  }
+}
+
+// gram
+namespace gram
+{
+  // get node init
+  smtc::InitPtr getNodeInit (basl::Nonterm & nonterm)
+  {
+    smtc::InitPtr init;
+    nonterm.accept (GetNodeInit (init));
+    return init;
+  }
+}

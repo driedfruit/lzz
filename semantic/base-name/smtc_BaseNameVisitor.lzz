@@ -1,0 +1,42 @@
+// smtc_BaseNameVisitor.lzz
+//
+
+$hdr
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class IdentBaseName;
+  class OperBaseName;
+  class DtorBaseName;
+  class ConvBaseName;
+
+  // BaseNameVisitor
+  struct BaseNameVisitor ()
+  {
+    // ident base name
+    virtual void visit (IdentBaseName const & base_name) const
+    {
+    }
+
+    // operator base name
+    virtual void visit (OperBaseName const & base_name) const
+    {
+    }
+
+    // dtor base name
+    virtual void visit (DtorBaseName const & base_name) const
+    {
+    }
+
+    // conv base name
+    virtual void visit (ConvBaseName const & base_name) const
+    {
+    }
+  }
+}

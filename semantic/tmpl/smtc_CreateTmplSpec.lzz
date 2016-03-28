@@ -1,0 +1,26 @@
+// smtc_CreateTmplSpec.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ParamPtrVector.h"
+#include "smtc_TmplSpecPtr.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+// semantic
+#include "smtc_TmplSpec.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create template spec
+  TmplSpecPtr createTmplSpec (util::Loc const & loc, ParamPtrVector const & param_set)
+  {
+    return new TmplSpec (loc, param_set);
+  }
+}

@@ -1,0 +1,124 @@
+// smtc_DeclareTdef.lzz
+//
+// declare typedef
+//
+
+$hdr
+// semantic
+#include "smtc_CvType.h"
+#include "smtc_NamePtr.h"
+#include "smtc_ScopePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_ClassDefn.h"
+#include "smtc_ClassScope.h"
+#include "smtc_CreateTdef.h"
+#include "smtc_CreateTdefEntity.h"
+#include "smtc_GetNameIfIdent.h"
+#include "smtc_GetNameLoc.h"
+#include "smtc_IsNameQual.h"
+#include "smtc_LinkageSpecScope.h"
+#include "smtc_Message.h"
+#include "smtc_Ns.h"
+#include "smtc_NsScope.h"
+#include "smtc_ScopeVisitor.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // declare typdef
+  struct DeclareTdef (Linkage const & linkage, CvType const & cv_type, NamePtr const & name)
+    : ScopeVisitor
+  {
+    // namespace scope
+    void visit (NsScope const & scope) const
+    {
+      // check name
+      checkName ();
+
+      // add entity namespace
+      scope.getNs ()->addEntity (buildEntity ());
+    }
+
+    // class scope
+    void visit (ClassScope const & scope) const
+    {
+      // check name
+      checkName ();
+
+      // store type name in scope
+      ClassDefnPtr const & class_defn = scope.getClassDefn ();
+      util::Ident ident = getNameIfIdent (name);
+      if (ident.isSet ())
+      {
+        class_defn->addTypeName (ident);
+      }
+
+      // add entity class
+      class_defn->addEntity (buildEntity ());
+    }
+
+    // linkage spec scope
+    void visit (LinkageSpecScope const & scope) const
+    {
+      if (linkage.isSet ())
+      {
+        // nested linkage spec
+        msg::multipleLinkageSpec (scope.getLoc ());
+      }
+      else
+      {
+        Linkage const & linkage = scope.getLinkage ();
+        scope.getParent ()->accept (DeclareTdef (linkage, cv_type, name));
+      }
+    }
+
+    // check name
+    void checkName () const
+    {
+      // cannot be qualfied
+      if (isNameQual (name))
+      {
+        msg::qualTdef (getNameLoc (name));
+      }
+    }
+
+    // tmpl spec scope
+    void visit (TmplSpecScope const & scope) const
+    {
+      // cannot declare a template typedef
+      msg::templateTdef (getNameLoc (name));
+    }
+
+    // tmpl inst scope
+    void visit (TmplInstScope const & scope) const
+    {
+      // cannot explicitly instantiate a typedef
+      msg::instantiateTdef (getNameLoc (name));
+    }
+
+    // build entity
+    EntityPtr buildEntity () const
+    {
+      TdefPtr tdef = createTdef (linkage, cv_type, name);
+      return createTdefEntity (tdef);
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // declare typedef
+  void declareTdef (ScopePtr const & scope, CvType const & cv_type, NamePtr const & name)
+  {
+    Linkage linkage;
+    scope->accept (DeclareTdef (linkage, cv_type, name));
+  }
+}

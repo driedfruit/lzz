@@ -1,0 +1,19 @@
+// smtc_SectionPtr.lzz
+//
+
+$hdr
+#include "util_BPtr.h"
+$end
+
+$src
+#include "smtc_Section.h"
+#include "util_BPtr.tpl"
+$end
+
+// semantic
+namespace smtc
+{
+  class Section;
+  typedef util::BPtr <Section> SectionPtr;
+}
+template class util::BPtr <smtc::Section>;

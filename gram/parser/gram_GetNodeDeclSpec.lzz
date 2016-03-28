@@ -1,0 +1,577 @@
+// gram_GetNodeDeclSpec.lzz
+//
+
+$hdr
+// gram
+#include "gram_SpecSel.h"
+
+// basil
+#include "basl_Nonterm.h"
+
+// semantic
+#include "smtc_Cv.h"
+#include "smtc_CvType.h"
+$end
+
+$src
+// gram
+#include "gram_DclSpecFlags.h"
+#include "gram_DclSpecToString.h"
+#include "gram_DeclSpecFlags.h"
+#include "gram_DeclSpecToString.h"
+#include "gram_GetClassKey.h"
+#include "gram_GetNodeName.h"
+#include "gram_Message.h"
+#include "gram_Nonterm.h"
+#include "gram_TokenNumber.h"
+#include "gram_Visitor.h"
+
+// semantic
+#include "smtc_GetBuiltInType.h"
+#include "smtc_GetCvType.h"
+#include "smtc_GetElabType.h"
+#include "smtc_GetUserType.h"
+
+// util
+#include "util_BitOp.h"
+$end
+
+// private namespace
+namespace
+{ 
+  // using gram
+  using namespace gram;
+
+  // built-in specifier flags
+  enum
+  {
+    // bool
+    BOOL_SPEC      = 1 << 0,
+
+    // char
+    CHAR_SPEC      = 1 << 1,
+
+    // double
+    DOUBLE_SPEC    = 1 << 2,
+
+    // float
+    FLOAT_SPEC     = 1 << 3,
+
+    // int
+    INT_SPEC       = 1 << 4,
+
+    // long
+    LONG_SPEC      = 1 << 5,
+
+    // short
+    SHORT_SPEC     = 1 << 6,
+
+    // signed
+    SIGNED_SPEC    = 1 << 7,
+
+    // unsigned
+    UNSIGNED_SPEC  = 1 << 8,
+
+    // void
+    VOID_SPEC      = 1 << 9,
+
+    // wchar
+    WCHAR_SPEC     = 1 << 10,
+
+    // long long
+    LONG_LONG_SPEC = 1 << 11,
+  }
+
+  // built-in spec to string
+  char const * builtInSpecToString (int flag)
+  {
+    char const * str;
+    switch (flag)
+    {
+      case BOOL_SPEC:
+      {
+        str = "bool";
+        break;
+      }
+      case CHAR_SPEC:
+      {
+        str = "char";
+        break;
+      }
+      case DOUBLE_SPEC:
+      {
+        str = "double";
+        break;
+      }
+      case FLOAT_SPEC:
+      {
+        str = "float";
+        break;
+      }
+      case INT_SPEC:
+      {
+        str = "int";
+        break;
+      }
+      case LONG_SPEC:
+      {
+        str = "long";
+        break;
+      }
+      case LONG_LONG_SPEC:
+      {
+        str = "long long";
+        break;
+      }
+      case SHORT_SPEC:
+      {
+        str = "short";
+        break;
+      }
+      case SIGNED_SPEC:
+      {
+        str = "signed";
+        break;
+      }
+      case UNSIGNED_SPEC:
+      {
+        str = "unsigned";
+        break;
+      }
+      case VOID_SPEC:
+      {
+        str = "void";
+        break;
+      }
+      case WCHAR_SPEC:
+      {
+        str = "wchar";
+        break;
+      }
+    }
+    return str;
+  }
+
+  // cv specifiers
+  enum
+  {
+    // const
+    CONST_SPEC     = 1 << 0,
+
+    // volatile
+    VOLATILE_SPEC  = 1 << 1,
+  }
+
+  // cv spec to string
+  char const * cvSpecToString (int flag)
+  {
+    char const * str;
+    if (flag == CONST_SPEC)
+    {
+      str = "const";
+    }
+    else
+    {
+      str = "volatile";
+    }
+    return str;
+  }
+
+  // first flag
+  int firstFlag (int flags)
+  {
+    assert (flags != 0);
+    int flag = 1;
+    while (! util::hasFlag (flags, flag))
+    {
+      flag <<= 1;
+    }
+    return flag;
+  }
+
+  // get node decl specifiers
+  struct GetNodeDeclSpec (SpecSel & decl_spec_sel, SpecSel & dcl_spec_sel, SpecSel & bltn_spec_sel, SpecSel & cv_spec_sel,
+      smtc::TypePtr & type) : Visitor
+  {
+    // typedef-spec -> TYPEDEF
+    void visit (DeclSpecNode & node) const
+    {
+      int flag = 0;
+      if (node.getTYPEDEF_TOKEN ().getNumber () == TYPEDEF_TOKEN)
+      {
+        flag = TYPEDEF_SPEC;
+      }
+      else
+      {
+        flag = FRIEND_SPEC;
+      }
+      // can never have duplicate or both since not permitted by grammar
+      decl_spec_sel.addSpec (flag, node.getTYPEDEF_TOKEN ().getLoc ());
+    }
+
+    // ftor-spec -> ftor-token
+    void visit (FtorSpecNode & node) const
+    {
+      int flag = 0;
+      switch (node.getFtorToken ().getNumber ())
+      {
+        case INLINE_TOKEN:
+        {
+          flag = INLINE_SPEC;
+          break;
+        }
+        case VIRTUAL_TOKEN:
+        {
+          flag = VIRTUAL_SPEC;
+          break;
+        }
+        case EXPLICIT_TOKEN:
+        {
+          flag = EXPLICIT_SPEC;
+          break;
+        }
+        case STATIC_TOKEN:
+        {
+          flag = STATIC_SPEC;
+          break;
+        }
+        case EXTERN_TOKEN:
+        {
+          flag = EXTERN_SPEC;
+          break;
+        }
+        case MUTABLE_TOKEN:
+        {
+          flag = MUTABLE_SPEC;
+          break;
+        }
+        case AUTO_TOKEN:
+        {
+          flag = AUTO_SPEC;
+          break;
+        }
+        case REGISTER_TOKEN:
+        {
+          flag = REGISTER_SPEC;
+          break;
+        }
+        case DLL_API_TOKEN:
+        {
+          flag = DLL_API_SPEC;
+          break;
+        }
+      }
+      util::Loc const & loc = node.getFtorToken ().getLoc ();
+      if (dcl_spec_sel.hasSpec (flag))
+      { 
+        msg::duplicateSpecifier (loc, dclSpecToString (flag));
+      }
+      else
+      {
+        dcl_spec_sel.addSpec (flag, loc);
+      }
+    }
+
+    // cv-spec -> cv-token
+    void visit (CVSpecNode & node) const
+    {
+      int flag = 0;
+      if (node.getCvToken ().getNumber () == CONST_TOKEN)
+      {
+        flag = CONST_SPEC;
+      }
+      else
+      {
+        flag = VOLATILE_SPEC;
+      }
+      util::Loc const & loc = node.getCvToken ().getLoc ();
+      if (cv_spec_sel.hasSpec (flag))
+      { 
+        msg::duplicateSpecifier (loc, cvSpecToString (flag));
+      }
+      else
+      {
+        cv_spec_sel.addSpec (flag, loc);
+      }
+    }
+
+    // built-in-type -> built-in-type-token
+    void visit (BuiltInTypeNode & node) const
+    {
+      int flag = 0, alt_flags = 0;
+      switch (node.getBuiltInTypeToken ().getNumber ())
+      {
+        case BOOL_TOKEN:
+        {
+          flag = BOOL_SPEC;
+          alt_flags = 0;
+          break;
+        }
+        case CHAR_TOKEN:
+        {
+          flag = CHAR_SPEC;
+          alt_flags = SIGNED_SPEC | UNSIGNED_SPEC;
+          break;
+        }
+        case DOUBLE_TOKEN:
+        {
+          flag = DOUBLE_SPEC;
+          alt_flags = LONG_SPEC;
+          break;
+        }
+        case FLOAT_TOKEN:
+        {
+          flag = FLOAT_SPEC;
+          alt_flags = 0;
+          break;
+        }
+        case INT_TOKEN:
+        {
+          flag = INT_SPEC;
+          alt_flags = LONG_SPEC | LONG_LONG_SPEC | SHORT_SPEC | SIGNED_SPEC | UNSIGNED_SPEC;
+          break;
+        }
+        case LONG_TOKEN:
+        {
+          int cur_flags = bltn_spec_sel.getFlags ();
+          if (cur_flags & LONG_SPEC && ! (cur_flags & LONG_LONG_SPEC))
+          {
+            flag = LONG_LONG_SPEC;
+            alt_flags = INT_SPEC | SIGNED_SPEC | UNSIGNED_SPEC | LONG_SPEC;
+          }
+          else
+          {
+            flag = LONG_SPEC;
+            alt_flags = DOUBLE_SPEC | INT_SPEC | SIGNED_SPEC | UNSIGNED_SPEC;
+          }
+          break;
+        }
+        case SHORT_TOKEN:
+        {
+          flag = SHORT_SPEC;
+          alt_flags = INT_SPEC | SIGNED_SPEC | UNSIGNED_SPEC;
+          break;
+        }
+        case SIGNED_TOKEN:
+        {
+          flag = SIGNED_SPEC;
+          alt_flags = INT_SPEC | SHORT_SPEC | LONG_SPEC | LONG_LONG_SPEC | CHAR_SPEC;
+          break;
+        }
+        case UNSIGNED_TOKEN:
+        {
+          flag = UNSIGNED_SPEC;
+          alt_flags = INT_SPEC | SHORT_SPEC | LONG_SPEC | LONG_LONG_SPEC | CHAR_SPEC;
+          break;
+        }
+        case VOID_TOKEN:
+        {
+          flag = VOID_SPEC;
+          alt_flags = 0;
+          break;
+        }
+        case WCHAR_TOKEN:
+        {
+          flag = WCHAR_SPEC;
+          alt_flags = 0;
+          break;
+        }
+      }
+      int flags = bltn_spec_sel.getFlags ();
+      util::Loc const & loc = node.getBuiltInTypeToken ().getLoc ();
+      if (util::hasFlag (flags, flag))
+      {
+        msg::duplicateSpecifier (loc, builtInSpecToString (flag));
+      }
+      else if ((flags &= ~ alt_flags) != 0)
+      {
+        msg::conflictingSpecifier (loc, builtInSpecToString (firstFlag (flags)), builtInSpecToString (flag));
+      }
+      else
+      {
+        bltn_spec_sel.addSpec (flag, loc);
+      }
+    }
+    
+    // user-type -> obj-name
+    void visit (UserTypeNode & node) const
+    {
+      smtc::NamePtr name = getNodeName (node.getObjName ());
+      type = smtc::getUserType (name);
+    }
+
+    // elaborated-type -> class-key obj-name
+    void visit (ElabTypeNode & node) const
+    {
+      smtc::ClassKey key = getClassKey (node.getClassKey ().getNumber ());
+      smtc::NamePtr name = getNodeName (node.getObjName ());
+      type = smtc::getElabType (key, name);
+    }
+  }
+
+  // get built-in type from built-in spec
+  smtc::TypePtr getBuiltInType (SpecSel const & spec_sel)
+  {
+    smtc::TypePtr type;
+    switch (spec_sel.getFlags ())
+    {
+      // char
+      case CHAR_SPEC:
+      {
+        type = smtc::getCharType ();
+        break;
+      }
+      // unsigned char
+      case UNSIGNED_SPEC | CHAR_SPEC:
+      {
+        type = smtc::getUnsignedCharType ();
+        break;
+      }
+      // signed char
+      case SIGNED_SPEC | CHAR_SPEC:
+      {
+        type = smtc::getSignedCharType ();
+        break;
+      }
+      // bool
+      case BOOL_SPEC:
+      {
+        type = smtc::getBoolType ();
+        break;
+      }
+      // int
+      case INT_SPEC:
+      case SIGNED_SPEC:
+      case SIGNED_SPEC | INT_SPEC:
+      {
+        type = smtc::getIntType ();
+        break;
+      }
+      // unsigned int
+      case UNSIGNED_SPEC:
+      case UNSIGNED_SPEC | INT_SPEC:
+      {
+        type = smtc::getUnsignedIntType ();
+        break;
+      }
+      // short int
+      case SHORT_SPEC:
+      case SHORT_SPEC | INT_SPEC:
+      case SHORT_SPEC | SIGNED_SPEC | INT_SPEC:
+      case SHORT_SPEC | SIGNED_SPEC:
+      {
+        type = smtc::getShortIntType ();
+        break;
+      }
+      // unsigned short int
+      case SHORT_SPEC | UNSIGNED_SPEC | INT_SPEC:
+      case SHORT_SPEC | UNSIGNED_SPEC:
+      {
+        type = smtc::getUnsignedShortIntType ();
+        break;
+      }
+      // long int
+      case LONG_SPEC:
+      case LONG_SPEC | INT_SPEC:
+      case LONG_SPEC | SIGNED_SPEC | INT_SPEC:
+      case LONG_SPEC | SIGNED_SPEC:
+      {
+        type = smtc::getLongIntType ();
+        break;
+      }
+      // unsigned long int
+      case LONG_SPEC | UNSIGNED_SPEC | INT_SPEC:
+      case LONG_SPEC | UNSIGNED_SPEC:
+      {
+        type = smtc::getUnsignedLongIntType ();
+        break;
+      }
+      // long long int
+      case LONG_SPEC | LONG_LONG_SPEC:
+      case LONG_SPEC | LONG_LONG_SPEC | INT_SPEC:
+      case LONG_SPEC | LONG_LONG_SPEC | SIGNED_SPEC | INT_SPEC:
+      case LONG_SPEC | LONG_LONG_SPEC | SIGNED_SPEC:
+      {
+        type = smtc::getLongLongIntType ();
+        break;
+      }
+      // unsigned long long int
+      case LONG_SPEC | LONG_LONG_SPEC | UNSIGNED_SPEC | INT_SPEC:
+      case LONG_SPEC | LONG_LONG_SPEC | UNSIGNED_SPEC:
+      {
+        type = smtc::getUnsignedLongLongIntType ();
+        break;
+      }
+      // float
+      case FLOAT_SPEC:
+      {
+        type = smtc::getFloatType ();
+        break;
+      }
+      // double
+      case DOUBLE_SPEC:
+      {
+        type = smtc::getDoubleType ();
+        break;
+      }
+      // long double
+      case DOUBLE_SPEC | LONG_SPEC:
+      {
+        type = smtc::getLongDoubleType ();
+        break;
+      }
+      // wchar_t
+      case WCHAR_SPEC:
+      {
+        type = smtc::getWideCharType ();
+        break;
+      }
+      // void
+      case VOID_SPEC:
+      {
+        type = smtc::getVoidType ();
+        break;
+      }
+    }
+    return type;
+  }
+}
+
+// gram
+namespace gram
+{
+  // get declaration specifiers
+  void getNodeDeclSpec (basl::Nonterm & nonterm, SpecSel & decl_spec_sel, SpecSel & dcl_spec_sel, smtc::CvType & cv_type)
+  {
+    SpecSel bltn_spec_sel, cv_spec_sel;
+    smtc::TypePtr type;
+    nonterm.accept (GetNodeDeclSpec (decl_spec_sel, dcl_spec_sel, bltn_spec_sel, cv_spec_sel, type));
+    // set cv type 
+    if (bltn_spec_sel.anySet ())
+    {
+      type = getBuiltInType (bltn_spec_sel);
+    }
+    if (type.isSet ())
+    {
+      int cv_flags = cv_spec_sel.getFlags ();
+      cv_type = smtc::getCvType (type, util::hasFlag (cv_flags, CONST_SPEC), util::hasFlag (cv_flags, VOLATILE_SPEC));
+    }
+  }
+
+  // get declaration specifiers without spec sel
+  void getNodeDeclSpec (basl::Nonterm & nonterm, smtc::CvType & cv_type)
+  {
+    SpecSel decl_spec_sel, dcl_spec_sel;
+    getNodeDeclSpec (nonterm, decl_spec_sel, dcl_spec_sel, cv_type);
+  }
+
+  // get lazy ctor specifiers
+  void getNodeLazyCtorSpec (basl::Nonterm & nonterm, SpecSel & dcl_spec_sel, smtc::Cv & cv)
+  {
+    SpecSel decl_spec_sel, bltn_spec_sel, cv_spec_sel;
+    smtc::TypePtr type;
+    nonterm.accept (GetNodeDeclSpec (decl_spec_sel, dcl_spec_sel, bltn_spec_sel, cv_spec_sel, type));
+    int cv_flags = cv_spec_sel.getFlags ();
+    cv = smtc::Cv (util::hasFlag (cv_flags, CONST_SPEC), util::hasFlag (cv_flags, VOLATILE_SPEC));
+  }
+}

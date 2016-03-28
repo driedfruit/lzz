@@ -1,0 +1,88 @@
+// smtc_NonTypeParam.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CvType.h"
+#include "smtc_Param.h"
+
+// gram
+#include "gram_Block.h"
+$end
+
+$src
+// semantic
+#include "smtc_SpecFlagsToString.h"
+#include "smtc_NameToString.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // non type param decl
+  class NonTypeParam : public Param
+  {
+    // spec flags
+    int m_flags;
+
+    // cv type
+    CvType m_cv_type;
+
+    // default arg, if not set no default arg
+    gram::Block m_def_arg;
+
+  public:
+    // constructor
+    inline NonTypeParam (int flags, CvType const & cv_type, NamePtr const & name, gram::Block const & def_arg)
+      : Param (name), m_flags (flags), m_cv_type (cv_type), m_def_arg (def_arg)
+    {
+    }
+
+    // destructor
+    ~ NonTypeParam ()
+    {
+    }
+
+    // get decl spec
+    int getDeclSpec () const
+    {
+      return m_flags;
+    }
+
+    // get cv type
+    inline CvType const & getCvType () const
+    {
+      return m_cv_type;
+    }
+
+    // true if has default arg
+    inline bool hasDefaultArg () const
+    {
+      return m_def_arg.isSet ();
+    }
+
+    // get default arg
+    inline gram::Block const & getDefaultArg () const
+    {
+      return m_def_arg;
+    }
+
+    // to string
+    util::String toString (bool is_decl) const
+    {
+      using namespace util;
+      String str = specFlagsToString (m_flags);
+      String dcl_str = nameToString (getName ());
+      appendWithSpace (str, m_cv_type.toString (dcl_str));
+      if (is_decl && m_def_arg.isSet ())
+      {
+        appendWithSpace (str, '=');
+        appendWithSpace (str, m_def_arg.toString ());
+      }
+      return str;
+    }
+  }
+}

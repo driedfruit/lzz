@@ -1,0 +1,15 @@
+// util_IdentList.lzz
+//
+
+$hdr
+#include <list>
+#include "util_Ident.h"
+$end
+
+// util
+namespace util
+{
+  typedef std::list <Ident> IdentList;
+  typedef std::list <Ident>::iterator IdentListIter;
+  typedef std::list <Ident>::const_iterator IdentListConstIter;
+}

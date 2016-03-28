@@ -1,0 +1,39 @@
+// smtc_UsingDecl.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // UsingDecl
+  class UsingDecl
+  {
+    // name
+    NamePtr m_name;
+
+  public:
+    // constructor
+    UsingDecl (NamePtr const & name)
+      : m_name (name)
+    {
+    }
+
+    // destructor
+    ~ UsingDecl ()
+    {      
+    }
+
+    // get name
+    inline NamePtr const & getName () const
+    {
+      return m_name;
+    }
+  }
+}

@@ -1,0 +1,46 @@
+// smtc_DeclareParamAsMbrObj.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_LazyClassPtr.h"
+#include "smtc_ParamPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_CreateMbrInit.h"
+#include "smtc_CreateObj.h"
+#include "smtc_CreateObjEntity.h"
+#include "smtc_GetCvTypeAsRef.h"
+#include "smtc_LazyClass.h"
+#include "smtc_NameToString.h"
+#include "smtc_NonTypeParam.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // declare param as member object
+  void declareParamAsMbrObj (LazyClassPtr const & lazy_class, ParamPtr const & param, bool as_ref = false)
+  {
+    // create obj, param is a non-type param
+    NonTypeParam const & non_type_param = static_cast <NonTypeParam const &> (* param);
+    NamePtr const & name = non_type_param.getName ();
+    CvType param_type = non_type_param.getCvType ();
+    if (as_ref)
+    {
+      param_type = getCvTypeAsRef (param_type);
+    }
+    ObjPtr obj = createObj (0, param_type, name, InitPtr ());
+    lazy_class->addEntity (createObjEntity (obj));
+    // add member init
+    lazy_class->addMbrInit (createMbrInit (name, nameToString (name)));
+  }
+
+  // functor: declare param as member object
+  inline void DeclareParamAsMbrObj (LazyClassPtr const & lazy_class, bool as_ref = false; ParamPtr const & param) const
+  {
+    declareParamAsMbrObj (lazy_class, param, as_ref);
+  }
+}

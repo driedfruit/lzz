@@ -1,0 +1,204 @@
+// conf_PrintHelp.lzz
+//
+
+#hdr
+// std lib
+#include <iostream>
+#end
+
+#src
+// std lib
+#include <iostream>
+
+// config
+#include "conf_Config.h"
+#include "conf_LzzVersion.h"
+#include "conf_Option.h"
+#end
+
+// private namespace
+namespace
+{
+  // help text
+  char const version_text [] =
+  {
+    "Lzz: A C++ Component Generator, Version " LZZ_VERSION
+#ifdef DEBUG_BUILD
+    " DEBUG"
+#endif
+    "\n"
+  };
+
+#ifdef PRL_BUILD
+  // usage text
+  char const usage_text [] =
+  {
+    "Usage: lzz [options] filenames ...\n"
+    "Options:\n"
+    " -i, -inl\n"
+    "   Output inline definitions to inline file.\n"
+    " -t, -tpl\n"
+    "   Output template definitions to template file.\n"
+    " -n, -tnl\n"
+    "   Output template inline definitions to template inline file.\n"
+    " -ii, -inl-inl\n"
+    "   Output inline definitions to inline file, but inline the contents of\n"
+    "   the file in both the header and source file instead of using an include\n"
+    "   directive.\n"
+    " -ts, -tplsrc\n"
+    "   Output template definitions to source file (overrides -t).\n"
+    " -hx EXT, -hdr-ext EXT\n"
+    "   Set header filename extension.\n"
+    " -sx EXT, -src-ext EXT\n"
+    "   Set source filename extension.\n"
+    " -ix EXT, -inl-ext EXT\n"
+    "   Set inline filename extension.\n"
+    " -tx EXT, -tpl-ext EXT\n"
+    "   Set template filename extension.\n"
+    " -nx EXT, -tnl-ext EXT\n"
+    "   Set template inline filename extension.\n"
+    " -hl, -hdr-line\n"
+    "   Ouput #lines in header file.\n"
+    " -sl, -src-line\n"
+    "   Ouput #lines in source file.\n"
+    " -il, -inl-line\n"
+    "   Ouput #lines in inline file.\n"
+    " -tl, -tpl-line\n"
+    "   Ouput #lines in template file.\n"
+    " -nl, -tnl-line\n"
+    "   Ouput #lines in template inline file.\n"
+    " -hd, -hdr-smart-write\n"
+    "   Write header file only if different than previous.\n"
+    " -sd, -src-smart-write\n"
+    "   Write source file only if different than previous.\n"
+    " -id, -inl-smart-write\n"
+    "   Write inline file only if different than previous.\n"
+    " -td, -tpl-smart-write\n"
+    "   Write template file only if different than previous.\n"
+    " -nd, -tnl-smart-write\n"
+    "   Write template inline file only if different than previous.\n"
+    " -c, -src-if-hdr\n"
+    "   Create source file if header file is created.\n"
+    " -o DIR, -out-dir DIR\n"
+    "   Set output directory for files.\n"
+    " -x\n"
+    "   Use absolute filenames in #lines.\n"
+    " -d, -delete-old\n"
+    "   Delete old files no longer created.\n"
+    " -I DIR\n"
+    "   Search directory for #include and #insert files.\n"
+    " -D MACRO\n"
+    "   Define function or object macro (replacement text follows '=').\n"
+    " -a FNAME\n"
+    "   Automatically #include file at start of file.\n"
+    " -k\n"
+    "   Set package name (will embed in include guard).\n"
+    " -da, -dll-api\n"
+    "   Enable _dll_api semantics and set DLL API macro name.\n"
+    " -dx, -dll-exports\n"
+    "   Set DLL exports macro name.\n"
+    " -p\n"
+    "   Preprocess to stdout, captured code represented as 'BLOCK'.\n"
+    " -P\n"
+    "   Preprocess to stdout, all code in file.\n"
+    " -E\n"
+    "   Preprocess to stdout, all code in file and #include files.\n"
+    " -r CMDS\n"
+    "   Set the syntax error recover commands.\n"
+    
+#ifdef DEBUG_BUILD
+    " -tr\n"
+    "   Print parse trace.\n"
+#endif
+
+    " -v\n"
+    "   Print the values of the above options.\n"
+    " -hr\n"
+    "   Print the help text for the -r option.\n"
+    " -T\n"
+    "   Print token names usable in the -r option.\n"
+    " -ver\n"
+    "   Print the version number.\n"
+    " -h, -help\n"
+    "   Print this help text.\n"
+    "Options can also be specified in the environment variable LZZ_OPTIONS.\n"
+    "To turn off a boolean option precede the option with '-no'.\n"
+    "For further help, see http://www.lazycplusplus.com.\n"
+ // "Copyright (C) 2001-2003, Mike Spencer (mike@lazycplusplus.com)\n"
+  };
+#else
+  // usage text
+  char const usage_text [] =
+  {
+    "Usage: lzz [options] filenames ...\n"
+    "Options:\n"
+    " -i       Output inline definitions to inline file.\n"
+    " -t       Output template definitions to template file.\n"
+    " -n       Output inline template definitions to template inline file.\n"
+    " -hx EXT  Set header filename extension.\n"
+    " -sx EXT  Set source filename extension.\n"
+    " -ix EXT  Set inline filename extension.\n"
+    " -tx EXT  Set template filename extension.\n"
+    " -nx EXT  Set template inline filename extension.\n"
+    " -hl      Ouput #lines in header file.\n"
+    " -sl      Ouput #lines in source file.\n"
+    " -il      Ouput #lines in inline file.\n"
+    " -tl      Ouput #lines in template file.\n"
+    " -nl      Ouput #lines in template inline file.\n"
+    " -hd      Write header file only if different than previous.\n"
+    " -sd      Write source file only if different than previous.\n"
+    " -id      Write inline file only if different than previous.\n"
+    " -td      Write template file only if different than previous.\n"
+    " -nd      Write template inline file only if different than previous.\n"
+    " -c       Create source file if header file is created.\n"
+    " -e       Preprocess all code.\n"
+    " -o DIR   Set output directory for files.\n"
+    " -x       Use absolute filenames in #lines.\n"
+    " -d       Delete old files no longer created.\n"
+    " -I DIR   Search directory for #include and #insert files.\n"
+    " -D MACRO Define function or object macro (replacement text follows '=').\n"
+    " -da MACRO Set the macro that project defines to __declspec(dllimport) or __declspec(dllexport).\n"
+    " -dx MACRO Set the macro that is non-zero when project is compiled to export DLL symbols.\n"
+    " -a FNAME Automatically #include file at start of file.\n"
+    " -k NAME  Set the package name (will embed in include guard).\n"
+    " -p       Preprocess to stdout.\n"
+    " -P       Preprocess to stdout, all code in file.\n"
+    " -E       Preprocess to stdout, all code in file and #include files.\n"
+    " -r CMDS  Set the syntax error recover commands.\n"
+
+#ifdef DEBUG_BUILD
+    " -tr      Print parse trace.\n"
+#endif
+
+    " -v       Print the values of the above options.\n"
+    " -hr      Print the help text for the -r option.\n"
+    " -T       Print token names usable in the -r option.\n"
+    " -ver     Print the version number.\n"
+    " -h\n"
+    " -help    Print this help text.\n"
+    "Options can also be specified in the environment variable LZZ_OPTIONS.\n"
+    "To turn off a boolean option precede the option with '-no'.\n"
+    "For further help, see http://www.lazycplusplus.com.\n"
+    "Copyright (C) 2001-2011, Mike Spencer (mike@lazycplusplus.com)\n"
+  };
+#endif
+}
+
+// config
+namespace conf
+{
+  // print version to standard output
+  void printVersion (std::ostream & os)
+  {
+    os << version_text;
+    os.flush ();
+  }
+
+  // print help to standard output
+  void printHelp (std::ostream & os)
+  {
+    os << version_text;
+    os << usage_text;
+    os.flush ();
+  }
+}

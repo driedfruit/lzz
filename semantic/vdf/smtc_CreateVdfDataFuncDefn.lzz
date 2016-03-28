@@ -1,0 +1,30 @@
+// smtc_CreateVdfDataFuncDefn.lzz
+//
+
+#hdr
+// semantic
+#include "smtc_CvType.h"
+#include "smtc_NamePtr.h"
+#include "smtc_ParamPtrVector.h"
+#include "smtc_VdfDataFuncDefnPtr.h"
+
+// util
+#include "util_String.h"
+
+#end
+
+#src
+// semantic
+#include "smtc_VdfDataFuncDefn.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // create vdf data func defn
+  VdfDataFuncDefnPtr createVdfDataFuncDefn (int flags, CvType const & ret_type, NamePtr const & name,
+      ParamPtrVector const & param_set, bool vararg, util::String const & cmt)
+  {
+    return new VdfDataFuncDefn (flags, ret_type, name, param_set, vararg, cmt);
+  }
+}

@@ -1,0 +1,24 @@
+// gram_FileStatPtrVector.lzz
+//
+
+$hdr
+// std lib
+#include <vector>
+
+// gram
+#include "gram_FileStatPtr.h"
+$end
+
+$src
+$end
+
+// gram
+namespace gram
+{
+  // FileStatPtrVector
+  typedef std::vector <FileStatPtr> FileStatPtrVector;
+  typedef std::vector <FileStatPtr>::iterator FileStatPtrVectorIter;
+  typedef std::vector <FileStatPtr>::const_iterator FileStatPtrVectorConstIter;
+  typedef std::vector <FileStatPtr>::reverse_iterator FileStatPtrVectorRevIter;
+  typedef std::vector <FileStatPtr>::const_reverse_iterator FileStatPtrVectorConstRevIter;
+}

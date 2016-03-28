@@ -1,0 +1,105 @@
+// msg_Message.lzz
+//
+
+#hdr
+// util
+#include "util_Ident.h"
+#include "util_String.h"
+
+// message
+#include "msg_Severity.h"
+#end
+
+#src
+// std lib
+#include <cassert>
+
+// util
+#include "util_IntToString.h"
+#end
+
+// msg
+namespace msg
+{
+  // Message
+  class Message
+  {
+    // severity
+    Severity m_severity; 
+
+    // string
+    util::String m_str;
+
+    // arg num
+    int m_arg_num;
+
+  public:
+    // constructor
+    Message (Severity severity, char const * str)
+      : m_severity (severity), m_str (str), m_arg_num (1)
+    {
+    }
+
+    // constructor
+    Message (char const * str)
+      : m_severity (ERROR_MSG), m_str (str), m_arg_num (1)
+    {
+    }
+
+    // destructor
+    ~ Message ()
+    {
+    }
+
+    // add string arg
+    void addArg (char const * arg)
+    {
+      util::String param ("%");
+      param += util::intToString (m_arg_num ++);
+      util::String::size_type p = m_str.find (param);
+      assert (p != util::String::npos);
+      m_str.replace (p, param.length (), arg);
+    }
+
+    // add string arg
+    Message & operator << (char const * arg)
+    {
+      addArg (arg);
+      return * this;
+    }
+
+    // add string arg
+    Message & operator << (util::String const & arg)
+    {
+      addArg (arg.c_str ());
+      return * this;
+    }
+
+    // add ident arg
+    Message & operator << (util::Ident const & arg)
+    {
+      addArg (arg.c_str ());
+      return * this;
+    }
+
+    // add int arg
+    Message & operator << (int arg)
+    {
+      util::String str_arg = util::intToString (arg);
+      addArg (str_arg.c_str ());
+      return * this;
+    }
+
+    // get severity
+    inline Severity getSeverity () const
+    {
+      return m_severity;
+    }
+
+    // get string
+    inline util::String const & getString () const
+    {
+      return m_str;
+    }
+  }
+}

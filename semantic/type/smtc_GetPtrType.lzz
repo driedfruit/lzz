@@ -1,0 +1,23 @@
+// smtc_GetPtrType.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_TypePtr.h"
+#include "smtc_CvType.h"
+$end
+
+$src
+// semantic
+#include "smtc_PtrType.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // get ptr type
+  TypePtr getPtrType (CvType const & to_cv_type)
+  {
+    return new PtrType (to_cv_type);
+  }
+}

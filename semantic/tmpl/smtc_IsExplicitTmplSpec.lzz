@@ -1,0 +1,25 @@
+// smtc_IsExplicitTmplSpec.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_TmplSpecPtrVector.h"
+$end
+
+$src
+#include <algorithm>
+
+// semantic
+#include "smtc_IsTmplSpecParamSetEmpty.h"
+#include "smtc_TmplSpec.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // true if explicit template spec (empty param sets in all tmpl specs)
+  bool isExplicitTmplSpec (TmplSpecPtrVector const & tmpl_spec_set)
+  {
+    return std::find_if (tmpl_spec_set.begin (), tmpl_spec_set.end (), std::not1 (IsTmplSpecParamSetEmpty ())) == tmpl_spec_set.end ();
+  }
+}

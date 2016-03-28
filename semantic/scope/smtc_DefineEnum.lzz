@@ -1,0 +1,97 @@
+// smtc_DefineEnum.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EnumtorPtrVector.h"
+#include "smtc_NamePtr.h"
+#include "smtc_ScopePtr.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+// semantic
+#include "smtc_ClassDefn.h"
+#include "smtc_ClassScope.h"
+#include "smtc_CreateEnum.h"
+#include "smtc_CreateEnumEntity.h"
+#include "smtc_GetNameIfIdent.h"
+#include "smtc_GetNameLoc.h"
+#include "smtc_IsNameQual.h"
+#include "smtc_Message.h"
+#include "smtc_Ns.h"
+#include "smtc_NsScope.h"
+#include "smtc_ScopeVisitor.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // define enum
+  struct DefineEnum (util::Loc const & loc, NamePtr const & name, EnumtorPtrVector const & enumtor_set)
+    : ScopeVisitor
+  {
+    // ns scope
+    void visit (NsScope const & scope) const
+    {
+      // check name
+      checkName ();
+
+      // add entity to ns
+      scope.getNs ()->addEntity (buildEntity ());
+    }
+
+    // class scope
+    void visit (ClassScope const & scope) const
+    {
+      // check name
+      checkName ();
+
+      // store type name in scope
+      ClassDefnPtr const & class_defn = scope.getClassDefn ();
+      if (name.isSet ())
+      {
+        util::Ident ident = getNameIfIdent (name);
+        if (ident.isSet ())
+        {
+          class_defn->addTypeName (ident);
+        }
+      }
+
+      // add entity to class
+      class_defn->addEntity (buildEntity ());
+    }
+
+    // check name
+    void checkName () const
+    {
+      // cannot be qualified
+      if (name.isSet () && isNameQual (name))
+      {
+        msg::qualEnumDefn (getNameLoc (name));
+      }
+    }
+
+    // build entity
+    EntityPtr buildEntity () const
+    {
+      EnumPtr en = createEnum (loc, name, enumtor_set);
+      return createEnumEntity (en);
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // define enum, name not set if unnamed enum
+  void defineEnum (ScopePtr const & scope, util::Loc const & loc, NamePtr const & name, EnumtorPtrVector const & enumtor_set)
+  {
+    scope->accept (DefineEnum (loc, name, enumtor_set));
+  }
+}

@@ -1,0 +1,23 @@
+// smtc_CreateTmplSpecScope.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_TmplSpecPtr.h"
+#include "smtc_ScopePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_TmplSpecScope.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create tmpl spec scope
+  ScopePtr createTmplSpecScope (ScopePtr const & parent, TmplSpecPtr const & tmpl_spec)
+  {
+    return new TmplSpecScope (parent, tmpl_spec);
+  }
+}

@@ -1,0 +1,23 @@
+// smtc_InitPtr.lzz
+//
+
+$hdr
+// util
+#include "util_BPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_Init.h"
+
+// util
+#include "util_BPtr.tpl"
+$end
+
+// semantic
+namespace smtc
+{
+  class Init;
+  typedef util::BPtr <Init> InitPtr;
+}
+template class util::BPtr <smtc::Init>;

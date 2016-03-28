@@ -1,0 +1,21 @@
+// util_IntKeyTable.lzz
+//
+
+$hdr
+// util
+#include "util_KeyTable.h"
+$end
+
+$src
+// util
+#include "util_KeyTable.tpl"
+$end
+
+// util
+namespace util
+{
+  // IntKeyTable
+  typedef KeyTable <size_t> IntKeyTable;
+  template class Key <size_t>;
+  template class KeyTable <size_t>;
+}

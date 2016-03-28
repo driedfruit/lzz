@@ -1,0 +1,24 @@
+// smtc_BaseSpecPtrVector.lzz
+//
+
+$hdr
+// std lib
+#include <vector>
+
+// semantic
+#include "smtc_BaseSpecPtr.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // BaseSpecPtrVector
+  typedef std::vector <BaseSpecPtr> BaseSpecPtrVector;
+  typedef std::vector <BaseSpecPtr>::iterator BaseSpecPtrVectorIter;
+  typedef std::vector <BaseSpecPtr>::const_iterator BaseSpecPtrVectorConstIter;
+  typedef std::vector <BaseSpecPtr>::reverse_iterator BaseSpecPtrVectorRevIter;
+  typedef std::vector <BaseSpecPtr>::const_reverse_iterator BaseSpecPtrVectorConstRevIter;
+}

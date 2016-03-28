@@ -1,0 +1,23 @@
+// smtc_CreateVdfDataFuncDefnEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EntityPtr.h"
+#include "smtc_VdfDataFuncDefnPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_VdfDataFuncDefnEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create func defn entity
+  EntityPtr createVdfDataFuncDefnEntity (VdfDataFuncDefnPtr const & vdf_data_func_defn)
+  {
+    return new VdfDataFuncDefnEntity (vdf_data_func_defn);
+  }
+}

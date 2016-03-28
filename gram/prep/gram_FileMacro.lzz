@@ -1,0 +1,38 @@
+// gram_FileMacro.lzz
+//
+// __FILE__ macro
+//
+
+$hdr
+// gram
+#include "gram_Macro.h"
+$end
+
+$src
+$end
+
+// gram
+namespace gram
+{
+  // FileMacro
+  class FileMacro : public Macro
+  {
+  public:
+    // constructor
+    inline FileMacro (util::Loc const & loc, util::Ident const & name)
+      : Macro (loc, name)
+    {
+    }
+
+    // destructor
+    ~ FileMacro ()
+    {
+    }
+
+    // get kind
+    MacroKind getKind () const
+    {
+      return FILE_MACRO;
+    }
+  }
+}

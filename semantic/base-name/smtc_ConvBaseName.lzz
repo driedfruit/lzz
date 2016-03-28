@@ -1,0 +1,48 @@
+// smtc_ConvBaseName.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_BaseName.h"
+#include "smtc_CvType.h"
+$end
+
+$src
+// semantic
+#include "smtc_BaseNameVisitor.h"
+$end
+
+// smtc
+namespace smtc
+{
+  // conv base name
+  class ConvBaseName : public BaseName
+  {
+    // cv type
+    CvType m_cv_type;
+
+  public:
+    // constructor
+    ConvBaseName (util::Loc const & loc, util::Ident const & macro, CvType const & cv_type)
+      : BaseName (loc, macro), m_cv_type (cv_type)
+    {
+    }
+
+    // destructor
+    ~ ConvBaseName ()
+    {
+    }
+
+    // accept visitor
+    void accept (BaseNameVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get cv type
+    CvType const & getCvType () const
+    {
+      return m_cv_type;
+    }
+  }
+}

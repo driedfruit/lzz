@@ -1,0 +1,23 @@
+// basl_TokenDeque.lzz
+//
+
+$hdr
+// std lib
+#include <deque>
+
+// basl
+#include "basl_Token.h"
+$end
+
+$src
+$end
+
+// basl
+namespace basl
+{
+  typedef std::deque <Token> TokenDeque;
+  typedef std::deque <Token>::iterator TokenDequeIter;
+  typedef std::deque <Token>::const_iterator TokenDequeConstIter;
+  typedef std::deque <Token>::reverse_iterator TokenDequeRevIter;
+  typedef std::deque <Token>::const_reverse_iterator TokenDequeConstRevIter;
+}

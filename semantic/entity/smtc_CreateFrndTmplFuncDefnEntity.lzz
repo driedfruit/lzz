@@ -1,0 +1,23 @@
+// smtc_CreateFrndTmplFuncDefnEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EntityPtr.h"
+#include "smtc_TmplFuncDefnPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_FrndTmplFuncDefnEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create friend template func defn entity
+  EntityPtr createFrndTmplFuncDefnEntity (TmplFuncDefnPtr const & tmpl_func_defn)
+  {
+    return new FrndTmplFuncDefnEntity (tmpl_func_defn);
+  }
+}

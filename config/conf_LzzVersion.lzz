@@ -1,0 +1,23 @@
+// conf_LzzVersion.lzz
+//
+
+// 6 June 2010, version 2.8.2
+//   added package feature (-k option) (will just mangle include guard with package name)
+
+#hdr
+#if   defined (PRL_BUILD)
+#define LZZ_VERSION "2.7.1 PRL"
+#elif defined (CGI_BUILD)
+#define LZZ_VERSION "2.6.0 CGI"
+#else
+#define LZZ_VERSION "2.8.2"
+#endif
+#end
+
+#if   defined (PRL_BUILD)
+#define LZZ_VERSION "2.7.1 PRL"
+#elif defined (CGI_BUILD)
+#define LZZ_VERSION "2.6.0 CGI"
+#else
+#define LZZ_VERSION "2.8.2"
+#endif

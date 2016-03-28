@@ -1,0 +1,19 @@
+// smtc_UsingDirPtr.lzz
+//
+
+$hdr
+#include "util_BPtr.h"
+$end
+
+$src
+#include "smtc_UsingDir.h"
+#include "util_BPtr.tpl"
+$end
+
+// semantic
+namespace smtc
+{
+  class UsingDir;
+  typedef util::BPtr <UsingDir> UsingDirPtr;
+}
+template class util::BPtr <smtc::UsingDir>;

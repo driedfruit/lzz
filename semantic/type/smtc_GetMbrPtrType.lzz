@@ -1,0 +1,24 @@
+// smtc_GetMbrPtrType.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CvType.h"
+#include "smtc_NamePtr.h"
+#include "smtc_TypePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_MbrPtrType.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // get member ptr type
+  TypePtr getMbrPtrType (NamePtr const & mbr_name, CvType const & to_cv_type)
+  {
+    return new MbrPtrType (mbr_name, to_cv_type);
+  }
+}

@@ -1,0 +1,59 @@
+// mstc_Enumtor.lzz
+//
+// enumerator
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+
+// gram
+#include "gram_Block.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // Enumtor
+  class Enumtor
+  {
+    // name
+    NamePtr m_name;
+
+    // initializer, not set if no intializer
+    gram::Block m_init;
+
+  public:
+    // constructor
+    Enumtor (NamePtr const & name, gram::Block const & init)
+      : m_name (name), m_init (init)
+    {
+    }   
+
+    // destructor
+    ~ Enumtor ()
+    {
+    }
+
+    // get name
+    inline NamePtr const & getName () const
+    {
+      return m_name;
+    }
+
+    // true if has init
+    inline bool hasInit () const
+    {
+      return m_init.isSet ();
+    }
+
+    // get init
+    inline gram::Block const & getInit () const
+    {
+      return m_init;
+    }
+  }
+}

@@ -1,0 +1,28 @@
+// smtc_CreateDtorBaseName.lzz
+//
+
+$hdr
+#include "smtc_BaseNamePtr.h"
+#include "util_Ident.h"
+#include "util_Loc.h"
+$end
+
+$src
+#include "smtc_DtorBaseName.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create dtor base name
+  inline BaseNamePtr createDtorBaseName (util::Loc const & loc, util::Ident const & ident)
+  {
+    return createDtorBaseName (loc, util::Ident (), ident);
+  }
+
+  // create dtor base name
+  BaseNamePtr createDtorBaseName (util::Loc const & loc, util::Ident const & macro, util::Ident const & ident)
+  {
+    return new DtorBaseName (loc, macro, ident);
+  }
+}

@@ -1,0 +1,29 @@
+// smtc_PrintNsTmplLazyClass.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NsPtr.h"
+#include "smtc_TmplLazyClassPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_CompleteLazyClass.h"
+#include "smtc_PrintNsTmplClassDefn.h"
+#include "smtc_TmplLazyClass.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class Output;
+
+  // print ns tmpl lazy class
+  void printNsTmplLazyClass (Output & out, TmplLazyClassPtr const & tmpl_lazy_class, NsPtr const & ns)
+  {
+    completeLazyClass (tmpl_lazy_class->getLazyClass ());
+    printNsTmplClassDefn (out, tmpl_lazy_class, ns);
+  }
+}

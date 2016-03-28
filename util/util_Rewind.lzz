@@ -1,0 +1,27 @@
+// util_Rewind.lzz
+//
+// rewind input stream
+//
+
+#hdr
+#include <iosfwd>
+#end
+
+#src
+#include <iostream>
+#end
+
+// util
+namespace util
+{
+  // needs support for xmingw (used only by lzzcgi at the moment)
+#ifndef WIN32
+
+  // rewind input stream
+  void rewind (std::istream & is)
+  {
+    is.seekg (0, std::ios_base::beg);
+  }
+
+#endif
+}

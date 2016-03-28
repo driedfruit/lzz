@@ -1,0 +1,51 @@
+// gram_GetClassKey.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ClassKey.h"
+$end
+
+$src
+// gram
+#include "gram_TokenNumber.h"
+$end
+
+// gram
+namespace gram
+{
+  // get class key from token number for class key
+  smtc::ClassKey getClassKey (int number)
+  {
+    smtc::ClassKey key;
+    switch (number)
+    {
+      case CLASS_TOKEN:
+      {
+        key = smtc::CLASS_KEY;
+        break;
+      }
+      case STRUCT_TOKEN:
+      {
+        key = smtc::STRUCT_KEY;
+        break;
+      }
+      case UNION_TOKEN:
+      {
+        key = smtc::UNION_KEY;
+        break;
+      }
+      case ENUM_TOKEN:
+      {
+        key = smtc::ENUM_KEY;
+        break;
+      }
+      case TYPENAME_TOKEN:
+      {
+        key = smtc::TYPENAME_KEY;
+        break;
+      }
+    }
+    return key;
+  }
+}

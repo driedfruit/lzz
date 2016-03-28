@@ -1,0 +1,105 @@
+// gram_CharBlock.lzz
+//
+
+#hdr
+// gram
+#include "gram_Block.h"
+
+// util
+#include "util_String.h"
+#end
+
+#inl
+#include "gram_CharBlockImpl.h"
+#end
+
+namespace gram
+{
+  // types
+  class CharBlockImpl;
+
+  // CharBlock
+  class CharBlock : public Block
+  {
+  public:
+    // constructor
+    CharBlock (util::Loc const & loc)
+      : Block (BlockImplPtr (new CharBlockImpl (loc)))
+    {
+    }
+
+    // constructor
+    CharBlock (Block const & block)
+      : Block (block)
+    {
+    }
+
+    // append
+    inline void append (char ch) const
+    {
+      getCharBlockImpl ().append (ch);
+    }
+
+    // append
+    inline void append (char const * str) const
+    {
+      getCharBlockImpl ().append (str);
+    }
+
+    // append
+    inline void append (util::String const & str) const
+    {
+      append (str.c_str ());
+    }
+
+    // append line (adds newline)
+    inline void appendLine (util::String const & str) const
+    {
+      append (str.c_str ());
+      append ('\n');
+    }
+
+    // get c string
+    inline const char * c_str () const
+    {
+      return getCharBlockImpl ().c_str ();
+    }
+
+    // get number of lines
+    inline int getNumLines () const
+    {
+      return getCharBlockImpl ().getNumLines ();
+    }
+
+    // get length
+    inline int getLength () const
+    {
+      return getCharBlockImpl ().getLength ();
+    }
+
+    // freeze
+    inline void freeze () const
+    {
+      getCharBlockImpl ().freeze ();
+    }
+
+    // trim string
+    inline void trim () const
+    {
+      getCharBlockImpl ().trim ();
+    }
+
+    // true if empty (has only white space characters, if any)
+    inline bool isEmpty () const
+    {
+      return getCharBlockImpl ().isEmpty ();
+    }
+
+  private:
+    // get char block impl
+    inline CharBlockImpl & getCharBlockImpl () const
+    {
+      return static_cast <CharBlockImpl &> (* getImpl ());
+    }
+  }
+}

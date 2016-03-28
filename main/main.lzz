@@ -1,0 +1,151 @@
+// main.lzz
+//
+
+#hdr
+#end
+
+#src
+// semantic
+#include "smtc_Lzz.h"
+#include "msg_Output.h"
+#include "msg_Recorder.h"
+
+// config
+#include "conf_Config.h"
+
+#ifdef CGI_BUILD
+#include <fstream>
+#include "smtc_File.h"
+#include "smtc_Output.h"
+#endif
+
+#end
+
+#ifndef CGI_BUILD
+
+// main
+int main (int argc, char ** argv)
+{
+  int ret_code = 0;
+  try
+  {
+    // console output is std::cout
+    std::ostream & os = std::cout;
+
+    // print messages to console
+    msg::setMessageOut (os);
+
+    // parse options
+    util::StringDeque filenames;
+    if (! conf::parseOptions (argc, argv, filenames) || msg::hasAnyFatalMessage ())
+    {
+      ret_code = 1;
+    }
+    else
+    {
+      smtc::compileFiles (filenames, os);
+    }
+  }
+  catch (...)
+  {
+    ret_code = 1;
+  }
+  if (msg::hasAnyFatalMessage ())
+  {
+    ret_code = 1;
+  }
+  return ret_code;
+}
+
+#else
+
+//
+// called by cgi process
+//
+
+// main
+int main (int argc, char ** argv)
+{
+  int ret_code = 0;
+  try
+  {
+    std::ofstream out_os ("lzzout.txt");
+    if (! out_os)
+    {
+      ret_code = 2;
+    }
+    else
+    {
+      msg::setMessageOut (out_os);
+      // parse options
+      util::StringDeque filenames;
+      if (! conf::parseOptions (argc, argv, filenames) || msg::hasAnyFatalMessage ())
+      {
+        ret_code = 1;
+      }
+      else
+      {
+        util::String filename = "Sample.lzz";
+        if (smtc::isHelpOptionSet ())
+        {
+          smtc::printLzzHelp (out_os);
+        }
+        else if (smtc::isPreprocessOptionSet ())
+        {
+          smtc::preprocessFile (filename, out_os);
+        }
+        else
+        {
+          smtc::Output output (filename);
+          smtc::translateFile (filename, output);
+          if (! msg::hasAnyFatalMessage ())
+          {
+            std::ofstream log_os ("lzzlog.txt");
+            if (! log_os)
+            {
+              ret_code = 1;
+            }
+            else
+            {
+              smtc::FilePtr file;
+              if (output.hasHdrFile (file))
+              {
+                log_os << "h" << file->getName () << std::endl;
+              }
+              if (output.hasSrcFile (file))
+              {
+                log_os << "s" << file->getName () << std::endl;
+              }
+              if (output.hasInlFile (file))
+              {
+                log_os << "i" << file->getName () << std::endl;
+              }
+              if (output.hasTplFile (file))
+              {
+                log_os << "t" << file->getName () << std::endl;
+              }
+              if (output.hasTnlFile (file))
+              {
+                log_os << "n" << file->getName () << std::endl;
+              }
+              log_os.close ();
+            }
+          }
+        }
+      }
+      out_os.close ();
+    }
+  }
+  catch (...)
+  {
+    ret_code = 1;
+  }
+  if (msg::hasAnyFatalMessage ())
+  {
+    ret_code = 1;
+  }
+  return ret_code;
+}
+
+#endif
+

@@ -1,0 +1,88 @@
+// smtc_BaseNameToString.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_BaseNamePtr.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// semantic
+#include "smtc_BaseNameVisitor.h"
+#include "smtc_ConvBaseName.h"
+#include "smtc_DtorBaseName.h"
+#include "smtc_IdentBaseName.h"
+#include "smtc_OperBaseName.h"
+#include "smtc_OperToString.h"
+
+// util
+#include "util_AppendWithSpace.h"
+#include "util_IdentToString.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+  using namespace util;
+
+  // BaseNameToString
+  struct BaseNameToString (util::String & str) : BaseNameVisitor
+  {
+    // ident base name
+    void visit (IdentBaseName const & base_name) const
+    {
+      addMacro (base_name);
+      appendWithSpace (str, identToString (base_name.getIdent ()));
+    }
+
+    // operator base name
+    void visit (OperBaseName const & base_name) const
+    {
+      addMacro (base_name);
+      appendWithSpace (str, "operator");
+      appendWithSpace (str, operToString (base_name.getOperKind ()));
+    }
+
+    // dtor base name
+    void visit (DtorBaseName const & base_name) const
+    {
+      addMacro (base_name);
+      appendWithSpace (str, '~');
+      appendWithSpace (str, identToString (base_name.getIdent ()));
+    }
+
+    // conv base name
+    void visit (ConvBaseName const & base_name) const
+    {
+      addMacro (base_name);
+      appendWithSpace (str, "operator");
+      appendWithSpace (str, base_name.getCvType ().toString ());
+    }
+
+    // add macro
+    void addMacro (BaseName const & base_name) const
+    {
+      if (base_name.hasMacro ())
+      {
+        str = base_name.getMacro ().c_str ();
+      }
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // base name to string
+  util::String baseNameToString (BaseNamePtr const & base_name)
+  {
+    util::String str;
+    base_name->accept (BaseNameToString (str));
+    return str;
+  }
+}

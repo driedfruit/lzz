@@ -1,0 +1,20 @@
+// smtc_GetCv.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Cv.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // get cv
+  inline Cv getCv (bool c, bool v)
+  {
+    return Cv (c, v);
+  }
+}

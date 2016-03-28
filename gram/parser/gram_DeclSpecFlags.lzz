@@ -1,0 +1,24 @@
+// navg_DeclSpecFlags.lzz
+//
+// declaration specifier flags
+//
+
+$hdr
+$end
+
+$src
+$end
+
+// gram
+namespace gram
+{
+  // flags
+  enum
+  {
+    // typedef
+    TYPEDEF_SPEC = 1 << 0,
+
+    // friend
+    FRIEND_SPEC = 1 << 1,
+  }
+}

@@ -1,0 +1,39 @@
+// smtc_PrintParamAsObj.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FilePtr.h"
+#include "smtc_ParamPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_GetNameLoc.h"
+#include "smtc_Param.h"
+#include "smtc_PrintCode.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // using util
+  using namespace util;
+
+#if 0
+  // print param as obj decl
+  void printParamAsObj (FilePtr const & file, ParamPtr const & param)
+  {
+    String str = param->toString (false);
+    str += ';';
+    NamePtr const & name = param->getName ();
+    printLine (file, getNameLoc (name), str);
+  }
+
+  // functor: print param as obj
+  inline void PrintParamAsObj (FilePtr const & file; ParamPtr const & param) const
+  {
+    printParamAsObj (file, param);
+  }
+#endif
+}

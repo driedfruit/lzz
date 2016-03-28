@@ -1,0 +1,55 @@
+// smtc_QualName.lzz
+//
+
+$hdr
+#include "smtc_Name.h"
+#include "smtc_NamePtr.h"
+$end
+
+$src
+#include "smtc_NameVisitor.h"
+$end
+
+// smtc
+namespace smtc
+{
+  // QualName
+  class QualName : public Name
+  {
+    // qual name (not set if global scope)
+    NamePtr m_qual_name;
+
+    // unql name
+    NamePtr m_unql_name;
+
+  public:
+    // constructor
+    QualName (NamePtr const & qual_name, NamePtr const & unql_name)
+      : m_qual_name (qual_name), m_unql_name (unql_name)
+    {
+    }
+
+    // destructor
+    ~ QualName ()
+    {
+    }
+
+    // get qual name
+    NamePtr const & getQualName () const
+    {
+      return m_qual_name;
+    }
+
+    // get unql name
+    NamePtr const & getUnqlName () const
+    {
+      return m_unql_name;
+    }
+
+    // accept visitor
+    void accept (NameVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+  }
+}

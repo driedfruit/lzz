@@ -1,0 +1,48 @@
+// smtc_EnumEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Entity.h"
+#include "smtc_EnumPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_EntityVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // EnumEntity
+  class EnumEntity : public Entity
+  {
+    // enum decl
+    EnumPtr m_en;
+
+  public:
+    // constructor
+    EnumEntity (EnumPtr const & en)
+      : m_en (en)
+    {
+    }
+
+    // destructor
+    ~ EnumEntity ()
+    {
+    }
+
+    // accept visitor
+    void accept (EntityVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get enum decl
+    inline EnumPtr const & getEnum () const
+    {
+      return m_en;
+    }
+  }
+}

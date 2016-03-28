@@ -1,0 +1,36 @@
+// smtc_CreateTmplName.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_BaseNamePtr.h"
+#include "smtc_NamePtr.h"
+
+// gram
+#include "gram_Block.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// semantic
+#include "smtc_TmplName.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create template name
+  NamePtr createTmplName (BaseNamePtr const & base_name, bool has_tmpl, gram::Block const & args)
+  {
+    args.trim ();
+    return createTmplName (base_name, has_tmpl, args.toString ());
+  }
+
+  // create template name with string args
+  NamePtr createTmplName (BaseNamePtr const & base_name, bool has_tmpl, util::String const & args)
+  {
+    return new TmplName (base_name, has_tmpl, args);
+  }
+}

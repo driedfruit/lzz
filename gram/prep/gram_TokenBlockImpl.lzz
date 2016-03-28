@@ -1,0 +1,70 @@
+// gram_TokenBlockImpl.lzz
+//
+
+#hdr
+// gram
+#include "gram_BlockImpl.h"
+
+// basil
+#include "basl_TokenDeque.h"
+#end
+
+#src
+// std lib
+#include <algorithm>
+
+// util
+#include "gram_PrettyPrintTokens.h"
+#end
+
+namespace gram
+{
+  // TokenBlockImpl
+  class TokenBlockImpl : public BlockImpl
+  {
+    // tokens
+    basl::TokenDeque m_tokens;
+
+  public:
+    // constructor
+    TokenBlockImpl (util::Loc const & loc)
+      : BlockImpl (loc)
+    {
+    }
+
+    // destructor
+    ~ TokenBlockImpl ()
+    {
+    }
+
+    // true if chararacter block
+    bool isCharBlock () const
+    {
+      return false;
+    }
+
+    // true if empty (has only white space characters, if any)
+    bool isEmpty () const
+    {
+      return m_tokens.empty ();
+    }
+
+    // to string
+    util::String toString () const
+    {
+      return prettyPrintTokensToString (m_tokens);
+    }
+
+    // append token
+    void append (basl::Token const & token)
+    {
+      m_tokens.push_back (token);
+    }
+
+    // get tokens
+    basl::TokenDeque const & getTokens () const
+    {
+      return m_tokens;
+    }
+  }
+}

@@ -1,0 +1,24 @@
+// smtc_ScopePtrDeque.lzz
+//
+
+$hdr
+// std lib
+#include <deque>
+
+// semantic
+#include "smtc_ScopePtr.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // ScopePtrDeque
+  typedef std::deque <ScopePtr> ScopePtrDeque;
+  typedef std::deque <ScopePtr>::iterator ScopePtrDequeIter;
+  typedef std::deque <ScopePtr>::const_iterator ScopePtrDequeConstIter;
+  typedef std::deque <ScopePtr>::reverse_iterator ScopePtrDequeRevIter;
+  typedef std::deque <ScopePtr>::const_reverse_iterator ScopePtrDequeConstRevIter;
+}

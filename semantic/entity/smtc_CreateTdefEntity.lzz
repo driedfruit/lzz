@@ -1,0 +1,23 @@
+// smtc_CreateTdefEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EntityPtr.h"
+#include "smtc_TdefPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_TdefEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create typedef entity
+  EntityPtr createTdefEntity (TdefPtr const & tdef)
+  {
+    return new TdefEntity (tdef);
+  }
+}

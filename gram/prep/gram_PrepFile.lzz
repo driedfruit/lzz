@@ -1,0 +1,39 @@
+// gram_PrepFile.lzz
+//
+// preprocess file with no regard to context
+//
+
+#hdr
+// basil
+#include "basl_TokenDeque.h"
+
+// util
+#include "util_String.h"
+#end
+
+#src
+// gram
+#include "gram_Prep.h"
+#include "gram_TokenNumber.h"
+#end
+
+// gram
+namespace gram
+{
+  // prep file, insert_all true if including all #includes in token_set
+  void prepFile (util::String const & filename, bool insert_all, basl::TokenDeque & token_set)
+  {
+    // no output
+    Prep prep (filename, 0, insert_all);
+    for (;;)
+    {
+      // preprocess all tokens, no blocks
+      basl::Token token = prep.getNextToken ();
+      token_set.push_back (token);
+      if (token.getNumber () == EOT)
+      {
+        break;
+      }
+    }
+  }
+}

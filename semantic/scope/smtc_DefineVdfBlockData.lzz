@@ -1,0 +1,104 @@
+// smtc_DefineVdfBlockData.lzz
+//
+// define vdf block data
+//
+
+#hdr
+// semantic
+#include "smtc_ScopePtr.h"
+#include "smtc_ParamPtrVector.h"
+
+// util
+#include "util_Ident.h"
+#include "util_Loc.h"
+#include "util_String.h"
+
+#end
+
+#src
+// semantic
+#include "smtc_CreateIdentBaseName.h"
+#include "smtc_CreateNonTmplName.h"
+#include "smtc_CreateVdfBlockDataScope.h"
+#include "smtc_CreateVdfDataFuncDefn.h"
+#include "smtc_CreateVdfDataFuncDefnEntity.h"
+#include "smtc_GetCvTypeAsRef.h"
+#include "smtc_GetUserType.h"
+#include "smtc_GetVdfDataId.h"
+#include "smtc_NameToString.h"
+#include "smtc_Ns.h"
+#include "smtc_ScopeVisitor.h"
+#include "smtc_VdfScope.h"
+
+// util
+#include "util_GetIdent.h"
+
+#end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // define vdf block data
+  // has_id true if ident form of short data, false if string form
+  // if has_id true then name is name_id, otherwise name is name_str
+  struct DefineVdfBlockData (util::Loc const & loc, bool has_id, util::Ident const & name_id,
+      util::String name_str, ParamPtrVector const & param_set, bool vararg, ScopePtr & res_scope)
+    : ScopeVisitor
+  {
+    // vdf scope
+    void visit (VdfScope const & scope) const
+    {
+      // definition goes in outer ns
+      NsPtr const & ns = scope.getOuterNs ();
+      // return type is ref to const base type
+      CvType ret_type = getCvTypeAsRef (CvType (getUserType (scope.getBaseTypeName ()), Cv (true, false)));
+      // get encoded function name and comment
+      util::String base_type_str = nameToString (scope.getBaseTypeName ());
+      util::String cmt = base_type_str;
+      cmt += ": ";
+      util::Ident enc_name_id;
+      if (has_id)
+      {
+        // name_id is encoded id, and that's all we have for a comment too
+        enc_name_id = name_id;
+        cmt += name_id.c_str ();
+      }
+      else
+      {
+        enc_name_id = util::getIdent (getVdfDataId (base_type_str, name_str));
+        cmt += name_str;
+      }
+      NamePtr name = createNonTmplName (createIdentBaseName (loc, enc_name_id));
+      VdfDataFuncDefnPtr vdf_data_func_defn = createVdfDataFuncDefn (0, ret_type, name, param_set, vararg, cmt);
+      ns->addEntity (createVdfDataFuncDefnEntity (vdf_data_func_defn));
+      // vdf data func saved in block data scope for obj definitions
+      res_scope = createVdfBlockDataScope (vdf_data_func_defn);
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // define vdf block data with identifier
+  // return block data scope
+  ScopePtr defineVdfBlockData (ScopePtr const & scope, util::Loc const & loc, util::Ident const & ident,
+      ParamPtrVector const & param_set, bool vararg)
+  {
+    ScopePtr res_scope;
+    scope->accept (DefineVdfBlockData (loc, true, ident, util::String (), param_set, vararg, res_scope));
+    return res_scope;
+  }
+
+  // define vdf block data with string
+  ScopePtr defineVdfBlockData (ScopePtr const & scope, util::Loc const & loc, util::String const & str,
+      ParamPtrVector const & param_set, bool vararg)
+  {
+    ScopePtr res_scope;
+    scope->accept (DefineVdfBlockData (loc, false, util::Ident (), str, param_set, vararg, res_scope));
+    return res_scope;
+  }
+}

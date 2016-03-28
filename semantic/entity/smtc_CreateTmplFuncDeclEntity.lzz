@@ -1,0 +1,23 @@
+// smtc_CreateTmplFuncDeclEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EntityPtr.h"
+#include "smtc_TmplFuncDeclPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_TmplFuncDeclEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create func decl entity
+  EntityPtr createTmplFuncDeclEntity (TmplFuncDeclPtr const & tmpl_func_decl)
+  {
+    return new TmplFuncDeclEntity (tmpl_func_decl);
+  }
+}

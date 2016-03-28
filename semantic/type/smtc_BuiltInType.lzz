@@ -1,0 +1,124 @@
+// smtc_BuiltInType.lzz
+//
+
+// generate template file
+$pragma tpl on tpl
+
+$hdr
+// semantic
+#include "smtc_BuiltIn.h"
+#include "smtc_Type.h"
+$end
+
+$src
+// semantic
+#include "smtc_AppendCv.h"
+#include "smtc_BuiltInType.tpl"
+$end
+
+$tpl
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // BuiltInType
+  template <class T>
+  class BuiltInType : public Type
+  {
+  public:
+    // constructor
+    BuiltInType ()
+    {
+    }
+
+    // destructor
+    ~ BuiltInType ()
+    {
+    }
+
+    // get kind
+    TypeKind getKind () const
+    {
+      return T::KIND;
+    }
+
+    // to string
+    util::String toString (util::String const & dcl, bool c, bool v) const
+    {
+      util::String str = T::NAME;
+      appendCv (str, c, v);
+      util::appendWithSpace (str, dcl);
+      return str;
+    }
+  }
+
+  // BoolType
+  typedef BuiltInType <Bool> BoolType;
+  template class BuiltInType <Bool>;
+
+  // CharType
+  typedef BuiltInType <Char> CharType;
+  template class BuiltInType <Char>;
+
+  // SignedCharType
+  typedef BuiltInType <SignedChar> SignedCharType;
+  template class BuiltInType <SignedChar>;
+
+  // UnsignedCharType
+  typedef BuiltInType <UnsignedChar> UnsignedCharType;
+  template class BuiltInType <UnsignedChar>;
+
+  // WideCharType
+  typedef BuiltInType <WideChar> WideCharType;
+  template class BuiltInType <WideChar>;
+
+  // ShortIntType
+  typedef BuiltInType <ShortInt> ShortIntType;
+  template class BuiltInType <ShortInt>;
+
+  // UnsignedShortIntType
+  typedef BuiltInType <UnsignedShortInt> UnsignedShortIntType;
+  template class BuiltInType <UnsignedShortInt>;
+
+  // IntType
+  typedef BuiltInType <Int> IntType;
+  template class BuiltInType <Int>;
+
+  // UnsignedIntType
+  typedef BuiltInType <UnsignedInt> UnsignedIntType;
+  template class BuiltInType <UnsignedInt>;
+
+  // LongIntType
+  typedef BuiltInType <LongInt> LongIntType;
+  template class BuiltInType <LongInt>;
+
+  // UnsignedLongIntType
+  typedef BuiltInType <UnsignedLongInt> UnsignedLongIntType;
+  template class BuiltInType <UnsignedLongInt>;
+
+  // LongLongIntType
+  typedef BuiltInType <LongLongInt> LongLongIntType;
+  template class BuiltInType <LongLongInt>;
+
+  // UnsignedLongLongIntType
+  typedef BuiltInType <UnsignedLongLongInt> UnsignedLongLongIntType;
+  template class BuiltInType <UnsignedLongLongInt>;
+
+  // FloatType
+  typedef BuiltInType <Float> FloatType;
+  template class BuiltInType <Float>;
+
+  // DoubleType
+  typedef BuiltInType <Double> DoubleType;
+  template class BuiltInType <Double>;
+
+  // LongDoubleType
+  typedef BuiltInType <LongDouble> LongDoubleType;
+  template class BuiltInType <LongDouble>;
+
+  // VoidType
+  typedef BuiltInType <Void> VoidType;
+  template class BuiltInType <Void>;
+}

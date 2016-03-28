@@ -1,0 +1,57 @@
+// smtc_GetNameIfIdent.lzz
+//
+// get name as identifier, if not an unqualified identifier
+// then return nothing
+//
+
+#hdr
+// semantic
+#include "smtc_NamePtr.h"
+
+// util
+#include "util_Ident.h"
+#end
+
+#src
+// semantic
+#include "smtc_GetBaseNameIfIdent.h"
+#include "smtc_NameVisitor.h"
+#include "smtc_NonTmplName.h"
+#include "smtc_TmplName.h"
+
+#end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // get name as ident
+  struct GetNameIfIdent (util::Ident & ident) : NameVisitor
+  {
+    // tmpl name
+    void visit (TmplName const & name) const
+    {
+      ident = getBaseNameIfIdent (name.getBaseName ());
+    }
+
+    // non tmpl naem
+    void visit (NonTmplName const & name) const
+    {
+      ident = getBaseNameIfIdent (name.getBaseName ());
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // get name if unqualified identifier, if not return unset identifier
+  util::Ident getNameIfIdent (NamePtr const & name)
+  {
+    util::Ident ident;
+    name->accept (GetNameIfIdent (ident));
+    return ident;
+  }
+}

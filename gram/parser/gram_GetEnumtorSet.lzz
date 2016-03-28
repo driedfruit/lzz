@@ -1,0 +1,58 @@
+// gram_GetEnumtorSet.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EnumtorPtrVector.h"
+
+// basil
+#include "basl_Nonterm.h"
+$end
+
+$src
+// gram
+#include "gram_BlockTable.h"
+#include "gram_GetNodeName.h"
+#include "gram_Nonterm.h"
+#include "gram_Visitor.h"
+
+// semantic
+#include "smtc_GetEnumtor.h"
+$end
+
+// private namespace
+namespace 
+{
+  // using gram
+  using namespace gram;
+
+  // get enumtor set
+  struct GetEnumtorSet (smtc::EnumtorPtrVector & enumtor_set)
+    : Visitor
+  {
+    // enumtor-decl -> obj-name
+    void visit (EnumtorDecl1Node & node) const
+    {
+      smtc::NamePtr name = getNodeName (node.getObjName ());
+      enumtor_set.push_back (smtc::getEnumtor (name));
+    }
+    
+    // enumtor-decl -> obj-name ASSIGN BLOCK 9
+    void visit (EnumtorDecl2Node & node) const
+    {
+      smtc::NamePtr name = getNodeName (node.getObjName ());
+      Block init = getBlock (node.getBLOCK_TOKEN ().getLexeme ());
+      enumtor_set.push_back (smtc::getEnumtor (name, init));
+    }
+  }
+}
+
+// gram
+namespace gram
+{
+  // get enumtor set
+  void getEnumtorSet (basl::Nonterm & nonterm, smtc::EnumtorPtrVector & enumtor_set)
+  {
+    nonterm.accept (GetEnumtorSet (enumtor_set));
+  }
+}

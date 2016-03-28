@@ -1,0 +1,96 @@
+// basl_ErrorRec.lzz
+//
+// Copyright (C) 2002, Michael Spencer
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, subject to the following
+// restrictions:
+// 
+//   1. The origin of this software must not be misrepresented; you must
+//      not claim that you wrote the original software. If you use this
+//      software in a product, an acknowledgment in the product
+//      documentation would be appreciated but is not required.
+// 
+//   2. Altered source versions must be plainly marked as such, and must
+//      not be misrepresented as being the original software.
+// 
+// Basil documentation, as well as the latest version, is available at
+// http://www.lazycplusplus.com/basil.
+//
+// Send comments and bug reports to michael_spencer@lazycplusplus.com.
+// 
+
+$hdr
+// basil
+#include "basl_FreeTokenVector.h"
+#include "basl_RecCmdPtrDeque.h"
+$end
+
+$src
+// basil
+#include "basl_RecCmd.h"
+$end
+
+// basil
+namespace basl
+{
+  // ErrorRec
+  class ErrorRec
+  {
+    // recover command set
+    RecCmdPtrDeque m_rec_cmd_set;
+
+  public:
+    // constructor
+    inline ErrorRec ()
+    {
+    }
+
+    // destructor
+    inline ~ ErrorRec ()
+    {
+    }
+
+    // insert some tokens
+    void insertSome (FreeTokenVector const & free_token_set)
+    {
+      m_rec_cmd_set.push_back (new InsertSomeRecCmd (free_token_set));
+    }
+
+    // discard max_discard tokens
+    void discardSome (int max_discard)
+    {
+      m_rec_cmd_set.push_back (new DiscardSomeRecCmd (max_discard));
+    }
+
+    // discard token with number
+    void discardOne (int number)
+    {
+      m_rec_cmd_set.push_back (new DiscardOneRecCmd (number));
+    }
+
+    // discard max_discard tokens and insert some tokens
+    void replaceSome (int max_discard, FreeTokenVector const & free_token_set)
+    {
+      m_rec_cmd_set.push_back (new ReplaceSomeRecCmd (max_discard, free_token_set));
+    }
+  
+    // discard token with number and insert some tokens 
+    void replaceOne (int number, FreeTokenVector const & free_token_set)
+    {
+      m_rec_cmd_set.push_back (new ReplaceOneRecCmd (number, free_token_set));
+    }
+
+    // move some
+    void moveSome (int max_move, int max_num)
+    {
+      m_rec_cmd_set.push_back (new MoveSomeRecCmd (max_move, max_num));
+    }
+
+    // get recover command set
+    inline RecCmdPtrDeque const & getRecCmdSet () const
+    {
+      return m_rec_cmd_set;
+    }
+  }
+}

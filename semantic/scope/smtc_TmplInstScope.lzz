@@ -1,0 +1,50 @@
+// smtc_TmplInstScope.lzz
+//
+// template instantiation scope
+//
+
+$hdr
+// semantic
+#include "smtc_Scope.h"
+#include "smtc_ScopePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_ScopeVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // TmplInstScope
+  class TmplInstScope : public Scope
+  {
+    // parent scope
+    ScopePtr m_parent;
+
+  public:
+    // constructor
+    TmplInstScope (ScopePtr const & parent)
+      : m_parent (parent)
+    {
+    }
+
+    // destructor
+    ~ TmplInstScope ()
+    {
+    }
+
+    // accept visitor
+    void accept (ScopeVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get parent
+    ScopePtr const & getParent () const
+    {
+      return m_parent;
+    }
+  }
+}

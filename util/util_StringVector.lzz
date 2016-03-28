@@ -1,0 +1,17 @@
+// util_StringVector.c++
+//
+
+$hdr
+#include <vector>
+#include "util_String.h"
+$end
+
+//
+// util
+//
+namespace util
+{
+  typedef std::vector <String> StringVector;
+  typedef std::vector <String>::iterator StringVectorIter;
+  typedef std::vector <String>::const_iterator StringVectorConstIter;
+}

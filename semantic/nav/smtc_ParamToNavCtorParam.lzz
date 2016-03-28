@@ -1,0 +1,35 @@
+// smtc_ParamToNavCtorParam.lzz
+//
+// (non type) param to navigator ctor param
+//
+
+#hdr
+// semantic
+#include "smtc_ParamPtr.h"
+#end
+
+#src
+// semantic
+#include "smtc_CreateNonTypeParam.h"
+#include "smtc_GetCvTypeAsRef.h"
+#include "smtc_NonTypeParam.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // convert param to nav ctor param
+  // as reference with no default arg and no dcl specifiers 
+  ParamPtr paramToNavCtorParam (ParamPtr const & param)
+  {
+    NonTypeParam const & non_type_param = static_cast <NonTypeParam const &> (* param);
+    CvType const & cv_type = non_type_param.getCvType ();
+    return createNonTypeParam (0, getCvTypeAsRef (cv_type), non_type_param.getName (), gram::Block ());
+  }
+
+  // functor
+  inline ParamPtr ParamToNavCtorParam (; ParamPtr const & param) const
+  {
+    return paramToNavCtorParam (param);
+  }
+}

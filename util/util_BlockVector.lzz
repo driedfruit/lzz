@@ -1,0 +1,17 @@
+// util_BlockVector.lzz
+//
+
+$header
+#include <vector>
+#include "util_Block.h"
+$end
+
+//
+// util
+//
+namespace util
+{
+  typedef std::vector <Block> BlockVector;
+  typedef std::vector <Block>::iterator BlockVectorIter;
+  typedef std::vector <Block>::const_iterator BlockVectorConstIter;
+}

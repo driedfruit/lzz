@@ -1,0 +1,130 @@
+// util_Block.lzz
+//
+// captured text
+//
+
+$hdr
+// util
+#include "util_BPtr.h"
+#include "util_Loc.h"
+#include "util_String.h"
+$end
+
+$src
+// util
+#include "util_BPtr.tpl"
+#include "util_BlockImpl.h"
+$end
+
+// util
+namespace util
+{
+  // BlockImplPtr
+  class BlockImpl;
+  typedef BPtr <BlockImpl> BlockImplPtr;
+  template class BPtr <BlockImpl>;
+
+  // Block
+  class Block
+  {
+    // impl
+    BlockImplPtr m_impl;
+
+  public:
+    // default constructor
+    Block ()
+      : m_impl (BlockImplPtr ())
+    {
+    }
+
+    // constructor
+    explicit Block (Loc const & loc)
+      : m_impl (new BlockImpl (loc)) 
+    {
+    }
+
+    // destructor
+    ~ Block ()
+    {
+    }
+
+    // true if set
+    bool isSet () const
+    {
+      return m_impl.isSet ();
+    }
+
+    // set location (used to set location of left brace for correct indentation)
+    void setLoc (Loc const & loc)
+    {
+      m_impl->setLoc (loc);
+    }
+
+    // get location
+    Loc const & getLoc () const
+    {
+      return m_impl->getLoc ();
+    }
+
+    // append
+    void append (char ch) const
+    {
+      m_impl->append (ch);
+    }
+
+    // append
+    void append (char const * str) const
+    {
+      m_impl->append (str);
+    }
+
+    // append
+    inline void append (util::String const & str) const
+    {
+      append (str.c_str ());
+    }
+
+    // append line (adds newline)
+    inline void appendLine (util::String const & str) const
+    {
+      append (str.c_str ());
+      append ('\n');
+    }
+
+    // to string
+    const char * toString () const
+    {
+      return m_impl->c_str ();
+    }
+
+    // get number of lines
+    int getNumLines () const
+    {
+      return m_impl->getNumLines ();
+    }
+
+    // get length
+    int getLength () const
+    {
+      return m_impl->getLength ();
+    }
+
+    // freeze
+    void freeze () const
+    {
+      m_impl->freeze ();
+    }
+
+    // trim string
+    void trim () const
+    {
+      m_impl->trim ();
+    }
+
+    // true if empty (has any white space)
+    bool isEmpty () const
+    {
+      return m_impl->isEmpty ();
+    }
+  }
+}

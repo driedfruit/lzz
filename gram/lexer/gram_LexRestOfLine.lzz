@@ -1,0 +1,58 @@
+// gram_LexRestOfLine.lzz
+//
+
+$hdr
+// gram
+#include "basl_TokenVector.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+// gram
+#include "gram_Lexer.h"
+$end
+
+// gram
+namespace gram
+{
+  // types
+  class Lexer;
+
+  // lex tokens to end of line, use normal lex state, set end of line location, return number of tokens lexed
+  int lexRestOfLine (Lexer & lexer, util::Loc & eol_loc, basl::TokenVector & token_set)
+  {
+    int num = 0;
+    for (basl::Token token; lexer.getNextToken (eol_loc, token); token_set.push_back (token))
+    {
+      ++ num;
+    }
+    return num;
+  }
+
+  // lex tokens to end of line, use normal lex state
+  inline int lexRestOfLine (Lexer & lexer, basl::TokenVector & token_set)
+  {
+    util::Loc eol_loc;
+    return lexRestOfLine (lexer, eol_loc, token_set);
+  }
+
+  /*
+  // lex tokens to end of line, use normal lex state, set end of line location, return number of tokens lexed
+  void lexRestOfLine (Lexer & lexer, util::Loc & eol_loc, basl::TokenDeque & token_set)
+  {
+    for (basl::Token token; lexer.getNextToken (eol_loc, token);)
+    {
+      token_set.push_back (token);
+    }
+  }
+
+  // lex tokens to end of line, use normal lex state
+  inline void lexRestLine (Lexer & lexer, basl::TokenDeque & token_set)
+  {
+    util::Loc eol_loc;
+    lexRestOfLine (lexer, eol_loc, token_set);
+  }
+  */
+}

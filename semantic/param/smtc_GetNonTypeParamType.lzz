@@ -1,0 +1,23 @@
+// smtc_GetNonTypeParamType.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CvType.h"
+#include "smtc_ParamPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_NonTypeParam.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // get non type param type
+  CvType GetNonTypeParamType (; ParamPtr const & param) const
+  {
+    return static_cast <NonTypeParam const &> (* param).getCvType ();
+  }
+}

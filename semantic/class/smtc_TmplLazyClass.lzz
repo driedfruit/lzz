@@ -1,0 +1,37 @@
+// smtc_TmplLazyClass.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_LazyClassPtr.h"
+#include "smtc_TmplClassDefn.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // TmplLazyClass
+  class TmplLazyClass : public TmplClassDefn
+  {
+  public:
+    // constructor
+    inline TmplLazyClass (TmplSpecPtrVector const & tmpl_spec_set, LazyClassPtr const & lazy_class)
+      : TmplClassDefn (tmpl_spec_set, lazy_class)
+    {
+    }
+
+    // destructor
+    ~ TmplLazyClass ()
+    {
+    }
+
+    // get lazy class
+    inline LazyClassPtr getLazyClass () const
+    {
+      return getClassDecl ();
+    }
+  }
+}

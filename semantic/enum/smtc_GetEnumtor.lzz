@@ -1,0 +1,41 @@
+// smtc_GetEnumtor.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+#include "smtc_EnumtorPtr.h"
+
+// gram
+#include "gram_Block.h"
+$end
+
+$src
+// semantic
+#include "smtc_CreateEnumtor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // get enumtor
+  EnumtorPtr getEnumtor (NamePtr const & name, gram::Block const & init)
+  {
+    // TBD: check name
+    // ...
+
+    // trim init
+    if (init.isSet ())
+    {
+      init.trim ();
+    }
+    
+    return createEnumtor (name, init);
+  }
+
+  // get enumtor
+  inline EnumtorPtr getEnumtor (NamePtr const & name)
+  {
+    return getEnumtor (name, gram::Block ());
+  }
+}

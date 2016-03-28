@@ -1,0 +1,23 @@
+// smtc_CreateLazyClassScope.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_LazyClassPtr.h"
+#include "smtc_ScopePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_LazyClassScope.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create class scope
+  ScopePtr createLazyClassScope (LazyClassPtr const & lazy_class)
+  {
+    return new LazyClassScope (lazy_class);
+  }
+}

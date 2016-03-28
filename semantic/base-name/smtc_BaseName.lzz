@@ -1,0 +1,60 @@
+// smtc_BaseName.lzz
+//
+
+$hdr
+#include "util_Ident.h"
+#include "util_Loc.h"
+$end
+
+$src
+$end
+
+// smtc
+namespace smtc
+{
+  // types
+  class BaseNameVisitor;
+
+  // BaseName
+  class BaseName
+  {
+    // loc
+    util::Loc m_loc;
+
+    // persistent macro name (for bonnie)
+    util::Ident m_macro;
+
+  public:
+    // constructor
+    BaseName (util::Loc const & loc, util::Ident const & macro)
+      : m_loc (loc), m_macro (macro)
+    {
+    }
+
+    // destructor
+    virtual ~ BaseName ()
+    {
+    }
+
+    // get loc
+    inline util::Loc const & getLoc () const
+    {
+      return m_loc;
+    }
+
+    // true if has macro
+    inline bool hasMacro () const
+    {
+      return m_macro.isSet ();
+    }
+
+    // get macro
+    inline util::Ident const & getMacro () const
+    {
+      return m_macro;
+    }
+
+    // accept visitor
+    virtual void accept (BaseNameVisitor const & visitor) const = 0;
+  }
+}

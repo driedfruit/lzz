@@ -1,0 +1,30 @@
+// smtc_PrintAccessSpec.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FilePtr.h"
+#include "smtc_AccessSpecPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_AccessSpec.h"
+#include "smtc_AccessToString.h"
+#include "smtc_PrintCode.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // using util
+  using namespace util;
+
+  // print access spec
+  void printAccessSpec (FilePtr const & file, AccessSpecPtr const & access_spec)
+  {
+    String str = accessToString (access_spec->getAccess ());
+    str += ':';
+    printLine (file, DECLARATION_SECTION, access_spec->getLoc (), -1, str);
+  }
+}

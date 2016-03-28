@@ -1,0 +1,34 @@
+// smtc_CreateTmplClassDefn.lzz
+//
+
+namespace smtc
+{
+  // create class defn
+  TmplClassDefnPtr createTmplClassDefn (TmplSpecPtrVector const & tmpl_spec_set, ClassKey key, NamePtr const & name,
+      BaseSpecPtrVector const & base_spec_set)
+  {
+    bool is_dll_api = false;
+    ClassDefnPtr class_defn = createClassDefn (key, name, is_dll_api, base_spec_set);
+    return new TmplClassDefn (tmpl_spec_set, class_defn);
+  }
+
+  // create class defn
+  TmplClassDefnPtr createTmplClassDefn (TmplSpecPtrVector const & tmpl_spec_set, ClassDefnPtr const & class_defn)
+  {
+    return new TmplClassDefn (tmpl_spec_set, class_defn);
+  }
+}
+
+#hdr
+#include "smtc_BaseSpecPtrVector.h"
+#include "smtc_ClassDefnPtr.h"
+#include "smtc_ClassKey.h"
+#include "smtc_NamePtr.h"
+#include "smtc_TmplClassDefnPtr.h"
+#include "smtc_TmplSpecPtrVector.h"
+#end
+
+#src
+#include "smtc_CreateClassDefn.h"
+#include "smtc_TmplClassDefn.h"
+#end

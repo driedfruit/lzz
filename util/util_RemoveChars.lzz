@@ -1,0 +1,34 @@
+// util_RemoveChars.lzz
+//
+// remove characters from string
+//
+
+$hdr
+// util
+#include "util_String.h"
+$end
+
+$src
+// std lib
+#include <cstring>
+$end
+
+// util
+namespace util
+{
+  // remove characters in chars
+  // return string with characters removed
+  String removeChars (String const & str1, char const * chars)
+  {
+    String str2;
+    for (StringConstIter i = str1.begin (); i != str1.end (); ++ i)
+    {
+      char ch = * i;
+      if (strchr (chars, ch) == NULL)
+      {
+        str2 += ch;
+      }
+    }
+    return str2;
+  }
+}

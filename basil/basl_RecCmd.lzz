@@ -1,0 +1,192 @@
+// basl_RecCmd.lzz
+//
+
+$hdr
+// basil
+#include "basl_FreeTokenVector.h"
+#include "basl_LRBTParser.h"
+#include "basl_RecCmdPtr.h"
+$end
+
+$src
+$end
+
+// basl
+namespace basl
+{
+  // types
+  struct LRParser;
+  struct LRBTParser;
+
+  // base recover command
+  class RecCmd
+  {
+  public:
+    // destructor
+    virtual ~ RecCmd ()
+    {
+    }
+
+    // true if can recover
+    virtual bool canRecover (LRBTParser & lrbt_parser, LRParser const & start_lr_parser, LRParser & lr_parser) const = 0;
+  }
+
+  // recover by inserting one token
+  class InsertSomeRecCmd : public RecCmd
+  {
+    // free token set
+    FreeTokenVector free_token_set;
+
+  public:
+    // constructor
+    inline InsertSomeRecCmd (FreeTokenVector const & free_token_set)
+      : free_token_set (free_token_set)
+    {
+    }
+
+    // destructor
+    ~ InsertSomeRecCmd ()
+    {
+    }
+
+    // true if can recover
+    bool canRecover (LRBTParser & lrbt_parser, LRParser const & start_lr_parser, LRParser & lr_parser) const
+    {
+      return lrbt_parser.insertSome (start_lr_parser, free_token_set, lr_parser);
+    }
+  }
+
+  // recover by discarding some number of tokens
+  class DiscardSomeRecCmd : public RecCmd
+  {
+    // max discard
+    int max_discard;
+
+  public:
+    // constructor
+    inline DiscardSomeRecCmd (int max_discard)
+      : max_discard (max_discard)
+    {
+    }
+
+    // destructor
+    ~ DiscardSomeRecCmd ()
+    {
+    }
+
+    // true if can recover
+    bool canRecover (LRBTParser & lrbt_parser, LRParser const & start_lr_parser, LRParser & lr_parser) const
+    {
+      return lrbt_parser.discardSome (start_lr_parser, max_discard, lr_parser);
+    }
+  }
+
+  // recover by discarding one number of tokens
+  class DiscardOneRecCmd : public RecCmd
+  {
+    // number of token to discard
+    int number;
+
+  public:
+    // constructor
+    inline DiscardOneRecCmd (int number)
+      : number (number)
+    {
+    }
+
+    // destructor
+    ~ DiscardOneRecCmd ()
+    {
+    }
+
+    // true if can recover
+    bool canRecover (LRBTParser & lrbt_parser, LRParser const & start_lr_parser, LRParser & lr_parser) const
+    {
+      return lrbt_parser.discardOne (start_lr_parser, number, lr_parser);
+    }
+  }
+
+  // replace some tokens
+  class ReplaceSomeRecCmd : public RecCmd
+  {
+    // max number of tokens to discard
+    int max_discard;
+
+    // tokens to insert
+    FreeTokenVector free_token_set;
+
+  public:
+    // constructor
+    inline ReplaceSomeRecCmd (int max_discard, FreeTokenVector const & free_token_set)
+      : max_discard (max_discard), free_token_set (free_token_set)
+    {
+    }
+
+    // destructor
+    ~ ReplaceSomeRecCmd ()
+    {
+    }
+
+    // true if can recover
+    bool canRecover (LRBTParser & lrbt_parser, LRParser const & start_lr_parser, LRParser & lr_parser) const
+    {
+      return lrbt_parser.replaceSome (start_lr_parser, max_discard, free_token_set, lr_parser);
+    }
+  }
+
+  // replace one token
+  class ReplaceOneRecCmd : public RecCmd
+  {
+    // number of token to discard
+    int number;
+
+    // tokens to insert 
+    FreeTokenVector free_token_set;
+
+  public:
+    // constructor
+    inline ReplaceOneRecCmd (int number, FreeTokenVector const & free_token_set)
+      : number (number), free_token_set (free_token_set)
+    {
+    }
+
+    // destructor
+    ~ ReplaceOneRecCmd ()
+    {
+    }
+
+    // true if can recover
+    bool canRecover (LRBTParser & lrbt_parser, LRParser const & start_lr_parser, LRParser & lr_parser) const
+    {
+      return lrbt_parser.replaceOne (start_lr_parser, number, free_token_set, lr_parser);
+    }
+  }
+
+  // recover by moving some number of tokens to the right 
+  class MoveSomeRecCmd : public RecCmd
+  {
+    // max move
+    int max_move;
+
+    // max num
+    int max_num;
+
+  public:
+    // constructor
+    inline MoveSomeRecCmd (int max_move, int max_num)
+      : max_move (max_move), max_num (max_num)
+    {
+    }
+
+    // destructor
+    ~ MoveSomeRecCmd ()
+    {
+    }
+
+    // true if can recover
+    bool canRecover (LRBTParser & lrbt_parser, LRParser const & start_lr_parser, LRParser & lr_parser) const
+    {
+      return lrbt_parser.moveSome (start_lr_parser, max_move, max_num, lr_parser);
+    }
+  }
+}

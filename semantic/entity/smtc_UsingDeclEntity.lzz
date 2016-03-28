@@ -1,0 +1,48 @@
+// smtc_UsingDeclEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Entity.h"
+#include "smtc_UsingDeclPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_EntityVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // UsingDeclEntity
+  class UsingDeclEntity : public Entity
+  {
+    // usingDecl decl
+    UsingDeclPtr m_using_decl;
+
+  public:
+    // constructor
+    inline UsingDeclEntity (UsingDeclPtr const & using_decl)
+      : m_using_decl (using_decl)
+    {
+    }
+
+    // destructor
+    ~ UsingDeclEntity ()
+    {
+    }
+
+    // accept visitor
+    void accept (EntityVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get usingDecl decl
+    inline UsingDeclPtr const & getUsingDecl () const
+    {
+      return m_using_decl;
+    }
+  }
+}

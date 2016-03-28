@@ -1,0 +1,26 @@
+// smtc_GetArrayType.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_TypePtr.h"
+#include "smtc_CvType.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// semantic
+#include "smtc_ArrayType.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // get array type
+  TypePtr getArrayType (CvType const & elem_cv_type, util::String const & size)
+  {
+    return new ArrayType (elem_cv_type, size);
+  }
+}

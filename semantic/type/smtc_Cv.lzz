@@ -1,0 +1,65 @@
+// smtc_Cv.lzz
+//
+
+$hdr
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // Cv
+  class Cv
+  {
+    // true if const
+    bool m_c;
+
+    // true if volatile
+    bool m_v;
+
+  public:
+    // constructor
+    inline Cv ()
+      : m_c (false), m_v (false)
+    {
+    }
+
+    // constructor
+    inline Cv (bool c, bool v)
+      : m_c (c), m_v (v)
+    {
+    }
+
+    // true if set (const or volatile)
+    inline bool isSet () const
+    {
+      return m_c || m_v;
+    }
+
+    // true if const onlyl
+    inline bool isConstOnly () const
+    {
+      return m_c && ! m_v;
+    }
+
+    // true if volatile only
+    inline bool isVolatileOnly () const
+    {
+      return m_v && ! m_c;
+    }
+
+    // true if const
+    inline bool isConst () const
+    {
+      return m_c;
+    }
+
+    // true if volatile
+    inline bool isVolatile () const
+    {
+      return m_v;
+    }
+  }
+}

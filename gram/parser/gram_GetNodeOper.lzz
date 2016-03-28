@@ -1,0 +1,70 @@
+// gram_GetNodeOper.lzz
+//
+
+$hdr
+// basil
+#include "basl_Nonterm.h"
+
+// semantic
+#include "smtc_OperKind.h"
+$end
+
+$src
+// gram
+#include "gram_GetOperKind.h"
+#include "gram_Nonterm.h"
+#include "gram_Visitor.h"
+$end
+
+// private namespace
+namespace
+{
+  // using gram
+  using namespace gram;
+
+  // GetNodeOper
+  struct GetNodeOper (smtc::OperKind & kind) : Visitor
+  {
+    // oper -> LPAREN RPAREN
+    void visit (Oper1Node & node) const
+    {
+      kind = smtc::CALL_OPER;
+    }
+
+    // oper -> LBRACK RBRACK
+    void visit (Oper2Node & node) const
+    {
+      kind = smtc::SUBSCR_OPER;
+    }
+
+    // oper -> NEW LBRACK RBRACK
+    void visit (Oper3Node & node) const
+    {
+      kind = smtc::NEW_ARRAY_OPER;
+    }
+
+    // oper -> DELETE LBRACK RBRACK
+    void visit (Oper4Node & node) const
+    {
+      kind = smtc::DELETE_OPER;
+    }
+
+    // oper -> single-oper
+    void visit (Oper5Node & node) const
+    {
+      kind = getOperKind (node.getSingleOper ().getNumber ());
+    }
+  }
+}
+
+// gram
+namespace gram
+{
+  // get node oper
+  smtc::OperKind getNodeOper (basl::Nonterm & nonterm)
+  {
+    smtc::OperKind kind;
+    nonterm.accept (GetNodeOper (kind));
+    return kind;
+  }
+}

@@ -1,0 +1,65 @@
+// smtc_TypeParam.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CvType.h"
+#include "smtc_Param.h"
+$end
+
+$src
+// semantic
+#include "smtc_NameToString.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // type param decl
+  class TypeParam : public Param
+  {
+    // default type (may be null)
+    CvType m_def_type;
+
+  public:
+    // constructor
+    TypeParam (NamePtr const & name, CvType const & def_type)
+      : Param (name), m_def_type (def_type)
+    {
+    }
+
+    // destructor
+    ~ TypeParam ()
+    {
+    }
+
+    // true if has default type
+    inline bool hasDefaultType () const
+    {
+      return m_def_type.isSet ();
+    }
+
+    // get default type
+    inline CvType const & getDefaultType () const
+    {
+      return m_def_type;
+    }
+
+    // to string
+    util::String toString (bool is_decl) const
+    {
+      using namespace util;
+      String str = "typename";
+      appendWithSpace (str, nameToString (getName ()));
+      if (is_decl && m_def_type.isSet ())
+      {
+        appendWithSpace (str, '=');
+        appendWithSpace (str, m_def_type.toString ());
+      }
+      return str;
+    }
+  }
+}

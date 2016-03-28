@@ -1,0 +1,57 @@
+// util_StringTable.lzz
+//
+// string table, manages shared read-only strings
+//
+
+$hdr
+// util
+#include "util_String.h"
+$end
+
+$src
+// util
+#include "util_IdentTable.h"
+$end
+
+// private namespace
+namespace
+{
+  // using util
+  using namespace util;
+
+  // StringTable
+  struct StringTable
+  {
+    // ident table
+    IdentTable table;
+
+    // store string
+    char const * storeString (char const * name)
+    {
+      return table.getIdent (name).c_str ();
+    }
+  }
+
+  // get string table
+  StringTable & getStringTable ()
+  {
+    static StringTable table;
+    return table;
+  }
+}
+
+// util
+namespace util
+{
+  // store string, return pointer to allocated string
+  char const * storeString (util::String const & name)
+  {
+    return getStringTable ().storeString (name.c_str ());
+  }
+
+  // store string, return pointer to allocated string
+  char const * storeString (char const * name)
+  {
+    return getStringTable ().storeString (name);
+  }
+}

@@ -1,0 +1,83 @@
+// smtc_VdfDataFuncDefn.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FuncDecl.h"
+#include "smtc_ObjPtrVector.h"
+
+// gram
+#include "gram_Block.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // VdfDataFuncDefn
+  class VdfDataFuncDefn : public FuncDecl
+  {
+    // comment
+    util::String m_cmt;
+
+    // object set
+    ObjPtrVector m_obj_set;
+
+    // return stmt (not set if no return stmt)
+    gram::Block m_ret_stmt; 
+
+  public:
+    // constructor
+    inline VdfDataFuncDefn (int flags, CvType const & ret_type, NamePtr const & name, ParamPtrVector const & param_set,
+        bool vararg, util::String const & cmt)
+      : FuncDecl (Linkage (), flags, ret_type, name, param_set, vararg, Cv (), ThrowSpecPtr ()), m_cmt (cmt)
+    {
+    }
+
+    // destructor
+    ~ VdfDataFuncDefn ()
+    {
+    }
+
+    // get comment
+    util::String const & getComment () const
+    {
+      return m_cmt;
+    }
+
+    // add obj
+    void addObj (ObjPtr const & obj)
+    {
+      m_obj_set.push_back (obj);
+    }
+
+    // get object set
+    inline ObjPtrVector const & getObjSet () const
+    {
+      return m_obj_set;
+    }
+
+    // has return stmt
+    inline bool hasReturnStmt () const
+    {
+      return m_ret_stmt.isSet ();
+    }
+
+    // get ret stmt
+    inline gram::Block const & getReturnStmt () const
+    {
+      return m_ret_stmt;
+    }
+
+    // set return stmt
+    inline void setReturnStmt (gram::Block const & stmt)
+    {
+      m_ret_stmt = stmt;
+    }
+  }
+}

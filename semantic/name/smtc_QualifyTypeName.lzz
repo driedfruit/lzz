@@ -1,0 +1,70 @@
+// smtc_QualifyTypeName.lzz
+//
+
+#hdr
+// semantic
+#include "smtc_NamePtr.h"
+
+// util
+#include "util_IdentSet.h"
+#end
+
+#src
+// semantic
+#include "smtc_CreateQualName.h"
+#include "smtc_GetBaseNameIfIdent.h"
+#include "smtc_NameVisitor.h"
+#include "smtc_NonTmplName.h"
+#include "smtc_TmplName.h"
+#end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // qualify type name, res_name initially is name visiting as pointer
+  struct QualifyTypeName (NamePtr const & name_ptr, util::IdentSet const & type_name_set, NamePtr const & qual_name,
+      bool & result, NamePtr & res_name) : NameVisitor
+  {
+    // tmpl name
+    void visit (TmplName const & name) const
+    {
+      qualifyBaseName (name.getBaseName ());
+    }
+
+    // non tmpl name
+    void visit (NonTmplName const & name) const
+    {
+      qualifyBaseName (name.getBaseName ());
+    }
+
+    // qualify name
+    void qualifyBaseName (BaseNamePtr const & base_name) const
+    {
+      util::Ident ident = getBaseNameIfIdent (base_name);
+      if (ident.isSet ())
+      {
+        util::IdentSetConstIter i = type_name_set.find (ident);
+        if (i != type_name_set.end ())
+        {
+          res_name = createQualName (qual_name, name_ptr);
+          result = true;
+        }
+      }
+    }
+  }    
+}
+
+// semantic
+namespace smtc
+{
+  // qualify type name, return true if qualified
+  bool qualifyTypeName (NamePtr const & name, util::IdentSet const & type_name_set, NamePtr const & qual_name, NamePtr & res_name)
+  {
+    bool result = false;
+    name->accept (QualifyTypeName (name, type_name_set, qual_name, result, res_name));
+    return result;
+  }
+}

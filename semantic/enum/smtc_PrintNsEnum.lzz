@@ -1,0 +1,29 @@
+// smtc_PrintNsEnum.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EnumPtr.h"
+#include "smtc_NsPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_IsNsEnclUnmd.h"
+#include "smtc_Output.h"
+#include "smtc_PrintEnum.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class Output;
+
+  // print ns enum
+  void printNsEnum (Output & out, EnumPtr const & en, NsPtr const & ns)
+  {
+    FilePtr const & file = isNsEnclUnmd (ns) ? out.getSrcFile () : out.getHdrFile ();
+    printEnum (file, en, ns);
+  }
+}

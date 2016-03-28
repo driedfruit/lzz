@@ -1,0 +1,19 @@
+// smtc_EntityPtr.lzz
+//
+
+$hdr
+#include "util_BPtr.h"
+$end
+
+$src
+#include "smtc_Entity.h"
+#include "util_BPtr.tpl"
+$end
+
+// semantic
+namespace smtc
+{
+  class Entity;
+  typedef util::BPtr <Entity> EntityPtr;
+}
+template class util::BPtr <smtc::Entity>;

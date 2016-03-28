@@ -1,0 +1,25 @@
+// msg_Severity.lzz
+//
+
+#hdr
+#end
+
+#src
+#end
+
+// message
+namespace msg
+{
+  // message severity
+  enum Severity
+  {
+    // error (no output is generated)
+    ERROR_MSG,
+
+    // warning (output files are generated)
+    WARNING_MSG,
+
+    // no severity
+    INFO_MSG,
+  }
+}

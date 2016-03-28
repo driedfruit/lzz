@@ -1,0 +1,80 @@
+// smtc_BlockTable.lzz
+//
+
+namespace gram
+{
+  // add block, return lexeme
+  util::Ident addBlock (Block const & block)
+  {
+    return getBlockTable ().addBlock (block);
+  }
+
+  // get block for lexeme  
+  Block getBlock (util::Ident const & lexeme)
+  {
+    return getBlockTable ().getBlock (lexeme);
+  }
+}
+
+using namespace std;
+
+namespace
+{
+  using namespace gram;
+  using namespace util;
+
+  // NOTE (9/28/2008): using lexeme to index block as location is not always
+  // unique.  Example with macros:
+  //   #define INSTANTIATE() N <X> & f <Y> ();
+  //   INSTANTIATE()
+  // the location of blocks X and Y would be the same here.
+  // So now generating unique lexeme for every block
+
+  // BlockTable
+  struct BlockTable ()
+  {
+    // block map
+    typedef std::map <size_t, Block> BlockMap;
+    BlockMap block_map;
+    int next_id = 1;
+
+    // add block at loc, return lexeme
+    Ident addBlock (Block const & block)
+    {
+      string lexeme_str = "BLOCK#";
+      lexeme_str += intToString (next_id ++);
+      Ident lexeme = getIdent (lexeme_str);
+      block_map [lexeme.getHandle ()] = block;
+      return lexeme;
+    }
+
+    // get block with lexeme and remove block from table
+    Block getBlock (Ident const & lexeme)
+    {
+      BlockMap::iterator i = block_map.find (lexeme.getHandle ());
+      assert (i != block_map.end ());
+      Block block = i->second;
+      block_map.erase (i);
+      return block;
+    }
+  }
+
+  // get block table
+  BlockTable & getBlockTable ()
+  {
+    static BlockTable table;
+    return table;
+  }
+}
+
+#hdr
+#include "gram_Block.h"
+#include "util_Ident.h"
+#include "util_Loc.h"
+#end
+
+#src
+#include <map>
+#include "util_IntToString.h"
+#include "util_GetIdent.h"
+#end

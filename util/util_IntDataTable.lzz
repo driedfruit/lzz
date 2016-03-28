@@ -1,0 +1,27 @@
+// util_IntDataTable.lzz
+//
+
+$hdr
+// lib
+#include <stddef.h>
+
+// util
+#include "util_DataTable.h"
+$end
+
+$src
+// util
+#include "util_DataTable.tpl"
+$end
+
+// util
+namespace util
+{
+  // IntDataTable, IntDataTableFindResult
+  typedef DataTable <size_t> IntDataTable;
+  typedef DataTableFindResult <size_t> IntDataTableFindResult;
+  template class DataTable <size_t>;
+  template class DataTableNode <size_t>;
+  template class DataTableIter <size_t>;
+  template class DataTableFindResult <size_t>;
+}

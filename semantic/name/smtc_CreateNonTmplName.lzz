@@ -1,0 +1,21 @@
+// smtc_CreateNonTmplName.lzz
+//
+
+$hdr
+#include "smtc_BaseNamePtr.h"
+#include "smtc_NamePtr.h"
+$end
+
+$src
+#include "smtc_NonTmplName.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create non template name
+  NamePtr createNonTmplName (BaseNamePtr const & base_name)
+  {
+    return new NonTmplName (base_name);
+  }
+}

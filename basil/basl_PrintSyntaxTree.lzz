@@ -1,0 +1,117 @@
+// basl_PrintSyntaxTree
+//
+// Copyright (C) 2002, Michael Spencer
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, subject to the following
+// restrictions:
+// 
+//   1. The origin of this software must not be misrepresented; you must
+//      not claim that you wrote the original software. If you use this
+//      software in a product, an acknowledgment in the product
+//      documentation would be appreciated but is not required.
+// 
+//   2. Altered source versions must be plainly marked as such, and must
+//      not be misrepresented as being the original software.
+// 
+// Basil documentation, as well as the latest version, is available at
+// http://www.lazycplusplus.com/basil.
+//
+// Send comments and bug reports to michael_spencer@lazycplusplus.com.
+// 
+
+$hdr
+// std lib
+#include <iostream>
+$end
+
+$src
+// std lib
+#include <deque>
+
+// basl
+#include "basl_LRData.h"
+#include "basl_Node.h"
+#include "basl_Nonterm.h"
+#include "basl_NontermInfo.h"
+
+// util
+#include "util_IdentToString.h"
+$end
+
+// basl
+namespace basl
+{
+  // types
+  class Node;
+  class Nonterm;
+
+  // print syntax tree
+  void printSyntaxTree (std::ostream & os, Node & node)
+  {
+    Token const & token = node.getToken ();
+    if (token.isSet ())
+    {
+      os << identToString (token.getLexeme ()) << '\n';
+    }
+    Nonterm const & nonterm = node.getNonterm ();
+    if (nonterm.isSet ())
+    {
+      printSyntaxTree (os, nonterm);
+    }
+  }
+
+  // print syntax tree
+  void printSyntaxTree (std::ostream & os, Nonterm const & nonterm)
+  {
+    LRRule const & rule = nonterm.getRule ();
+    os << rule.str;
+    // info->name is node name
+    NontermInfo const * info = rule.nonterm_info;
+    os << " [" << info->name << "]";
+    os << '\n';
+    typedef std::pair <Nonterm const *, int> ChildIter;
+    std::deque <ChildIter> stack;
+    stack.push_back (ChildIter (& nonterm, 1));
+    int indent = 1;
+    for (;;)
+    {
+      ChildIter & iter = stack.back ();
+      Nonterm const & nonterm = * iter.first;
+      if (iter.second > nonterm.getNumChild ())
+      {
+        stack.pop_back ();
+        if (stack.empty ())
+        {
+          break;
+        }
+        -- indent;
+      }
+      else
+      {
+        Node & node = nonterm.getChild (iter.second ++);
+        Token const & token = node.getToken ();
+        if (token.isSet ())
+        {
+          os.width (indent * 2);
+          os << "";
+          os << identToString (token.getLexeme ()) << '\n';
+        }
+        Nonterm const & nonterm = node.getNonterm ();
+        if (nonterm.isSet ())
+        {
+          LRRule const & rule = nonterm.getRule ();
+          os.width (indent * 2);
+          os << "";
+          os << rule.str;
+          // info->name is node name
+          NontermInfo const * info = rule.nonterm_info;
+          os << " [" << info->name << "]";
+          os << '\n';
+          stack.push_back (ChildIter (& nonterm, 1));
+          ++ indent;
+        }
+      }
+    }
+  }
+}

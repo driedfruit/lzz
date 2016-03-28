@@ -1,0 +1,30 @@
+// smtc_CreateBitfName.lzz
+//
+
+#hdr
+// semantic
+#include "smtc_NamePtr.h"
+
+// gram
+#include "gram_Block.h"
+
+// util
+#include "util_Ident.h"
+#include "util_Loc.h"
+#end
+
+#src
+// semantic
+#include "smtc_BitfName.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // create bitf name
+  NamePtr createBitfName (util::Loc const & loc, util::Ident const & ident, gram::Block const & size)
+  {
+    size.trim ();
+    return new BitfName (loc, ident, size.toString ());
+  }
+}

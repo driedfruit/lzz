@@ -1,0 +1,20 @@
+// util_BlockMap.lzz
+//
+
+$hdr
+// std lib
+#include <map>
+
+// util
+#include "util_Block.h"
+$end
+
+$src
+$end
+
+// util
+namespace util
+{
+  // BlockMap
+  typedef std::map <Loc, Block> BlockMap;
+}

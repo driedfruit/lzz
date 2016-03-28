@@ -1,0 +1,41 @@
+// smtc_PrintTmplClassDecl.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+#include "smtc_PrintClassDecl.h"
+#include "smtc_TmplClassDeclPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_PrintCode.h"
+#include "smtc_PrintNsClose.h"
+#include "smtc_PrintNsOpen.h"
+#include "smtc_PrintTmplSpecSet.h"
+#include "smtc_TmplClassDecl.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // PrintTmplClassDecl
+  struct PrintTmplClassDecl : PrintClassDecl
+  {
+    // print in ns
+    void print (FilePtr const & file, TmplClassDeclPtr const & tmpl_class_decl, NsPtr const & ns) const
+    {
+      int ns_depth = printNsOpen (file, DECLARATION_SECTION, ns);
+      print (file, tmpl_class_decl);
+      printNsClose (file, DECLARATION_SECTION, ns_depth);
+    }
+
+    // print
+    void print (FilePtr const & file, TmplClassDeclPtr const & tmpl_class_decl) const
+    {
+      printTmplSpecSet (file, DECLARATION_SECTION, tmpl_class_decl->getTmplSpecSet (), true);
+      PrintClassDecl::print (file, tmpl_class_decl->getClassDecl ());
+    }
+  }
+}

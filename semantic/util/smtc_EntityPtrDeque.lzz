@@ -1,0 +1,24 @@
+// smtc_EntityPtrDeque.lzz
+//
+
+$hdr
+// std lib
+#include <deque>
+
+// semantic
+#include "smtc_EntityPtr.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // EntityPtrDeque
+  typedef std::deque <EntityPtr> EntityPtrDeque;
+  typedef std::deque <EntityPtr>::iterator EntityPtrDequeIter;
+  typedef std::deque <EntityPtr>::const_iterator EntityPtrDequeConstIter;
+  typedef std::deque <EntityPtr>::reverse_iterator EntityPtrDequeRevIter;
+  typedef std::deque <EntityPtr>::const_reverse_iterator EntityPtrDequeConstRevIter;
+}

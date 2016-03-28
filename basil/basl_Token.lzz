@@ -1,0 +1,130 @@
+// basl_Token.lzz
+//
+
+$hdr
+// basil
+#include "basl_TokenFlags.h"
+
+// util
+#include "util_Ident.h"
+#include "util_Loc.h"
+$end
+
+$src
+$end
+
+// basl
+namespace basl
+{
+  // Token
+  class Token
+  {
+    // flags
+    int m_flags;
+
+    // number
+    int m_number;
+
+    // location
+    util::Loc m_loc;
+    
+    // lexeme
+    util::Ident m_lexeme;
+
+  public:
+    // constructor
+    inline Token ()
+      : m_flags (0)
+    {
+    }
+
+    // constructor
+    inline Token (int number, util::Loc const & loc, util::Ident const & lexeme)
+      : m_flags (IS_SET_TOKEN), m_number (number), m_loc (loc), m_lexeme (lexeme)
+    {
+    }
+
+    // destructor
+    ~ Token ()
+    {
+    }
+
+    // true if set
+    inline bool isSet () const
+    {
+      return m_flags & IS_SET_TOKEN;
+    }
+
+    // set space before
+    inline void setSpaceBefore ()
+    {
+      m_flags |= SPACE_BEFORE_TOKEN;
+    }
+
+    // true if has space before
+    inline bool hasSpaceBefore () const
+    {
+      return m_flags & SPACE_BEFORE_TOKEN;
+    }
+
+    // set recursively substituted macro
+    inline void setRecSubMacro ()
+    {
+      m_flags |= REC_SUB_MACRO_TOKEN;
+    }
+
+    // true if recursively substituted macro
+    inline bool isRecSubMacro () const
+    {
+      return m_flags & REC_SUB_MACRO_TOKEN;
+    }
+
+    // true if from macro
+    inline bool fromMacro () const
+    {
+      return m_flags & FROM_MACRO_TOKEN;
+    }
+
+    // set from macro flag
+    inline void setFromMacro ()
+    {
+      m_flags |= FROM_MACRO_TOKEN;
+    }
+
+    // get number
+    int getNumber () const
+    {
+      return m_number;
+    }
+
+    // set number
+    void setNumber (int number)
+    {
+      m_number = number;
+    }   
+
+    // get lexeme
+    util::Ident const & getLexeme () const
+    {
+      return m_lexeme;
+    }
+
+    // set lexeme (needed by gram::lexPPNumber, it changes the lexeme if the orginal is invalid)
+    void setLexeme (util::Ident const & lexeme)
+    {
+      m_lexeme = lexeme;
+    }
+
+    // get location
+    util::Loc const & getLoc () const
+    {
+      return m_loc;
+    }
+
+    // set location
+    void setLoc (util::Loc const & loc)
+    {
+      m_loc = loc;
+    }
+  }
+}

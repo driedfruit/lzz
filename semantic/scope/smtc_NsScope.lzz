@@ -1,0 +1,50 @@
+// smtc_NsScope.lzz
+//
+// namespace scope
+//
+
+$hdr
+// semantic
+#include "smtc_NsPtr.h"
+#include "smtc_Scope.h"
+$end
+
+$src
+// semantic
+#include "smtc_ScopeVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // NsScope
+  class NsScope : public Scope
+  {
+    // namespace
+    NsPtr m_ns;
+
+  public:
+    // constructor
+    NsScope (NsPtr const & ns)
+      : m_ns (ns)
+    {
+    }
+
+    // destructor
+    ~ NsScope ()
+    {
+    }
+
+    // accept visitor
+    void accept (ScopeVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get namespace
+    inline NsPtr const & getNs () const
+    {
+      return m_ns;
+    }
+  }
+}

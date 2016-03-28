@@ -1,0 +1,112 @@
+// smtc_Section.lzz
+//
+// a file section
+//
+
+#hdr
+// std lib
+#include <strstream>
+#include <cstring>
+#include <cassert>
+
+// semantic
+#include "smtc_SectionKind.h"
+#end
+
+#src
+#end
+
+namespace smtc
+{
+  // Section
+  class Section
+  {
+    // kind
+    SectionKind m_kind;
+
+    // output stream
+    std::ostrstream m_os;
+
+    // current indentation
+    int m_indent;
+    
+  public:
+    // constructor
+    Section (SectionKind kind)
+      : m_kind (kind), m_indent (0)
+    {
+    }
+
+    // destructor
+    ~ Section ()
+    {
+    }
+
+    // get kind
+    SectionKind getKind () const
+    {
+      return m_kind;
+    }
+
+    // return output stream, do not first indent
+    inline std::ostream & getStream ()
+    {
+      return m_os;
+    }
+
+    // indent, increment line and return output stream with optional indent offset
+    std::ostream & indent (int offset = 0)
+    {
+      return indentExactly ((m_indent + offset) * 2);
+    }
+
+    // indent exactly number of spaces
+    std::ostream & indentExactly (int num)
+    {
+      enum { MAX_INDENT = 512 };
+      static char buf [MAX_INDENT];
+      if (num > MAX_INDENT - 1)
+      {
+        num = MAX_INDENT - 1;
+      }
+      memset (buf, ' ', num);
+      buf [num] = '\0';
+      m_os << buf;
+      return m_os;
+    }
+
+    // increment indent
+    void incIndent ()
+    {
+      ++ m_indent;
+    }
+
+    // decrement indent
+    void decIndent ()
+    {
+      assert (m_indent > 0);
+      -- m_indent;
+    }
+
+    // freeze output, return output as string and output size
+    void freeze ()
+    {
+      m_os.freeze ();
+    }
+
+    // freeze output, return output as string and output size
+    char const * freeze (int & size)
+    {
+      m_os.freeze ();
+      size = m_os.pcount ();
+      return m_os.str ();
+    }
+
+    // freeze output, return output as string and output size
+    char const * toString (int & size)
+    {
+      size = m_os.pcount ();
+      return m_os.str ();
+    }
+  }
+}

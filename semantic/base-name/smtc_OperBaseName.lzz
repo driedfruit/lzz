@@ -1,0 +1,46 @@
+// smtc_OperBaseName.lzz
+//
+
+$hdr
+#include "smtc_BaseName.h"
+#include "smtc_OperKind.h"
+$end
+
+$src
+#include "smtc_BaseNameVisitor.h"
+$end
+
+// smtc
+namespace smtc
+{
+  // operator base name
+  class OperBaseName : public BaseName
+  {
+    // kind
+    OperKind m_kind;
+
+  public:
+    // constructor
+    OperBaseName (util::Loc const & loc, util::Ident const & macro, OperKind kind)
+      : BaseName (loc, macro), m_kind (kind)
+    {
+    }
+
+    // destructor
+    ~ OperBaseName ()
+    {
+    }
+
+    // accept visitor
+    void accept (BaseNameVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get kind
+    OperKind getOperKind () const
+    {
+      return m_kind;
+    }
+  }
+}

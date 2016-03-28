@@ -1,0 +1,75 @@
+// smtc_GetUnqlNameAsDtor.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_BaseNameVisitor.h"
+#include "smtc_CreateDtorBaseName.h"
+#include "smtc_CreateNonTmplName.h"
+#include "smtc_CreateTmplName.h"
+#include "smtc_IdentBaseName.h"
+#include "smtc_NameVisitor.h"
+#include "smtc_NonTmplName.h"
+#include "smtc_QualName.h"
+#include "smtc_TmplName.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // get base name as dtor
+  struct GetBaseNameAsDtor (BaseNamePtr & res_base_name)
+    : BaseNameVisitor
+  {
+    // ident base name
+    void visit (IdentBaseName const & base_name) const
+    {
+      res_base_name = createDtorBaseName (base_name.getLoc (), base_name.getIdent ());
+    }
+  }
+
+  // get base name as dtor
+  BaseNamePtr getBaseNameAsDtor (BaseNamePtr const & base_name)
+  {
+    BaseNamePtr res_base_name = base_name;
+    base_name->accept (GetBaseNameAsDtor (res_base_name));
+    return res_base_name;
+  }
+
+  // GetUnqlNameAsDtor
+  struct GetUnqlNameAsDtor (NamePtr & res_name)
+    : NameVisitor
+  {
+    // tmpl name
+    void visit (TmplName const & name) const
+    {
+      res_name = createTmplName (getBaseNameAsDtor (name.getBaseName ()), name.hasTemplateKeyword (), name.getArgs ());
+    }
+
+    // non tmpl name
+    void visit (NonTmplName const & name) const
+    {
+      res_name = createNonTmplName (getBaseNameAsDtor (name.getBaseName ()));
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // get unql name as dtor (U => ~ U, U<T> => ~U<T>)
+  NamePtr getUnqlNameAsDtor (NamePtr const & name)
+  {
+    NamePtr res_name = name;
+    name->accept (GetUnqlNameAsDtor (res_name));
+    return res_name;
+  }
+}

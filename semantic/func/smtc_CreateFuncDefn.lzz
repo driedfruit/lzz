@@ -1,0 +1,41 @@
+// smtc_CreateFuncDefn.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CtorInitPtr.h"
+#include "smtc_FuncDefnPtr.h"
+#include "smtc_NamePtr.h"
+#include "smtc_ParamPtrVector.h"
+#include "smtc_ThrowSpecPtr.h"
+#include "smtc_TryBlockPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_FuncDefn.h"
+$end
+
+// gram
+namespace gram
+{
+  // types
+  class Block;
+}
+
+// semantic
+namespace smtc
+{
+  // types
+  class Linkage;
+  class CvType;
+  class Cv;
+
+  // create func defn
+  FuncDefnPtr createFuncDefn (Linkage const & linkage, int flags, CvType const & ret_type, NamePtr const & name,
+      ParamPtrVector const & param_set, bool vararg, Cv const & cv, ThrowSpecPtr const & throw_spec,
+      CtorInitPtr const & ctor_init, gram::Block const & body, TryBlockPtr const & try_block)
+  {
+    return new FuncDefn (linkage, flags, ret_type, name, param_set, vararg, cv, throw_spec, ctor_init, body, try_block);
+  }
+}

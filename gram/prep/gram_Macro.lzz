@@ -1,0 +1,56 @@
+// gram_Macro.lzz
+//
+
+$hdr
+// gram
+#include "gram_MacroKind.h"
+
+// util
+#include "util_Ident.h"
+#include "util_Loc.h"
+$end
+
+$src
+// gram
+$end
+
+// gram
+namespace gram
+{
+  // Macro
+  class Macro
+  {
+    // location of definition
+    util::Loc m_loc;
+
+    // name
+    util::Ident m_name;
+
+  public:
+    // constructor
+    Macro (util::Loc const & loc, util::Ident const & name)
+      : m_loc (loc), m_name (name)
+    {
+    }
+
+    // destructor
+    virtual inline ~ Macro () = 0
+    {
+    }
+
+    // get location
+    inline util::Loc const & getLoc () const
+    {
+      return m_loc;
+    }
+
+    // get name
+    inline util::Ident const & getName () const
+    {
+      return m_name;
+    }
+
+    // get kind
+    virtual MacroKind getKind () const = 0;
+  }
+}

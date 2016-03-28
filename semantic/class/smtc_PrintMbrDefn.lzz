@@ -1,0 +1,115 @@
+// smtc_PrintMbrDefn.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ClassDefnPtr.h"
+#include "smtc_NamePtr.h"
+#include "smtc_NsPtr.h"
+$end
+
+$src
+// std lib
+#include <algorithm>
+
+// semantic
+#include "smtc_AcceptEntityVisitor.h"
+#include "smtc_ClassDefn.h"
+#include "smtc_CreateQualName.h"
+#include "smtc_EntityVisitor.h"
+#include "smtc_PrintMbrFuncDefn.h"
+#include "smtc_PrintNavSubmitFuncDefn.h"
+#include "smtc_PrintMbrObjDefn.h"
+#include "smtc_PrintMbrTmplFuncDefn.h"
+#include "smtc_PrintTmplMbrDefn.h"
+
+// entities
+#include "smtc_ClassDefnEntity.h"
+#include "smtc_FuncDefnEntity.h"
+#include "smtc_NavSubmitFuncDefnEntity.h"
+#include "smtc_ObjEntity.h"
+#include "smtc_TmplClassDefnEntity.h"
+#include "smtc_TmplFuncDefnEntity.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // PrintMbrDefn
+  struct PrintMbrDefn (Output & out, NsPtr const & ns, NamePtr const & qual_name)
+    : EntityVisitor
+  {
+    // obj
+    void visit (ObjEntity const & entity) const
+    {
+      printMbrObjDefn (out, entity.getObj (), ns, qual_name);
+    }
+
+    // func defn
+    void visit (FuncDefnEntity const & entity) const
+    {
+      printMbrFuncDefn (out, entity.getFuncDefn (), ns, qual_name);
+    }
+
+    // tmpl func defn
+    void visit (TmplFuncDefnEntity const & entity) const
+    {
+      printMbrTmplFuncDefn (out, entity.getTmplFuncDefn (), ns, qual_name);
+    }
+
+    // class defn
+    void visit (ClassDefnEntity const & entity) const
+    {
+   // printMbrDefn (out, entity.getClassDefn (), ns, qual_name);
+      printMbrDefn (out, entity.getClassDefn (), ns);
+    }
+
+    // tmpl class defn
+    void visit (TmplClassDefnEntity const & entity) const
+    {
+   // printTmplMbrDefn (out, entity.getTmplClassDefn (), ns, qual_name);
+      printTmplMbrDefn (out, entity.getTmplClassDefn (), ns);
+    }
+
+    // visit entity set
+    static void visitEntitySet (EntityPtrDeque const & entity_set, Output & out, NsPtr const & ns, NamePtr const & qual_name)
+    {
+      std::for_each (entity_set.begin (), entity_set.end (), AcceptEntityVisitor (PrintMbrDefn (out, ns, qual_name)));
+    }
+
+    // prl extensions
+    
+    // nav submit func defn
+    void visit (NavSubmitFuncDefnEntity const & entity) const
+    {
+      printNavSubmitFuncDefn (out, entity.getNavSubmitFuncDefn (), ns, qual_name);
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // types
+  class Output;
+
+  // print member defn
+  void printMbrDefn (Output & out, ClassDefnPtr const & class_defn, NsPtr const & ns)
+  {
+    EntityPtrDeque const & entity_set = class_defn->getEntitySet ();
+ // PrintMbrDefn::visitEntitySet (entity_set, out, ns, class_defn->getName ());
+    PrintMbrDefn::visitEntitySet (entity_set, out, ns, class_defn->getQualName ());
+  }
+
+  /*
+  // print member defn with qual name
+  void printMbrDefn (Output & out, ClassDefnPtr const & class_defn, NsPtr const & ns, NamePtr const & qual_name)
+  {
+    EntityPtrDeque const & entity_set = class_defn->getEntitySet ();
+    PrintMbrDefn::visitEntitySet (entity_set, out, ns, createQualName (qual_name, class_defn->getName ()));
+  }
+  */
+}

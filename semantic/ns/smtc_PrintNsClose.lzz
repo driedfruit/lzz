@@ -1,0 +1,35 @@
+// smtc_PrintNsClose.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FilePtr.h"
+#include "smtc_SectionKind.h"
+$end
+
+$src
+// semantic
+#include "smtc_PrintCode.h"
+#include "smtc_File.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // print namespace closing brace, depth is namespace depth
+  void printNsClose (FilePtr const & file, SectionKind skind, int depth)
+  {
+    for (int i = 0; i < depth; ++ i)
+    {
+      printCloseBrace (file, skind);
+    }
+  }
+
+#if 0
+  // print namespace closing brace, depth is namespace depth
+  void printNsClose (FilePtr const & file, int depth)
+  {
+    printNsClose (file, BODY_SECTION, depth);
+  }
+#endif
+}

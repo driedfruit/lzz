@@ -1,0 +1,16 @@
+// smtc_ParamToString.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ParamPtr.h"
+$end
+
+$src
+// semantic
+$end
+
+// semantic
+namespace smtc
+{
+}

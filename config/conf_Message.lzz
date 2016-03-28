@@ -1,0 +1,86 @@
+// conf_Message.lzz
+//
+
+#hdr
+#end
+
+#src
+// message
+#include "msg_Message.h"
+#include "msg_Output.h"
+#end
+
+// config
+namespace conf::msg
+{
+  // using ::msg
+  using namespace ::msg;
+
+  // option expected, env true if from environment
+  void optionExpected (bool env = false)
+  {
+    static char const str [] = "Option expected after '-'.";
+    static char const str_env [] = "Option expected after '-' in LZZ_OPTIONS.";
+    print (Message (ERROR_MSG, env ? str_env : str));
+  }
+
+  // invalid option
+  void invalidOption (char const * opt, bool env = false)
+  {
+    static char const str [] = "'%1' is not a recognized option.";
+    static char const str_env [] = "'%1' is not a recognized option in LZZ_OPTIONS.";
+    print (Message (ERROR_MSG, env ? str_env : str) << opt);
+  }
+
+  // not bool option
+  void notBoolOption (char const * opt, bool env = false)
+  {
+    static char const str [] = "'%1' is not a boolean option.";
+    static char const str_env [] = "'%1' is not a boolean option in LZZ_OPTIONS.";
+    print (Message (ERROR_MSG, env ? str_env : str) << opt);
+  }
+
+  // option value expected in LZZ_OPTIONS 
+  void optionValueExpected (char const * opt, bool env = false)
+  {
+    static char const str [] = "Value expected for option '%1'.";
+    static char const str_env [] = "Value expected for option '%1' in LZZ_OPTIONS.";
+    print (Message (ERROR_MSG, env ? str_env : str) << opt);
+  }
+
+  // disabled option
+  void disabledOption (char const * opt, bool env = false)
+  {
+    static char const str [] = "Option '%1' is disabled.";
+    static char const str_env [] = "Option '%1' is disabled in LZZ_OPTIONS.";
+    print (Message (ERROR_MSG, env ? str_env : str) << opt);
+  }
+
+  // filename not accepted (for cgi version)
+  void filenameNotAccepted (char const * name)
+  {
+    static char const str [] = "Filename '%1' not accepted.";
+    print (Message (ERROR_MSG, str) << name);
+  }
+
+  // no files
+  void noFiles ()
+  {
+    static char const str [] = "No files specified.";
+    print (Message (ERROR_MSG, str));
+  }
+
+  // dll_api set but dll_exports not set
+  void dllExportsNotSet ()
+  {
+    static char const str [] = "if setting dll api macro (-da) then dll exports macro must be set too (-dx).";
+    print (Message (ERROR_MSG, str));
+  }
+
+  // type help for usage
+  void typeHelpForUsage ()
+  {
+    static char const str [] = "Type 'lzz -h' for usage.";
+    print (Message (INFO_MSG, str));
+  }
+}

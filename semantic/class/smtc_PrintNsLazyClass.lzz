@@ -1,0 +1,28 @@
+// smtc_PrintNsLazyClass.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_LazyClassPtr.h"
+#include "smtc_NsPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_CompleteLazyClass.h"
+#include "smtc_PrintNsClassDefn.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class Output;
+
+  // print ns lazy class
+  void printNsLazyClass (Output & out, LazyClassPtr const & lazy_class, NsPtr const & ns)
+  {
+    completeLazyClass (lazy_class);
+    printNsClassDefn (out, lazy_class, ns);
+  }
+}

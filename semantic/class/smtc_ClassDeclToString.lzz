@@ -1,0 +1,35 @@
+// smtc_ClassDeclToString.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ClassDeclPtr.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// semantic
+#include "smtc_ClassDecl.h"
+#include "smtc_ClassKeyToString.h"
+#include "smtc_NameToString.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // using util
+  using namespace util;
+
+  // class decl to string
+  util::String classDeclToString (ClassDeclPtr const & class_decl)
+  {
+    String str = classKeyToString (class_decl->getKey ());
+    appendWithSpace (str, nameToString (class_decl->getName ()));
+    return str;
+  }
+}

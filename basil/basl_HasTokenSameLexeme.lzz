@@ -1,0 +1,20 @@
+// basl_HasTokenSameLexeme.lzz
+//
+
+$hdr
+// basil
+#include "basl_Token.h"
+$end
+
+$inl
+$end
+
+// basil
+namespace basl
+{
+  // true if same token lexeme
+  inline bool HasTokenSameLexeme (; Token const & a, Token const & b) const
+  {
+    return a.getLexeme () == b.getLexeme ();
+  }
+}

@@ -1,0 +1,59 @@
+// smtc_TmplName.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_UnqlName.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// semantic
+#include "smtc_NameVisitor.h"
+$end
+
+// smtc
+namespace smtc
+{
+  // TmplName
+  class TmplName : public UnqlName
+  {
+    // true if template name prefixed by 'template' keyword
+    bool m_has_tmpl;
+
+    // template args
+    util::String m_args;
+
+  public:
+    // constructor
+    TmplName (BaseNamePtr const & base_name, bool has_tmpl, util::String const & args)
+      : UnqlName (base_name), m_has_tmpl (has_tmpl), m_args (args)
+    {
+    }
+
+    // destructor
+    ~ TmplName ()
+    {
+    }
+
+    // true if has template keyword
+    inline bool hasTemplateKeyword () const
+    {
+      return m_has_tmpl;
+    }
+
+    // get args
+    util::String const & getArgs () const
+    {
+      return m_args;
+    }
+
+    // accept visitor
+    void accept (NameVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+  }
+}

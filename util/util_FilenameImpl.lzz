@@ -1,0 +1,28 @@
+// util_FilenameImpl.lzz
+//
+
+$hdr
+$end
+
+$src
+$end
+
+// util
+namespace util
+{
+  // FilenameImpl
+  struct FilenameImpl
+  {
+    // name
+    char const * name;
+
+    // realname
+    char const * realname;
+
+    // constructor
+    FilenameImpl (char const * name, char const * realname)
+      : name (name), realname (realname)
+    {
+    }
+  }
+}

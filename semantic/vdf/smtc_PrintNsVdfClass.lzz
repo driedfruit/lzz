@@ -1,0 +1,69 @@
+// smtc_PrintNsVdfClass.lzz
+//
+
+#hdr
+// semantic
+#include "smtc_NsPtr.h"
+#include "smtc_ClassDefnPtr.h"
+#end
+
+#src
+// semantic
+#include "smtc_IsNsEnclUnmd.h"
+#include "smtc_Output.h"
+#include "smtc_PrintClassDefn.h"
+#include "smtc_PrintCode.h"
+#include "smtc_PrintMbrDecl.h"
+#include "smtc_PrintMbrDefn.h"
+#include "smtc_PrintNsClose.h"
+#include "smtc_PrintNsOpen.h"
+#end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // PrintVdfClass
+  struct PrintVdfClass : PrintClassDefn
+  {
+    // print in ns
+    void print (FilePtr const & file, ClassDefnPtr const & class_defn, NsPtr const & ns) const
+    {
+      int ns_depth = printNsOpen (file, skind, ns);
+      print (file, class_defn);
+      printNsClose (file, skind, ns_depth);
+    }
+
+    // print
+    void print (FilePtr const & file, ClassDefnPtr const & class_defn) const
+    {
+      printHead (file, class_defn);
+      printMbrDecl (file, class_defn);
+      // comment if debug
+      printDir (file, skind, "#ifndef NDEBUG");
+      printLine (file, skind, "char const * _cmt;");
+      printDir (file, skind, "#endif");
+      printCloseBrace (file, skind, true);
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // types
+  class Output;
+
+  // print ns vdf class
+  void printNsVdfClass (Output & out, ClassDefnPtr const & class_defn, NsPtr const & ns)
+  {
+    // print class defn
+    FilePtr const & file = isNsEnclUnmd (ns) ? out.getSrcFile () : out.getHdrFile ();
+    PrintVdfClass printer;
+    printer.print (file, class_defn, ns);
+    // member definitions
+    printMbrDefn (out, class_defn, ns);
+  }
+}

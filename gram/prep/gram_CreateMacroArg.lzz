@@ -1,0 +1,25 @@
+// gram_CreateMacroArg.lzz
+//
+
+$hdr
+// gram
+#include "gram_MacroArgPtr.h"
+
+// basil
+#include "basl_TokenVector.h"
+$end
+
+$src
+// gram
+#include "gram_MacroArg.h"
+$end
+
+// gram
+namespace gram
+{
+  // create macro arg
+  MacroArgPtr createMacroArg (basl::TokenVector const & token_set)
+  {
+    return new MacroArg (token_set);
+  }
+}

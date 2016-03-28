@@ -1,0 +1,144 @@
+// smtc_DeclareFunctor.lzz
+//
+
+namespace smtc
+{
+  // declare functor
+  void declareFunctor (ScopePtr const & scope, gram::SpecSel const & spec_sel, CvType const & ret_type, NamePtr const & name,
+      ParamPtrVector const & ctor_param_set, bool ctor_vararg, ParamPtrVector const & call_param_set, bool call_vararg, Cv const & cv,
+      ThrowSpecPtr const & throw_spec, BaseSpecPtrVector const & base_spec_set)
+  {
+    TmplSpecPtrVector tmpl_spec_set;
+    scope->accept (DeclareFunctor (false, tmpl_spec_set, spec_sel, ret_type, name, ctor_param_set, ctor_vararg, call_param_set,
+        call_vararg, cv, throw_spec, base_spec_set));
+  }
+}
+
+namespace
+{
+  using namespace smtc;
+
+  // declare functor
+  struct DeclareFunctor (bool is_tmpl, TmplSpecPtrVector & tmpl_spec_set, gram::SpecSel const & spec_sel, CvType const & ret_type,
+      NamePtr const & name, ParamPtrVector const & ctor_param_set, bool ctor_vararg, ParamPtrVector const & call_param_set,
+      bool call_vararg, Cv const & cv, ThrowSpecPtr const & throw_spec, BaseSpecPtrVector const & base_spec_set)
+    : ScopeVisitor
+  {
+    // ns scope
+    void visit (NsScope const & scope) const
+    {
+      // add entity to ns
+      scope.getNs ()->addEntity (buildEntity ());
+    }
+
+    // class scope
+    void visit (ClassScope const & scope) const
+    {
+      // cannot be qualified
+      if (isNameQual (name))
+      {
+        msg::qualClassClassDefn (getNameLoc (name));
+      }
+      // add entity to class
+      ClassDefnPtr const & class_defn = scope.getClassDefn ();
+      class_defn->addEntity (buildEntity (class_defn->getQualName ()));
+    }
+
+    // tmpl spec scope
+    void visit (TmplSpecScope const & scope) const
+    {
+      // declare template class
+      tmpl_spec_set.push_back (scope.getTmplSpec ());
+      scope.getParent ()->accept (DeclareFunctor (true, tmpl_spec_set, spec_sel, ret_type, name, ctor_param_set, ctor_vararg,
+                                      call_param_set, call_vararg, cv, throw_spec, base_spec_set));
+    }
+
+    // build entity
+    EntityPtr buildEntity (NamePtr const & encl_qual_name = NamePtr ()) const
+    {
+      int flags = 0;
+      // create lazy class and declare obj param set
+      bool is_dll_api = false;
+      LazyClassPtr lazy_class = createLazyClass (flags, STRUCT_KEY, name, is_dll_api, ctor_param_set, ctor_vararg, base_spec_set);
+      declareLazyClassObjParamSet (lazy_class, ctor_param_set, base_spec_set);
+      buildCallDecl (lazy_class);
+      NamePtr qual_name;
+      EntityPtr entity;
+      if (is_tmpl)
+      {
+        qual_name = formTmplName (name, tmplSpecToArgString (tmpl_spec_set.front ()));
+        TmplLazyClassPtr tmpl_lazy_class = createTmplLazyClass (tmpl_spec_set, lazy_class);
+        entity = createTmplLazyClassEntity (tmpl_lazy_class);
+      }
+      else
+      {
+        qual_name = name;
+        entity = createLazyClassEntity (lazy_class);
+      }
+      if (encl_qual_name.isSet ())
+      {
+        qual_name = createQualName (encl_qual_name, qual_name);
+      }
+      lazy_class->setQualName (qual_name);
+      return entity;
+    }
+
+    // build operator() func decl
+    void buildCallDecl (LazyClassPtr const & lazy_class) const
+    {
+      // make sure it public
+      util::Loc loc = getNameLoc (name);
+      // declare operator()
+      int flags = spec_sel.getFlags ();
+      NamePtr name = createNonTmplName (createOperBaseName (loc, CALL_OPER));
+      FuncDeclPtr call_decl = createFuncDecl (Linkage (), flags, ret_type, name, call_param_set, call_vararg, cv, throw_spec);
+      lazy_class->addEntity (createFuncDeclEntity (call_decl));
+      // if fuctnor is virtual dtor should also be virtual
+      if (flags & VIRTUAL_SPEC)
+      {
+        lazy_class->setVirtualDtor ();
+      }
+    }
+  }  
+}
+
+#hdr
+#include "smtc_BaseSpecPtrVector.h"
+#include "smtc_ClassKey.h"
+#include "smtc_CvType.h"
+#include "smtc_NamePtr.h"
+#include "smtc_ParamPtrVector.h"
+#include "smtc_ScopePtr.h"
+#include "smtc_ThrowSpecPtr.h"
+#include "smtc_TryBlockPtr.h"
+#include "gram_SpecSel.h"
+#end
+
+#src
+#include "smtc_ClassDefn.h"
+#include "smtc_ClassScope.h"
+#include "smtc_CreateAccessSpec.h"
+#include "smtc_CreateAccessSpecEntity.h"
+#include "smtc_CreateFuncDecl.h"
+#include "smtc_CreateFuncDeclEntity.h"
+#include "smtc_CreateLazyClass.h"
+#include "smtc_CreateLazyClassEntity.h"
+#include "smtc_CreateNonTmplName.h"
+#include "smtc_CreateOperBaseName.h" 
+#include "smtc_CreateQualName.h"
+#include "smtc_CreateTmplLazyClass.h"
+#include "smtc_CreateTmplLazyClassEntity.h"
+#include "smtc_DeclareLazyClassObjParamSet.h"
+#include "smtc_FormTmplName.h"
+#include "smtc_GetNameLoc.h"
+#include "smtc_IsNameQual.h"
+#include "smtc_LazyClass.h"
+#include "smtc_Linkage.h"
+#include "smtc_Message.h"
+#include "smtc_Ns.h"
+#include "smtc_NsScope.h"
+#include "smtc_ScopeVisitor.h"
+#include "smtc_SpecFlags.h"
+#include "smtc_TmplSpecScope.h"
+#include "smtc_TmplSpecToArgString.h"
+#end

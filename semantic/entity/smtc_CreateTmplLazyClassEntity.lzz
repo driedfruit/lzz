@@ -1,0 +1,23 @@
+// smtc_CreateTmplLazyClassEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EntityPtr.h"
+#include "smtc_TmplLazyClassPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_TmplLazyClassEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create lazy class entity
+  EntityPtr createTmplLazyClassEntity (TmplLazyClassPtr const & tmpl_lazy_class)
+  {
+    return new TmplLazyClassEntity (tmpl_lazy_class);
+  }
+}

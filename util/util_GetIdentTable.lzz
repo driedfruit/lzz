@@ -1,0 +1,22 @@
+// util_GetIdentTable.lzz
+//
+// get program identifier table
+//
+
+$hdr
+#include "util_IdentTable.h"
+$end
+
+$src
+$end
+
+// util
+namespace util
+{
+  // get ident table
+  IdentTable & getIdentTable ()
+  {
+    static IdentTable ident_table;
+    return ident_table;
+  }
+}

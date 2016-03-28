@@ -1,0 +1,23 @@
+// smtc_GetUserType.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+#include "smtc_TypePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_UserType.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // get user type
+  TypePtr getUserType (NamePtr const & name)
+  {
+    return new UserType (name);
+  }
+}

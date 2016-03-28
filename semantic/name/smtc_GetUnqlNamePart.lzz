@@ -1,0 +1,55 @@
+// smtc_GetUnqlNamePart.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_CreateTmplName.h"
+#include "smtc_NameVisitor.h"
+#include "smtc_QualName.h"
+#include "smtc_TmplName.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // GetUnqlNamePart
+  struct GetUnqlNamePart (NamePtr & res_name)
+    : NameVisitor
+  {
+    // qual name
+    void visit (QualName const & name) const
+    {
+      res_name = getUnqlNamePart (name.getUnqlName ());
+    }
+
+    // tmpl name
+    void visit (TmplName const & name) const
+    {
+      // remove template keyword if used
+      if (name.hasTemplateKeyword ())
+      {
+        res_name = createTmplName (name.getBaseName (), false, name.getArgs ());
+      }
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // get unql part of name (ie: A::B => B, A::B<T> => B<T>)
+  NamePtr getUnqlNamePart (NamePtr const & name)
+  {
+    NamePtr res_name = name;
+    name->accept (GetUnqlNamePart (res_name));
+    return res_name;
+  }
+}

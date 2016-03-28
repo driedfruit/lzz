@@ -1,0 +1,27 @@
+// gram_CreateLineMacro.lzz
+//
+
+$hdr
+// gram
+#include "gram_MacroPtr.h"
+
+// util
+#include "util_Ident.h"
+#include "util_Loc.h"
+$end
+
+$src
+// gram
+#include "gram_LineMacro.h"
+$end
+
+// gram
+namespace gram
+{
+  // create line macro
+  MacroPtr createLineMacro (util::Loc const & loc, util::Ident const & name)
+  {
+    return new LineMacro (loc, name);
+  }
+}
+  

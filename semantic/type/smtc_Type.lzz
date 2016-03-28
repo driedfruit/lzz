@@ -1,0 +1,35 @@
+// smtc_Type.lzz
+//
+
+$hdr
+#include "smtc_TypeKind.h"
+#include "util_String.h"
+$end
+
+$src
+$end
+
+// smtc
+namespace smtc
+{
+  // Type
+  class Type
+  {
+  public:
+    // constructor
+    Type ()
+    {
+    }
+
+    // destructor
+    virtual ~ Type ()
+    {
+    }
+
+    // get kind
+    virtual TypeKind getKind () const = 0;
+
+    // to string
+    virtual util::String toString (util::String const & dcl, bool c, bool v) const = 0;
+  }
+}

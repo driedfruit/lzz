@@ -1,0 +1,85 @@
+// smtc_TypeKind.lzz
+//
+
+// smtc
+namespace smtc
+{
+  // type kind
+  enum TypeKind
+  {
+    // bool
+    BOOL_TYPE,
+
+    // char
+    CHAR_TYPE,
+
+    // signed char
+    SIGNED_CHAR_TYPE,
+
+    // unsigned char type
+    UNSIGNED_CHAR_TYPE,
+
+    // wide char
+    WIDE_CHAR_TYPE,
+
+    // short int
+    SHORT_INT_TYPE,
+
+    // unsigned short int
+    UNSIGNED_SHORT_INT,
+
+    // int
+    INT_TYPE,
+
+    // unsigned int
+    UNSIGNED_INT_TYPE,
+
+    // long int
+    LONG_INT_TYPE,
+
+    // unsigned long int
+    UNSIGNED_LONG_INT_TYPE,
+
+    // long long int
+    LONG_LONG_INT_TYPE,
+
+    // unsigned long long int
+    UNSIGNED_LONG_LONG_INT_TYPE,
+
+    // float
+    FLOAT_TYPE,
+
+    // double
+    DOUBLE_TYPE,
+
+    // long double
+    LONG_DOUBLE_TYPE,
+
+    // void
+    VOID_TYPE,
+
+    // user
+    USER_TYPE,
+
+    // elaborated type
+    ELAB_TYPE,
+
+    // pointer
+    PTR_TYPE,
+
+    // member pointer type
+    MBR_PTR_TYPE,
+
+    // reference
+    REF_TYPE,
+
+    // function
+    FUNC_TYPE,
+
+    // array
+    ARRAY_TYPE,
+
+    // no type (for empty decl-spec-seq)
+    NO_TYPE,
+  }
+}

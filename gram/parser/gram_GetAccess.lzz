@@ -1,0 +1,41 @@
+// gram_GetAccess.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Access.h"
+$end
+
+$src
+// gram
+#include "gram_TokenNumber.h"
+$end
+
+// gram
+namespace gram
+{
+  // get access from token number
+  smtc::Access getAccess (int number)
+  {
+    smtc::Access access;
+    switch (number)
+    {
+      case PUBLIC_TOKEN:
+      {
+        access = smtc::PUBLIC_ACCESS;
+        break;
+      }
+      case PROTECTED_TOKEN:
+      {
+        access = smtc::PROTECTED_ACCESS;
+        break;
+      }
+      case PRIVATE_TOKEN:
+      {
+        access = smtc::PRIVATE_ACCESS;
+        break;
+      }
+    }
+    return access;
+  }
+}

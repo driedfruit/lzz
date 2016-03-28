@@ -1,0 +1,128 @@
+// basl_NontermProxy.lzz
+//
+// nonterm proxy
+// this class acts as the glue between Nonterm and the generated leaf nonterminal classes
+//
+// Copyright (C) 2002, Michael Spencer
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, subject to the following
+// restrictions:
+// 
+//   1. The origin of this software must not be misrepresented; you must
+//      not claim that you wrote the original software. If you use this
+//      software in a product, an acknowledgment in the product
+//      documentation would be appreciated but is not required.
+// 
+//   2. Altered source versions must be plainly marked as such, and must
+//      not be misrepresented as being the original software.
+// 
+// Basil documentation, as well as the latest version, is available at
+// http://www.lazycplusplus.com/basil.
+//
+// Send comments and bug reports to michael_spencer@lazycplusplus.com.
+// 
+
+$hdr
+// basil
+#include "basl_AttribPtr.h"
+$end
+
+$inl
+// basil
+#include "basl_Nonterm.h"
+$end
+
+$src
+// basil
+#include "basl_Nonterm.h"
+$end
+
+// basl
+namespace basl
+{
+  // types
+  class Token;
+  struct Node;
+  struct Nonterm;
+  struct NontermInfo;
+  struct LRRule;
+  struct Visitor;
+
+  // nonterm node
+  class NontermProxy
+  {
+    // nonterm
+    Nonterm & m_nonterm;
+
+  public:
+    // constructor
+    inline NontermProxy (Nonterm & nonterm)
+      : m_nonterm (nonterm)
+    {
+    }
+
+    // accept visitor
+    inline void accept (Visitor const & visitor)
+    {
+      m_nonterm.accept (visitor);
+    }
+
+    // visit children
+    inline void visitChildren (Visitor const & visitor)
+    {
+      m_nonterm.visitChildren (visitor);
+    }
+
+    // get number of children
+    inline int getNumChild () const
+    {
+      return m_nonterm.getNumChild ();
+    }
+    
+    // get child
+    inline Node & getChild (int num) const
+    {
+      return m_nonterm.getChild (num);
+    }
+
+    // get rule
+    inline LRRule const & getRule () const
+    {
+      return m_nonterm.getRule ();
+    }
+
+    // get nonterm info
+    inline NontermInfo const * getInfo () const
+    {
+      return m_nonterm.getInfo ();
+    }
+
+    // set attribute
+    inline void setAttrib (AttribPtr const & a)
+    {
+      m_nonterm.setAttrib (a);
+    }
+
+    // get attrib
+    inline AttribPtr const & getAttrib () const
+    {
+      return m_nonterm.getAttrib ();
+    }
+
+    // automatic conversion to underlying Nonterm
+
+    // conversion to basil nonterm node
+    inline operator Nonterm & () const
+    {
+      return m_nonterm;
+    }
+
+    // operator &
+    inline Nonterm * operator & () const
+    {
+      return & m_nonterm;
+    }
+  }
+}
+

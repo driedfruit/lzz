@@ -1,0 +1,287 @@
+// conf_Option.lzz
+//
+
+$hdr
+// util
+#include "util_IdentList.h"
+#include "util_StringVector.h"
+$end
+
+$src
+// std lib
+#include <cstdlib>
+
+// util
+#include "util_GetIdent.h"
+#include "util_IntToString.h"
+$end
+
+// confif
+namespace conf
+{
+  // using util
+  using namespace util;
+
+  // option kind
+  enum OptionKind
+  {
+    // string
+    STRING_OPTION,
+
+    // ident list
+    IDENT_LIST_OPTION,
+
+    // int option
+    INT_OPTION,
+
+    // boolean
+    BOOL_OPTION,
+
+    // string set
+    STRING_SET_OPTION,
+  }
+
+  // Option
+  class Option
+  {
+  public:
+    // constructor
+    Option ()
+    {
+    }
+
+    // get kind
+    virtual OptionKind getKind () const = 0;
+
+    // set value
+    virtual void setValue (util::String const & value) = 0;
+
+    // get value as string
+    virtual util::String getValueAsString () const = 0;
+
+    // true if bool option
+    bool isBoolOption () const
+    {
+      return getKind () == BOOL_OPTION;
+    }
+  }
+
+  // StringOption
+  class StringOption : public Option
+  {
+    // value
+    util::String m_value;
+
+  public:
+    // constructor
+    StringOption (util::String const & default_value)
+      : m_value (default_value)
+    {
+    }
+
+    // get kind
+    OptionKind getKind () const
+    {
+      return STRING_OPTION;
+    }
+
+    // set value
+    void setValue (util::String const & value)
+    {
+      m_value = value;
+    }
+
+    // get value as string
+    util::String getValueAsString () const
+    {
+      return m_value;
+    }
+
+    // get value
+    inline util::String const & getValue () const
+    {
+      return m_value;
+    }
+  }
+
+  // IdentListOption
+  class IdentListOption : public Option
+  {
+    // value
+    util::IdentList m_value;
+
+  public:
+    // constructor
+    IdentListOption ()
+    {
+    }
+
+    // get kind
+    OptionKind getKind () const
+    {
+      return IDENT_LIST_OPTION;
+    }
+
+    // set value
+    void setValue (util::String const & value)
+    {
+      m_value.push_back (util::getIdent (value.c_str ()));
+    }
+
+    // get value as string
+    util::String getValueAsString () const
+    {
+      util::String str;
+      if (! m_value.empty ())
+      {
+        for (IdentListConstIter i = m_value.begin ();;)
+        {
+          str += (* i).c_str ();
+          if (++ i == m_value.end ())
+          {
+            break;
+          }
+          str += ' ';
+        }
+      }
+      return str;
+    }
+
+    // true if has value
+    bool hasValue () const
+    {
+      return ! m_value.empty ();
+    }
+
+    // get value
+    inline util::IdentList const & getValue () const
+    {
+      return m_value;
+    }
+  }
+
+  // BoolOption
+  class BoolOption : public Option
+  {
+    // value
+    bool m_value;
+
+  public:
+    // constructor
+    BoolOption (bool default_value)
+      : m_value (default_value)
+    {
+    }
+
+    // get kind
+    OptionKind getKind () const
+    {
+      return BOOL_OPTION;
+    }
+
+    // set value: "yes" or "no"
+    void setValue (util::String const & value)
+    {
+      m_value = (value == "yes" || value == "on");
+    }
+
+    // get value as string
+    util::String getValueAsString () const
+    {
+      return m_value ? "on" : "off";
+    }
+
+    // set value using bool
+    void setValue (bool value)
+    {
+      m_value = value;
+    }
+
+    // get value
+    inline bool getValue () const
+    {
+      return m_value;
+    }
+  }
+
+  // IntOption
+  class IntOption : public Option
+  {
+    // value
+    int m_value;
+
+  public:
+    // constructor
+    IntOption (int default_value)
+      : m_value (default_value)
+    {
+    }
+
+    // get kind
+    OptionKind getKind () const
+    {
+      return INT_OPTION;
+    }
+
+    // set value
+    void setValue (util::String const & value)
+    {
+      m_value = atoi (value.c_str ());
+    }
+
+    // get value as string
+    util::String getValueAsString () const
+    {
+      return util::intToString (m_value);
+    }
+
+    // set value using int
+    void setValue (int value)
+    {
+      m_value = value;
+    }
+
+    // get value
+    inline int getValue () const
+    {
+      return m_value;
+    }
+  }
+
+  // StringSetOption
+  class StringSetOption : public Option
+  {
+    // value
+    util::StringVector m_value_set;
+
+  public:
+    // constructor
+    StringSetOption ()
+    {
+    }
+
+    // get kind
+    OptionKind getKind () const
+    {
+      return STRING_SET_OPTION;
+    }
+
+    // set value
+    void setValue (util::String const & value)
+    {
+      m_value_set.push_back (value);
+    }
+
+    // get value as string
+    util::String getValueAsString () const
+    {
+      return util::String ();
+    }
+
+    // get value
+    inline util::StringVector const & getValue () const
+    {
+      return m_value_set;
+    }
+  }
+}

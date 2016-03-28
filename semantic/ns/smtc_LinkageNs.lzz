@@ -1,0 +1,51 @@
+// smtc_LinkageNs.lzz
+//
+// linkage namespace
+//
+
+#hdr
+// semantic
+#include "smtc_NestedNs.h"
+// util
+#include "util_Ident.h"
+#end
+
+#src
+// semantic
+#include "smtc_NsVisitor.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // LinkageNs
+  class LinkageNs : public NestedNs
+  {
+    // the literal string lexeme
+    util::Ident m_linkage;
+
+  public:
+    // constructor
+    LinkageNs (NsPtr const & encl_ns, util::Loc const & loc, util::Ident const & linkage)
+      : NestedNs (encl_ns, loc), m_linkage (linkage)
+    {
+    }
+
+    // destructor
+    ~ LinkageNs ()
+    {
+    }
+
+    // accept visitor
+    void accept (NsVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get linkage string
+    inline util::Ident const & getLinkage () const
+    {
+      return m_linkage;
+    }
+  }
+}

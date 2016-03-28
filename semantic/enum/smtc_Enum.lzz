@@ -1,0 +1,70 @@
+// smtc_Enum.lzz
+//
+// enum definition
+//
+
+$hdr
+// semantic
+#include "smtc_EnumtorPtrVector.h"
+#include "smtc_NamePtr.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+// semantic
+$end
+
+// semantic
+namespace smtc
+{
+  // Enum
+  class Enum
+  {
+    // loc (name may not be set)
+    util::Loc m_loc;
+
+    // name, not set if enum is not named
+    NamePtr m_name;
+
+    // enumerators
+    EnumtorPtrVector m_enumtor_set;
+
+  public:
+    // constructor
+    Enum (util::Loc const & loc, NamePtr const & name, EnumtorPtrVector const & enumtor_set)
+      : m_loc (loc), m_name (name), m_enumtor_set (enumtor_set)
+    {
+    }
+
+    // destructor
+    ~ Enum ()
+    {
+    }
+    
+    // get loc
+    inline util::Loc const & getLoc () const
+    {
+      return m_loc;
+    }
+
+    // true if has name
+    inline bool hasName () const
+    {
+      return m_name.isSet ();
+    }
+
+    // get name
+    inline NamePtr const & getName () const
+    {
+      return m_name;
+    }
+
+    // get enumtor set
+    inline EnumtorPtrVector const & getEnumtorSet () const
+    {
+      return m_enumtor_set;
+    }
+  }
+}

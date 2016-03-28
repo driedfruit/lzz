@@ -1,0 +1,318 @@
+// smtc_Message.lzz
+//
+
+#hdr
+// util
+#include "util_Ident.h"
+#include "util_Loc.h"
+#include "util_String.h"
+#end
+
+#src
+// semantic
+#include "msg_Message.h"
+#include "msg_Output.h"
+#end
+
+// semantic
+namespace smtc::msg
+{
+  // using ::msg
+  using namespace ::msg;
+
+  // ns
+
+  // file qualified ns
+  void fileQualNs (util::Loc const & loc)
+  {
+    static char const str [] = "Cannot define a globally qualified namespace.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+  
+  // template ns name
+  void templateNs (util::Loc const & loc)
+  {
+    static char const str [] = "Cannot define a namespace with a template-id.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // object
+
+  // invalid obj specifier
+  void invalidObjSpec (util::Loc const & loc, char const * spec)
+  {
+    static char const str [] = "'%1' is not a valid object specifier.";
+    print (loc, Message (ERROR_MSG, str) << spec);
+  }
+
+  // invalid namespace obj specifier
+  void invalidNsObjSpec (util::Loc const & loc, char const * spec)
+  {
+    static char const str [] = "'%1' is not a valid namespace object specifier.";
+    print (loc, Message (ERROR_MSG, str) << spec);
+  }
+
+  // invalid class obj specifier
+  void invalidClassObjSpec (util::Loc const & loc, char const * spec)
+  {
+    static char const str [] = "'%1' is not a valid class object specifier.";
+    print (loc, Message (ERROR_MSG, str) << spec);
+  }
+
+  // conflicting obj specifiers
+  void conflictingObjSpec (util::Loc const & loc, char const * spec1, char const * spec2)
+  {
+    static char const str [] = "Conflicting object specifiers: '%1' and '%2'.";
+    print (loc, Message (ERROR_MSG, str) << spec1 << spec2);
+  }
+
+  // non static class object with initializer
+  void nonStaticClassObjWithInit (util::Loc const & loc)
+  {
+    static char const str [] = "A non static class object cannot have an initializer.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // template object
+  void templateObj (util::Loc const & loc)
+  {
+    static char const str [] = "Cannot declare a template object.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // attempt to explicitly instantiate an object
+  void instantiateObj (util::Loc const & loc)
+  {
+    static char const str [] = "Cannot explicitly instantiate an object.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // qualified class obj
+  void qualClassObj (util::Loc const & loc)
+  {
+    static char const str [] = "A class object cannot be qualified.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // declaration has storage specifier in linkage specification
+  void invalidSpecWithLinkageSpec (util::Loc const & loc, char const * spec)
+  {
+    static char const str [] = "'%1' is not a valid in a declaration with a linkage specification.";
+    print (loc, Message (ERROR_MSG, str) << spec);
+  }
+
+  // multiple linkage specs
+  void multipleLinkageSpec (util::Loc const & loc)
+  {
+    static char const str [] = "Multiple linkage specifications.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // invalid linkage spec
+  void invalidLinkageSpec (util::Loc const & loc)
+  {
+    static char const str [] = "A linkage specifictaion is not valid in this context.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // ns bitfield
+  void nsBitfield (util::Loc const & loc)
+  {
+    static char const str [] = "A bitfield cannot be declared in a namespace.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // invalid bitfield specifier
+  void invalidBitfieldSpec (util::Loc const & loc, char const * spec)
+  {
+    static char const str [] = "'%1' is not a valid bitfield specifier.";
+    print (loc, Message (ERROR_MSG, str) << spec);
+  }
+
+  // param
+  
+  // invalid catch specifier
+  void invalidCatchParamSpec (util::Loc const & loc, char const * spec)
+  {
+    static char const str [] = "'%1' is not a valid catch parameter specifier.";
+    print (loc, Message (ERROR_MSG, str) << spec);
+  }
+
+  // invalid func param specifier
+  void invalidFuncParamSpec (util::Loc const & loc, char const * spec)
+  {
+    static char const str [] = "'%1' is not a valid function parameter specifier.";
+    print (loc, Message (ERROR_MSG, str) << spec);
+  }
+
+  // invalid non type param specifier
+  void invalidNonTypeParamSpec (util::Loc const & loc, char const * spec)
+  {
+    static char const str [] = "'%1' is not a valid non-type parameter specifier.";
+    print (loc, Message (ERROR_MSG, str) << spec);
+  }
+
+  // qualified param name
+  void qualParamName (util::Loc const & loc)
+  {
+    static char const str [] = "Cannot declare a qualified parameter.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // typedef
+
+  // template tdef
+  void templateTdef (util::Loc const & loc)
+  {
+    static char const str [] = "Cannot declare a template typedef.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // attemp to explicitly instantiate a typedef
+  void instantiateTdef (util::Loc const & loc)
+  {
+    static char const str [] = "Cannot explicitly instantiate a typedef.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // qual tdef
+  void qualTdef (util::Loc const & loc)
+  {
+    static char const str [] = "Cannot declare a qualified typedef.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // class
+
+  // qual class class defn
+  void qualClassClassDefn (util::Loc const & loc)
+  {
+    static char const str [] = "Cannot define a qualified class inside a class.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // enum
+
+  // qual enum defn
+  void qualEnumDefn (util::Loc const & loc)
+  {
+    static char const str [] = "Cannot define a qualified enum.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // function
+
+  // invalid function specifier
+  void invalidFuncSpec (util::Loc const & loc, char const * spec)
+  {
+    static char const str [] = "'%1' is not a valid function specifier.";
+    print (loc, Message (ERROR_MSG, str) << spec);
+  }
+
+  // invalid namespace function specifier
+  void invalidNsFuncSpec (util::Loc const & loc, char const * spec)
+  {
+    static char const str [] = "'%1' is not a valid namespace function specifier.";
+    print (loc, Message (ERROR_MSG, str) << spec);
+  }
+
+  // invalid class function specifier
+  void invalidClassFuncSpec (util::Loc const & loc, char const * spec)
+  {
+    static char const str [] = "'%1' is not a valid class function specifier.";
+    print (loc, Message (ERROR_MSG, str) << spec);
+  }
+
+  // conflicting function specifiers
+  void conflictingFuncSpec (util::Loc const & loc, char const * spec1, char const * spec2)
+  {
+    static char const str [] = "Conflicting function specifiers: '%1' and '%2'.";
+    print (loc, Message (ERROR_MSG, str) << spec1 << spec2);
+  }
+
+  // invalid friend function specifier
+  void invalidFriendFuncSpec (util::Loc const & loc, char const * spec)
+  {
+    static char const str [] = "'%1' is not a valid friend function specifier.";
+    print (loc, Message (ERROR_MSG, str) << spec);
+  }
+
+  // namespace friend func decl
+  void nsFriendFuncDecl (util::Loc const & loc)
+  {
+    static char const str [] = "A friend function cannot be declared in a namespace.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // namespace friend func defn
+  void nsFriendFuncDefn (util::Loc const & loc)
+  {
+    static char const str [] = "A friend function cannot be defined in a namespace.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // friend func explicit instantiation
+  void friendFuncInst (util::Loc const & loc)
+  {
+    static char const str [] = "A friend function cannot be explicitly instantiated.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  //
+  // invalid names
+  //
+
+  // qualified class function decl
+  void qualClassFuncDecl (util::Loc const & loc)
+  {
+    static char const str [] = "A class function declaration cannot be qualified.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // qualified class function defn
+  void qualClassFuncDefn (util::Loc const & loc)
+  {
+    static char const str [] = "A class function definition cannot be qualified.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // qualified friend function defn
+  void qualFriendFuncDefn (util::Loc const & loc)
+  {
+    static char const str [] = "A friend function definition cannot be qualified.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // io
+
+  // no filenames on command line
+  void noFilenames ()
+  {
+    static char const str [] = "No files specified.";
+    print (Message (ERROR_MSG, str));
+  }
+
+  // file open error (for input and output files)
+  void fileOpenError (util::String const & filename)
+  {
+    static char const str [] = "Error opening file '%1'.";
+    print (Message (ERROR_MSG, str) << filename);
+  }
+
+  // unable to create temporary files
+  void tempFileOpenError ()
+  {
+    static char const str [] = "Unable to open temporary files.";
+    print (Message (ERROR_MSG, str));
+  }
+
+  // prl extensions
+
+  // navigator already has return stmt
+  void navAlreadyHasReturn (util::Loc const & loc)
+  {
+    static char const str [] = "Navigator already has a return statement.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+}

@@ -1,0 +1,19 @@
+// smtc_BaseSpecPtr.lzz
+//
+
+$hdr
+#include "util_BPtr.h"
+$end
+
+$src
+#include "smtc_BaseSpec.h"
+#include "util_BPtr.tpl"
+$end
+
+// semantic
+namespace smtc
+{
+  class BaseSpec;
+  typedef util::BPtr <BaseSpec> BaseSpecPtr;
+}
+template class util::BPtr <smtc::BaseSpec>;

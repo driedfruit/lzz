@@ -1,0 +1,211 @@
+// smtc_PrintMbrDecl.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ClassDefnPtr.h"
+#include "smtc_FilePtr.h"
+$end
+
+$src
+// std lib
+#include <algorithm>
+
+// semantic
+#include "smtc_AcceptEntityVisitor.h"
+#include "smtc_ClassDefn.h"
+#include "smtc_EntityVisitor.h"
+#include "smtc_PrintAccessSpec.h"
+#include "smtc_PrintMbrClassDecl.h"
+#include "smtc_PrintMbrClassDefn.h"
+#include "smtc_PrintMbrEnum.h"
+#include "smtc_PrintMbrFrndClassDecl.h"
+#include "smtc_PrintMbrFrndFuncDecl.h"
+#include "smtc_PrintMbrFrndFuncDefn.h"
+#include "smtc_PrintMbrFrndFuncDefn.h"
+#include "smtc_PrintMbrFrndTmplClassDecl.h"
+#include "smtc_PrintMbrFrndTmplFuncDecl.h"
+#include "smtc_PrintMbrFrndTmplFuncDefn.h"
+#include "smtc_PrintMbrFuncDecl.h"
+#include "smtc_PrintMbrLazyClass.h"
+#include "smtc_PrintMbrObjDecl.h"
+#include "smtc_PrintMbrTdef.h"
+#include "smtc_PrintMbrTmplClassDecl.h"
+#include "smtc_PrintMbrTmplClassDefn.h"
+#include "smtc_PrintMbrTmplFuncDecl.h"
+#include "smtc_PrintMbrTmplLazyClass.h"
+#include "smtc_PrintMbrUsingDecl.h"
+
+// entities
+#include "smtc_AccessSpecEntity.h"
+#include "smtc_ClassDeclEntity.h"
+#include "smtc_ClassDefnEntity.h"
+#include "smtc_EnumEntity.h"
+#include "smtc_FrndClassDeclEntity.h"
+#include "smtc_FrndFuncDeclEntity.h"
+#include "smtc_FrndFuncDefnEntity.h"
+#include "smtc_FrndTmplClassDeclEntity.h"
+#include "smtc_FrndTmplFuncDeclEntity.h"
+#include "smtc_FrndTmplFuncDefnEntity.h"
+#include "smtc_FuncDeclEntity.h"
+#include "smtc_FuncDefnEntity.h"
+#include "smtc_LazyClassEntity.h"
+#include "smtc_ObjEntity.h"
+#include "smtc_TdefEntity.h"
+#include "smtc_TmplClassDeclEntity.h"
+#include "smtc_TmplClassDefnEntity.h"
+#include "smtc_TmplFuncDeclEntity.h"
+#include "smtc_TmplFuncDefnEntity.h"
+#include "smtc_TmplLazyClassEntity.h"
+#include "smtc_UsingDeclEntity.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // PrintMbrDecl
+  struct PrintMbrDecl (FilePtr const & file)
+    : EntityVisitor
+  {
+    // access spec
+    void visit (AccessSpecEntity const & entity) const
+    {
+      printAccessSpec (file, entity.getAccessSpec ());
+    }
+
+    // tdef
+    void visit (TdefEntity const & entity) const
+    {
+      printMbrTdef (file, entity.getTdef ());
+    }
+
+    // obj
+    void visit (ObjEntity const & entity) const
+    {
+      printMbrObjDecl (file, entity.getObj ());
+    }
+
+    // func decl
+    void visit (FuncDeclEntity const & entity) const
+    {
+      printMbrFuncDecl (file, entity.getFuncDecl ());
+    }
+
+    // frnd func decl
+    void visit (FrndFuncDeclEntity const & entity) const
+    {
+      printMbrFrndFuncDecl (file, entity.getFuncDecl ());
+    }
+
+    // func defn
+    void visit (FuncDefnEntity const & entity) const
+    {
+      printMbrFuncDecl (file, entity.getFuncDefn ());
+    }
+
+    // frnd func defn
+    void visit (FrndFuncDefnEntity const & entity) const
+    {
+      printMbrFrndFuncDefn (file, entity.getFuncDefn ());
+    }
+
+    // tmpl func decl
+    void visit (TmplFuncDeclEntity const & entity) const
+    {
+      printMbrTmplFuncDecl (file, entity.getTmplFuncDecl ());
+    }
+
+    // tmpl func defn
+    void visit (TmplFuncDefnEntity const & entity) const
+    {
+      printMbrTmplFuncDecl (file, entity.getTmplFuncDefn ());
+    }
+
+    // tmpl frnd func decl
+    void visit (FrndTmplFuncDeclEntity const & entity) const
+    {
+      printMbrFrndTmplFuncDecl (file, entity.getTmplFuncDecl ());
+    }
+
+    // tmpl frnd func defn
+    void visit (FrndTmplFuncDefnEntity const & entity) const
+    {
+      printMbrFrndTmplFuncDefn (file, entity.getTmplFuncDefn ());
+    }
+
+    // class decl
+    void visit (ClassDeclEntity const & entity) const
+    {
+      printMbrClassDecl (file, entity.getClassDecl ());
+    }
+
+    // tmpl class decl
+    void visit (TmplClassDeclEntity const & entity) const
+    {
+      printMbrTmplClassDecl (file, entity.getTmplClassDecl ());
+    }
+
+    // friend class decl
+    void visit (FrndClassDeclEntity const & entity) const
+    {
+      printMbrFrndClassDecl (file, entity.getClassDecl ());
+    }
+
+    // tmpl friend class decl
+    void visit (FrndTmplClassDeclEntity const & entity) const
+    {
+      printMbrFrndTmplClassDecl (file, entity.getTmplClassDecl ());
+    }
+
+    // class defn
+    void visit (ClassDefnEntity const & entity) const
+    {
+      printMbrClassDefn (file, entity.getClassDefn ());
+    }
+
+    // tmpl class defn
+    void visit (TmplClassDefnEntity const & entity) const
+    {
+      printMbrTmplClassDefn (file, entity.getTmplClassDefn ());
+    }
+
+    // lazy class
+    void visit (LazyClassEntity const & entity) const
+    {
+      printMbrLazyClass (file, entity.getLazyClass ());
+    }
+
+    // tmpl lazy class
+    void visit (TmplLazyClassEntity const & entity) const
+    {
+      printMbrTmplLazyClass (file, entity.getTmplLazyClass ());
+    }
+
+    // enum
+    void visit (EnumEntity const & entity) const
+    {
+      printMbrEnum (file, entity.getEnum ());
+    }
+
+    // using decl
+    void visit (UsingDeclEntity const & entity) const
+    {
+      printMbrUsingDecl (file, entity.getUsingDecl ());
+    }
+
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // print mbr decl
+  void printMbrDecl (FilePtr const & file, ClassDefnPtr const & class_defn)
+  {
+    EntityPtrDeque const & entity_set = class_defn->getEntitySet ();
+    std::for_each (entity_set.begin (), entity_set.end (), AcceptEntityVisitor (PrintMbrDecl (file)));
+  }
+}

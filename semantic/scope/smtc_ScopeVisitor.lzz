@@ -1,0 +1,77 @@
+// smtc_ScopeVisitor.lzz
+//
+
+$hdr
+$end
+
+$src
+// semantic
+#include "smtc_LazyClassScope.h"
+#include "smtc_NavClassScope.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class NsScope;
+  class ClassScope;
+  class VdfScope;
+  class TmplSpecScope;
+  class LinkageSpecScope;
+  class TmplInstScope;
+  class LazyClassScope;
+  class NavClassScope;
+  class VdfBlockDataScope;
+
+  // ScopeVisitor
+  struct ScopeVisitor
+  {
+    // ns scope
+    virtual void visit (NsScope const & scope) const
+    {
+    }
+
+    // class scope
+    virtual void visit (ClassScope const & scope) const
+    {
+    }
+
+    // tmpl spec scope
+    virtual void visit (TmplSpecScope const & scope) const
+    {
+    }
+
+    // tmpl inst scope
+    virtual void visit (TmplInstScope const & scope) const
+    {
+    }
+    
+    // lazy class scope
+    virtual void visit (LazyClassScope const & scope) const
+    {
+      visit (static_cast <ClassScope const &> (scope));
+    }
+
+    // linkage spec scope
+    virtual void visit (LinkageSpecScope const & scope) const
+    {
+    }
+
+    // nav class scope
+    virtual void visit (NavClassScope const & scope) const
+    {
+      visit (static_cast <ClassScope const &> (scope));
+    }
+
+    // vdf scope
+    virtual void visit (VdfScope const & scope) const
+    {
+    }
+
+    // vdf block data scope
+    virtual void visit (VdfBlockDataScope const & scope) const
+    {
+    }
+  }
+}

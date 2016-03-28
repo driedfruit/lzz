@@ -1,0 +1,64 @@
+// gram_GetNodeFuncParamSet.lzz
+//
+
+$hdr
+// basil
+#include "basl_Nonterm.h"
+
+// semantic
+#include "smtc_ParamPtrVector.h"
+$end
+
+$src
+// gram
+#include "gram_BlockTable.h"
+#include "gram_GetNodeDcl.h"
+#include "gram_Nonterm.h"
+#include "gram_Visitor.h"
+
+// semantic
+#include "smtc_GetFuncParam.h"
+$end
+
+// private namespace
+namespace
+{
+  // using gram
+  using namespace gram;
+
+  // GetNodeFuncParamSet
+  struct GetNodeFuncParamSet (smtc::ParamPtrVector & param_set)
+    : Visitor ()
+  {
+    // param-init-decl -> param-decl
+    void visit (ParamDecl1Node & node) const
+    {
+      SpecSel dcl_spec_sel;
+      smtc::CvType cv_type;
+      smtc::NamePtr name;
+      getNodeParamDcl (node.getParamDecl (), dcl_spec_sel, cv_type, name);
+      param_set.push_back (smtc::getFuncParam (dcl_spec_sel, cv_type, name, Block ()));
+    }
+
+    // param-init-decl -> param-decl ASSIGN BLOCK
+    void visit (ParamDecl2Node & node) const
+    {
+      SpecSel dcl_spec_sel;
+      smtc::CvType cv_type;
+      smtc::NamePtr name;
+      getNodeParamDcl (node.getParamDecl (), dcl_spec_sel, cv_type, name);
+      Block defarg = getBlock (node.getBLOCK_TOKEN ().getLexeme ());
+      param_set.push_back (smtc::getFuncParam (dcl_spec_sel, cv_type, name, defarg));
+    }
+  }
+}
+
+// gram
+namespace gram
+{
+  // get node func param set
+  void getNodeFuncParamSet (basl::Nonterm & nonterm, smtc::ParamPtrVector & param_set)
+  {
+    nonterm.accept (GetNodeFuncParamSet (param_set));
+  }
+}

@@ -1,0 +1,109 @@
+// gram_GetBaseSpecSet.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_BaseSpecPtrVector.h"
+
+// basil
+#include "basl_Nonterm.h"
+$end
+
+$src
+// gram
+#include "gram_GetAccess.h"
+#include "gram_GetNodeBlockSet.h"
+#include "gram_GetNodeName.h"
+#include "gram_Nonterm.h"
+#include "gram_Visitor.h"
+
+// semantic
+#include "smtc_GetBaseSpec.h"
+#include "smtc_GetLazyBaseSpec.h"
+$end
+
+// private namespace
+namespace
+{
+  // using gram
+  using namespace gram;
+
+  // get base spec set
+  struct GetBaseSpecSet (smtc::BaseSpecPtrVector & base_spec_set)
+    : Visitor
+  {
+    // base-spec -> obj-name
+    void visit (BaseSpec1Node & node) const
+    {
+      smtc::NamePtr name = getNodeName (node.getObjName ());
+      base_spec_set.push_back (smtc::getBaseSpec (smtc::DEFAULT_ACCESS, false, name));
+    }
+    
+    // lazy-base-spec -> obj-name base-init
+    void visit (LazyBaseSpec1Node & node) const
+    {
+      smtc::NamePtr name = getNodeName (node.getObjName ());
+      gram::BlockVector arg_set;
+      getNodeBlockSet (node.getBaseInit (), arg_set);
+      base_spec_set.push_back (smtc::getLazyBaseSpec (smtc::DEFAULT_ACCESS, false, name, arg_set));
+    }
+
+    
+    // base-spec -> VIRTUAL access-opt obj-name
+    void visit (BaseSpec2Node & node) const
+    {
+      smtc::NamePtr name = getNodeName (node.getObjName ());
+      smtc::Access access = smtc::DEFAULT_ACCESS;
+      basl::Token & access_node = node.getAccessOpt ();
+      if (access_node.isSet ())
+      {
+        access = getAccess (access_node.getNumber ());
+      }
+      base_spec_set.push_back (smtc::getBaseSpec (access, true, name));
+    }
+    
+    // lazy-base-spec -> VIRTUAL access-opt obj-name base-init
+    void visit (LazyBaseSpec2Node & node) const
+    {
+      smtc::NamePtr name = getNodeName (node.getObjName ());
+      smtc::Access access = smtc::DEFAULT_ACCESS;
+      basl::Token & access_node = node.getAccessOpt ();
+      if (access_node.isSet ())
+      {
+        access = getAccess (access_node.getNumber ());
+      }
+      gram::BlockVector arg_set;
+      getNodeBlockSet (node.getBaseInit (), arg_set);
+      base_spec_set.push_back (smtc::getLazyBaseSpec (access, true, name, arg_set));
+    }
+
+
+    // base-spec -> access virtual-opt obj-name
+    void visit (BaseSpec3Node & node) const
+    {
+      smtc::NamePtr name = getNodeName (node.getObjName ());
+      smtc::Access access = getAccess (node.getAccess ().getNumber ());
+      base_spec_set.push_back (smtc::getBaseSpec (access, node.getVirtualOpt ().isSet (), name));
+    }
+    
+    // lazy-base-spec -> access virtual-opt obj-name base-init
+    void visit (LazyBaseSpec3Node & node) const
+    {
+      smtc::NamePtr name = getNodeName (node.getObjName ());
+      smtc::Access access = getAccess (node.getAccess ().getNumber ());
+      gram::BlockVector arg_set;
+      getNodeBlockSet (node.getBaseInit (), arg_set);
+      base_spec_set.push_back (smtc::getLazyBaseSpec (access, node.getVirtualOpt ().isSet (), name, arg_set));
+    }
+  }
+}
+
+// gram
+namespace gram
+{
+  // get base spec set
+  void getBaseSpecSet (basl::Nonterm & nonterm, smtc::BaseSpecPtrVector & base_spec_set)
+  {
+    nonterm.accept (GetBaseSpecSet (base_spec_set));
+  }
+}

@@ -1,0 +1,1869 @@
+#
+# lzz rules
+#
+# Feb 23, 2003: mangled token names since mingw gcc has name conflicts (macros and lookup ambiguities)
+
+# start
+start -> decl-seq-opt
+
+# vdf start rules
+start -> param-decl-3-body
+start -> expr-list
+
+# decl seq opt
+decl-seq-opt -> decl-seq
+decl-seq-opt ->
+
+# decl seq
+decl-seq -> decl-seq decl
+[] decl-seq -> decl
+
+# decl
+decl -> namespace-def
+decl -> simple-decl
+decl -> class-def
+decl -> class-decl
+decl -> func-def
+decl -> tmpl-decl
+decl -> tmpl-inst
+decl -> lazy-ctor
+decl -> functor-def
+decl -> simple-functor-decl
+decl -> enum-def
+decl -> using-decl
+decl -> using-dir
+decl -> linkage-spec
+
+# simple decl
+[ SimpleDeclNode ]
+simple-decl * -> nested-simple-decl SEMI_TOKEN
+
+[(SimpleDeclNode)]
+simple-decl * -> nested-simple-ctor-decl SEMI_TOKEN
+
+# nested simple decl
+[ NestedSimpleDecl1Node ]
+nested-simple-decl * < -> nested-obj-decl obj-init-opt
+
+[ NestedSimpleDecl2Node ]
+nested-simple-decl * < -> nested-func-decl
+
+[(NestedSimpleDecl2Node)]
+nested-simple-ctor-decl * < -> nested-ctor-decl
+
+[ NestedSimpleDecl3Node ]
+nested-simple-decl * < -> nested-bitf-decl
+
+# nested obj decl
+[ NestedDeclNode ]
+nested-obj-decl -> nested-simple-decl COMMA_TOKEN obj-dcl
+nested-obj-decl -> obj-decl
+
+# nested bitf decl
+[(NestedDeclNode)]
+nested-bitf-decl -> nested-simple-decl COMMA_TOKEN bitf-dcl-id
+nested-bitf-decl -> bitf-decl
+
+# nested func decl
+[(NestedDeclNode)]
+nested-func-decl -> nested-simple-decl COMMA_TOKEN pure-func-dcl
+nested-func-decl -> func-decl
+
+# nested ctor decl
+[(NestedDeclNode)]
+nested-ctor-decl -> nested-simple-ctor-decl COMMA_TOKEN pure-ctor-dcl
+nested-ctor-decl -> ctor-decl
+
+# obj init opt
+obj-init-opt -> obj-init
+obj-init-opt ->
+
+# obj init
+[ObjInit1Node]
+obj-init -> ASSIGN_TOKEN BLOCK_TOKEN 3
+
+[ObjInit2Node]
+obj-init -> DINIT_TOKEN LPAREN_TOKEN expr-list RPAREN_TOKEN
+
+[ObjInit3Node]
+obj-init -> direct-expr-list RPAREN_TOKEN
+
+# direct expr list
+[(SeqNode)]
+direct-expr-list -> LPAREN_TOKEN LPAREN_TOKEN block 2 RPAREN_TOKEN
+
+[(SeqNode)]
+direct-expr-list -> direct-expr-list COMMA_TOKEN block 4
+
+# expr list
+[(SeqNode)]
+expr-list -> expr-list COMMA_TOKEN block 4
+expr-list -> block 4
+
+# block
+[BlockNode]
+block -> BLOCK_TOKEN
+
+# nested name 
+[NestedName1Node]
+nested-name -> DCOLON_TOKEN
+
+# DCOLON_TOKEN is always part of nested name
+[NestedName2Node]
+nested-name -> obj-name DCOLON_TOKEN >!
+
+# nested name opt
+
+nested-name-opt -> nested-name
+nested-name-opt -> 
+
+
+# obj name
+[Name1Node]
+obj-name -> nested-name-opt obj-base-name
+
+[Name2Node]
+obj-name -> nested-name-opt obj-base-name LT_TOKEN >! block-opt 1 GT_TOKEN
+
+[Name3Node]
+obj-name -> nested-name TEMPLATE_TOKEN obj-base-name LT_TOKEN >! block-opt 1 GT_TOKEN
+
+# obj base name
+[BaseName1Node]
+obj-base-name -> macro-opt IDENT_TOKEN
+
+# macro opt (for old -macro option)
+macro-opt -> macro
+macro-opt ->
+
+# macro
+macro -> MACRO_TOKEN
+
+# bitf name
+[Name4Node]
+bitf-name -> nested-name-opt macro-opt IDENT_TOKEN COLON_TOKEN BLOCK_TOKEN 4
+
+[Name5Node]
+bitf-name ->                                       COLON_TOKEN BLOCK_TOKEN 4
+
+# func name
+[(Name1Node)]
+func-name -> nested-name-opt func-base-name
+
+[(Name2Node)]
+func-name -> nested-name-opt func-base-name LT_TOKEN >! block-opt 1 GT_TOKEN
+
+# func base name
+[BaseName2Node]
+func-base-name -> macro-opt BITNOT_TOKEN IDENT_TOKEN
+
+[BaseName3Node]
+func-base-name -> macro-opt OPERATOR_TOKEN oper
+
+[BaseName4Node]
+func-base-name -> macro-opt OPERATOR_TOKEN abstract-decl >
+
+
+# oper
+[Oper1Node]
+oper -> LPAREN_TOKEN RPAREN_TOKEN
+
+[Oper2Node]
+oper -> LBRACK_TOKEN RBRACK_TOKEN
+
+[Oper3Node]
+oper -> NEW_TOKEN LBRACK_TOKEN RBRACK_TOKEN
+
+[Oper4Node]
+oper -> DELETE_TOKEN LBRACK_TOKEN RBRACK_TOKEN
+
+[Oper5Node]
+oper -> single-oper
+
+# single oper
+single-oper -> AND_TOKEN
+single-oper -> ASSIGN_TOKEN
+single-oper -> BITAND_TOKEN
+single-oper -> BITAND_ASSIGN_TOKEN
+single-oper -> BITNOT_TOKEN
+single-oper -> BITOR_TOKEN
+single-oper -> BITOR_ASSIGN_TOKEN
+single-oper -> COMMA_TOKEN
+single-oper -> DEC_TOKEN
+single-oper -> DELETE_TOKEN
+single-oper -> DIVIDE_TOKEN
+single-oper -> DIVIDE_ASSIGN_TOKEN
+single-oper -> EQ_TOKEN
+single-oper -> GT_TOKEN
+single-oper -> GTEQ_TOKEN
+single-oper -> INC_TOKEN
+single-oper -> LSHIFT_TOKEN
+single-oper -> LSHIFT_ASSIGN_TOKEN
+single-oper -> LT_TOKEN
+single-oper -> LTEQ_TOKEN
+single-oper -> MINUS_TOKEN
+single-oper -> MINUS_ASSIGN_TOKEN
+single-oper -> MOD_TOKEN
+single-oper -> MOD_ASSIGN_TOKEN
+single-oper -> NEW_TOKEN
+single-oper -> NOT_TOKEN
+single-oper -> NOTEQ_TOKEN
+single-oper -> OR_TOKEN
+single-oper -> PLUS_TOKEN
+single-oper -> PLUS_ASSIGN_TOKEN
+single-oper -> PTR_TOKEN
+single-oper -> PTR_TIMES_TOKEN
+single-oper -> RSHIFT_TOKEN
+single-oper -> RSHIFT_ASSIGN_TOKEN
+single-oper -> TIMES_TOKEN
+single-oper -> TIMES_ASSIGN_TOKEN
+single-oper -> XOR_TOKEN
+single-oper -> XOR_ASSIGN_TOKEN
+
+#
+# decl spec
+#
+
+# typedef spec
+[ DeclSpecNode ]
+typedef-spec -> TYPEDEF_TOKEN
+
+# friend spec
+[(DeclSpecNode)]
+friend-spec -> FRIEND_TOKEN
+
+# cv spec
+[CVSpecNode]
+cv-spec -> cv-token
+
+# cv token
+cv-token -> CONST_TOKEN
+cv-token -> VOLATILE_TOKEN
+
+# cv spec seq
+[$ SeqNode]
+cv-spec-seq -> cv-spec-seq cv-spec
+cv-spec-seq -> cv-spec
+
+# cv spec seq opt
+cv-spec-seq-opt -> cv-spec-seq
+cv-spec-seq-opt ->
+
+# ftor spec
+[FtorSpecNode]
+ftor-spec -> ftor-token
+
+# ftor token
+ftor-token -> INLINE_TOKEN
+ftor-token -> VIRTUAL_TOKEN
+ftor-token -> EXPLICIT_TOKEN
+ftor-token -> STATIC_TOKEN
+ftor-token -> EXTERN_TOKEN
+ftor-token -> MUTABLE_TOKEN
+ftor-token -> AUTO_TOKEN
+ftor-token -> REGISTER_TOKEN
+ftor-token -> DLL_API_TOKEN
+
+# user type
+[UserTypeNode]
+user-type -> obj-name
+
+# elaborated type
+[ ElabTypeNode ]
+elaborated-type -> class-key dll-api-opt obj-name
+
+[(ElabTypeNode)]
+elaborated-type -> ENUM_TOKEN obj-name
+
+[(ElabTypeNode)]
+elaborated-type -> TYPENAME_TOKEN obj-name
+
+# class key
+class-key -> CLASS_TOKEN
+class-key -> STRUCT_TOKEN
+class-key -> UNION_TOKEN
+
+# built in type
+[BuiltInTypeNode]
+built-in-type -> built-in-type-token
+
+# built in type
+built-in-type-token -> BOOL_TOKEN
+built-in-type-token -> CHAR_TOKEN
+built-in-type-token -> DOUBLE_TOKEN
+built-in-type-token -> FLOAT_TOKEN
+built-in-type-token -> INT_TOKEN
+built-in-type-token -> LONG_TOKEN
+built-in-type-token -> SHORT_TOKEN
+built-in-type-token -> SIGNED_TOKEN
+built-in-type-token -> UNSIGNED_TOKEN
+built-in-type-token -> VOID_TOKEN
+built-in-type-token -> WCHAR_TOKEN
+
+# decl spec seq
+# xxVx - cv
+[(SeqNode)]
+xxVx-decl-spec-seq -> xxVx-decl-spec-seq cv-spec
+[]
+xxVx-decl-spec-seq -> cv-spec
+
+# xxxS - ftor
+
+[(SeqNode)]
+xxxS-decl-spec-seq -> xxxS-decl-spec-seq ftor-spec
+[]
+xxxS-decl-spec-seq -> ftor-spec
+
+# xxVS - cv ftor
+[(SeqNode)]
+xxVS-decl-spec-seq -> xxVx-decl-spec-seq ftor-spec
+[(SeqNode)]
+xxVS-decl-spec-seq -> xxxS-decl-spec-seq cv-spec
+[(SeqNode)]
+xxVS-decl-spec-seq -> xxVS-decl-spec-seq ftor-spec
+[(SeqNode)]
+xxVS-decl-spec-seq -> xxVS-decl-spec-seq cv-spec
+
+# xBxx - built-in
+[(SeqNode)]
+xBxx-decl-spec-seq -> xBxx-decl-spec-seq built-in-type
+[]
+xBxx-decl-spec-seq -> built-in-type
+
+# xBVx - built-in cv
+[(SeqNode)]
+xBVx-decl-spec-seq -> xBxx-decl-spec-seq cv-spec
+[(SeqNode)]
+xBVx-decl-spec-seq -> xxVx-decl-spec-seq built-in-type
+[(SeqNode)]
+xBVx-decl-spec-seq -> xBVx-decl-spec-seq cv-spec
+[(SeqNode)]
+xBVx-decl-spec-seq -> xBVx-decl-spec-seq built-in-type
+
+# xBxS - built-in ftor
+[(SeqNode)]
+xBxS-decl-spec-seq -> xBxx-decl-spec-seq ftor-spec
+[(SeqNode)]
+xBxS-decl-spec-seq -> xxxS-decl-spec-seq built-in-type
+[(SeqNode)]
+xBxS-decl-spec-seq -> xBxS-decl-spec-seq ftor-spec
+[(SeqNode)]
+xBxS-decl-spec-seq -> xBxS-decl-spec-seq built-in-type
+
+# xBVS - built-in cv ftor
+[(SeqNode)]
+xBVS-decl-spec-seq -> xBVx-decl-spec-seq ftor-spec
+[(SeqNode)]
+xBVS-decl-spec-seq -> xBxS-decl-spec-seq cv-spec
+[(SeqNode)]
+xBVS-decl-spec-seq -> xxVS-decl-spec-seq built-in-type
+[(SeqNode)]
+xBVS-decl-spec-seq -> xBVS-decl-spec-seq ftor-spec
+[(SeqNode)]
+xBVS-decl-spec-seq -> xBVS-decl-spec-seq cv-spec
+[(SeqNode)]
+xBVS-decl-spec-seq -> xBVS-decl-spec-seq built-in-type
+
+# xUxx - user
+[]
+xUxx-decl-spec-seq -> user-type
+
+# xUVx - user cv
+[(SeqNode)]
+xUVx-decl-spec-seq -> xUxx-decl-spec-seq cv-spec
+[(SeqNode)]
+xUVx-decl-spec-seq -> xxVx-decl-spec-seq user-type
+[(SeqNode)]
+xUVx-decl-spec-seq -> xUVx-decl-spec-seq cv-spec
+
+# xUxS - user ftor
+[(SeqNode)]
+xUxS-decl-spec-seq -> xUxx-decl-spec-seq ftor-spec
+[(SeqNode)]
+xUxS-decl-spec-seq -> xxxS-decl-spec-seq user-type
+[(SeqNode)]
+xUxS-decl-spec-seq -> xUxS-decl-spec-seq ftor-spec
+
+# xUVS - user cv ftor
+[(SeqNode)]
+xUVS-decl-spec-seq -> xUVx-decl-spec-seq ftor-spec
+[(SeqNode)]
+xUVS-decl-spec-seq -> xUxS-decl-spec-seq cv-spec
+[(SeqNode)]
+xUVS-decl-spec-seq -> xxVS-decl-spec-seq user-type
+[(SeqNode)]
+xUVS-decl-spec-seq -> xUVS-decl-spec-seq ftor-spec
+[(SeqNode)]
+xUVS-decl-spec-seq -> xUVS-decl-spec-seq cv-spec
+
+# xExx - elaborated
+[]
+xExx-decl-spec-seq -> elaborated-type
+
+# xEVx - elaborated cv
+[(SeqNode)]
+xEVx-decl-spec-seq -> xExx-decl-spec-seq cv-spec
+[(SeqNode)]
+xEVx-decl-spec-seq -> xxVx-decl-spec-seq elaborated-type
+[(SeqNode)]
+xEVx-decl-spec-seq -> xEVx-decl-spec-seq cv-spec
+
+# xExS - elaborated ftor
+[(SeqNode)]
+xExS-decl-spec-seq -> xExx-decl-spec-seq ftor-spec
+[(SeqNode)]
+xExS-decl-spec-seq -> xxxS-decl-spec-seq elaborated-type  
+[(SeqNode)]
+xExS-decl-spec-seq -> xExS-decl-spec-seq ftor-spec
+
+# xEVS - elaborated cv ftor
+[(SeqNode)]
+xEVS-decl-spec-seq -> xEVx-decl-spec-seq ftor-spec
+[(SeqNode)]
+xEVS-decl-spec-seq -> xExS-decl-spec-seq cv-spec
+[(SeqNode)]
+xEVS-decl-spec-seq -> xxVS-decl-spec-seq elaborated-type 
+[(SeqNode)]
+xEVS-decl-spec-seq -> xEVS-decl-spec-seq ftor-spec
+[(SeqNode)]
+xEVS-decl-spec-seq -> xEVS-decl-spec-seq cv-spec
+
+# Txxx - typedef
+[]
+Txxx-decl-spec-seq -> typedef-spec
+
+# TxVx - typedef cv
+[(SeqNode)]
+TxVx-decl-spec-seq -> Txxx-decl-spec-seq cv-spec
+[(SeqNode)]
+TxVx-decl-spec-seq -> xxVx-decl-spec-seq typedef-spec
+[(SeqNode)]
+TxVx-decl-spec-seq -> TxVx-decl-spec-seq cv-spec
+
+# TxxS - typedef ftor
+[(SeqNode)]
+TxxS-decl-spec-seq -> Txxx-decl-spec-seq ftor-spec
+[(SeqNode)]
+TxxS-decl-spec-seq -> xxxS-decl-spec-seq typedef-spec
+[(SeqNode)]
+TxxS-decl-spec-seq -> TxxS-decl-spec-seq ftor-spec
+
+# TxVS - typedef cv ftor
+[(SeqNode)]
+TxVS-decl-spec-seq -> TxVx-decl-spec-seq ftor-spec
+[(SeqNode)]
+TxVS-decl-spec-seq -> TxxS-decl-spec-seq cv-spec
+[(SeqNode)]
+TxVS-decl-spec-seq -> xxVS-decl-spec-seq typedef-spec
+[(SeqNode)]
+TxVS-decl-spec-seq -> TxVS-decl-spec-seq ftor-spec
+[(SeqNode)]
+TxVS-decl-spec-seq -> TxVS-decl-spec-seq cv-spec
+
+# TBxx - typedef built-in
+[(SeqNode)]
+TBxx-decl-spec-seq -> Txxx-decl-spec-seq built-in-type
+[(SeqNode)]
+TBxx-decl-spec-seq -> xBxx-decl-spec-seq typedef-spec
+[(SeqNode)]
+TBxx-decl-spec-seq -> TBxx-decl-spec-seq built-in-type
+
+# TBVx - typedef built-in cv
+[(SeqNode)]
+TBVx-decl-spec-seq -> TBxx-decl-spec-seq cv-spec
+[(SeqNode)]
+TBVx-decl-spec-seq -> TxVx-decl-spec-seq built-in-type
+[(SeqNode)]
+TBVx-decl-spec-seq -> xBVx-decl-spec-seq typedef-spec
+[(SeqNode)]
+TBVx-decl-spec-seq -> TBVx-decl-spec-seq cv-spec
+[(SeqNode)]
+TBVx-decl-spec-seq -> TBVx-decl-spec-seq built-in-type
+
+# TBxS - typedef built-in ftor
+[(SeqNode)]
+TBxS-decl-spec-seq -> TBxx-decl-spec-seq ftor-spec
+[(SeqNode)]
+TBxS-decl-spec-seq -> TxxS-decl-spec-seq built-in-type
+[(SeqNode)]
+TBxS-decl-spec-seq -> xBxS-decl-spec-seq typedef-spec
+[(SeqNode)]
+TBxS-decl-spec-seq -> TBxS-decl-spec-seq ftor-spec
+[(SeqNode)]
+TBxS-decl-spec-seq -> TBxS-decl-spec-seq built-in-type
+
+# TBVS - typedef built-in cv ftor
+[(SeqNode)]
+TBVS-decl-spec-seq -> TBVx-decl-spec-seq ftor-spec
+[(SeqNode)]
+TBVS-decl-spec-seq -> TBxS-decl-spec-seq cv-spec
+[(SeqNode)]
+TBVS-decl-spec-seq -> TxVS-decl-spec-seq built-in-type
+[(SeqNode)]
+TBVS-decl-spec-seq -> xBVS-decl-spec-seq typedef-spec
+[(SeqNode)]
+TBVS-decl-spec-seq -> TBVS-decl-spec-seq ftor-spec
+[(SeqNode)]
+TBVS-decl-spec-seq -> TBVS-decl-spec-seq cv-spec
+[(SeqNode)]
+TBVS-decl-spec-seq -> TBVS-decl-spec-seq built-in-type
+
+# TUxx - typedef user
+[(SeqNode)]
+TUxx-decl-spec-seq -> Txxx-decl-spec-seq user-type
+[(SeqNode)]
+TUxx-decl-spec-seq -> xUxx-decl-spec-seq typedef-spec
+
+# TUVx - typedef user cv
+[(SeqNode)]
+TUVx-decl-spec-seq -> TUxx-decl-spec-seq cv-spec
+[(SeqNode)]
+TUVx-decl-spec-seq -> TxVx-decl-spec-seq user-type
+[(SeqNode)]
+TUVx-decl-spec-seq -> xUVx-decl-spec-seq typedef-spec
+[(SeqNode)]
+TUVx-decl-spec-seq -> TUVx-decl-spec-seq cv-spec
+
+# TUxS - typedef user ftor
+[(SeqNode)]
+TUxS-decl-spec-seq -> TUxx-decl-spec-seq ftor-spec
+[(SeqNode)]
+TUxS-decl-spec-seq -> TxxS-decl-spec-seq user-type
+[(SeqNode)]
+TUxS-decl-spec-seq -> xUxS-decl-spec-seq typedef-spec
+[(SeqNode)]
+TUxS-decl-spec-seq -> TUxS-decl-spec-seq ftor-spec
+
+# TUVS - typedef user cv ftor
+[(SeqNode)]
+TUVS-decl-spec-seq -> TUVx-decl-spec-seq ftor-spec
+[(SeqNode)]
+TUVS-decl-spec-seq -> TUxS-decl-spec-seq cv-spec
+[(SeqNode)]
+TUVS-decl-spec-seq -> TxVS-decl-spec-seq user-type
+[(SeqNode)]
+TUVS-decl-spec-seq -> xUVS-decl-spec-seq typedef-spec
+[(SeqNode)]
+TUVS-decl-spec-seq -> TUVS-decl-spec-seq ftor-spec
+[(SeqNode)]
+TUVS-decl-spec-seq -> TUVS-decl-spec-seq cv-spec
+
+# TExx - typedef elaborated
+[(SeqNode)]
+TExx-decl-spec-seq -> Txxx-decl-spec-seq elaborated-type
+[(SeqNode)]
+TExx-decl-spec-seq -> xExx-decl-spec-seq typedef-spec
+
+# TEVx - typedef elaborated cv
+[(SeqNode)]
+TEVx-decl-spec-seq -> TExx-decl-spec-seq cv-spec
+[(SeqNode)]
+TEVx-decl-spec-seq -> TxVx-decl-spec-seq elaborated-type
+[(SeqNode)]
+TEVx-decl-spec-seq -> xEVx-decl-spec-seq typedef-spec
+[(SeqNode)]
+TEVx-decl-spec-seq -> TEVx-decl-spec-seq cv-spec
+
+# TExS - typedef elaborated ftor
+[(SeqNode)]
+TExS-decl-spec-seq -> TExx-decl-spec-seq ftor-spec
+[(SeqNode)]
+TExS-decl-spec-seq -> TxxS-decl-spec-seq elaborated-type
+[(SeqNode)]
+TExS-decl-spec-seq -> xExS-decl-spec-seq typedef-spec
+[(SeqNode)]
+TExS-decl-spec-seq -> TExS-decl-spec-seq ftor-spec
+
+# TEVS - typedef elaborated cv ftor
+[(SeqNode)]
+TEVS-decl-spec-seq -> TEVx-decl-spec-seq ftor-spec
+[(SeqNode)]
+TEVS-decl-spec-seq -> TExS-decl-spec-seq cv-spec
+[(SeqNode)]
+TEVS-decl-spec-seq -> TxVS-decl-spec-seq elaborated-type
+[(SeqNode)]
+TEVS-decl-spec-seq -> xEVS-decl-spec-seq typedef-spec
+[(SeqNode)]
+TEVS-decl-spec-seq -> TEVS-decl-spec-seq ftor-spec
+[(SeqNode)]
+TEVS-decl-spec-seq -> TEVS-decl-spec-seq cv-spec
+
+# Fxxx - friend
+[]
+Fxxx-decl-spec-seq -> friend-spec
+
+# FxVx - friend cv
+[(SeqNode)]
+FxVx-decl-spec-seq -> Fxxx-decl-spec-seq cv-spec
+[(SeqNode)]
+FxVx-decl-spec-seq -> xxVx-decl-spec-seq friend-spec
+[(SeqNode)]
+FxVx-decl-spec-seq -> FxVx-decl-spec-seq cv-spec
+
+# FxxS - friend ftor
+[(SeqNode)]
+FxxS-decl-spec-seq -> Fxxx-decl-spec-seq ftor-spec
+[(SeqNode)]
+FxxS-decl-spec-seq -> xxxS-decl-spec-seq friend-spec
+[(SeqNode)]
+FxxS-decl-spec-seq -> FxxS-decl-spec-seq ftor-spec
+
+# FxVS - friend cv ftor
+[(SeqNode)]
+FxVS-decl-spec-seq -> FxVx-decl-spec-seq ftor-spec
+[(SeqNode)]
+FxVS-decl-spec-seq -> FxxS-decl-spec-seq cv-spec
+[(SeqNode)]
+FxVS-decl-spec-seq -> xxVS-decl-spec-seq friend-spec
+[(SeqNode)]
+FxVS-decl-spec-seq -> FxVS-decl-spec-seq ftor-spec
+[(SeqNode)]
+FxVS-decl-spec-seq -> FxVS-decl-spec-seq cv-spec
+
+# FBxx - friend built-in
+[(SeqNode)]
+FBxx-decl-spec-seq -> Fxxx-decl-spec-seq built-in-type
+[(SeqNode)]
+FBxx-decl-spec-seq -> xBxx-decl-spec-seq friend-spec
+[(SeqNode)]
+FBxx-decl-spec-seq -> FBxx-decl-spec-seq built-in-type
+
+# FBVx - friend built-in cv
+[(SeqNode)]
+FBVx-decl-spec-seq -> FBxx-decl-spec-seq cv-spec
+[(SeqNode)]
+FBVx-decl-spec-seq -> FxVx-decl-spec-seq built-in-type
+[(SeqNode)]
+FBVx-decl-spec-seq -> xBVx-decl-spec-seq friend-spec
+[(SeqNode)]
+FBVx-decl-spec-seq -> FBVx-decl-spec-seq cv-spec
+[(SeqNode)]
+FBVx-decl-spec-seq -> FBVx-decl-spec-seq built-in-type
+
+# FBxS - friend built-in ftor
+[(SeqNode)]
+FBxS-decl-spec-seq -> FBxx-decl-spec-seq ftor-spec
+[(SeqNode)]
+FBxS-decl-spec-seq -> FxxS-decl-spec-seq built-in-type
+[(SeqNode)]
+FBxS-decl-spec-seq -> xBxS-decl-spec-seq friend-spec
+[(SeqNode)]
+FBxS-decl-spec-seq -> FBxS-decl-spec-seq ftor-spec
+[(SeqNode)]
+FBxS-decl-spec-seq -> FBxS-decl-spec-seq built-in-type
+
+# FBVS - friend built-in cv ftor
+[(SeqNode)]
+FBVS-decl-spec-seq -> FBVx-decl-spec-seq ftor-spec
+[(SeqNode)]
+FBVS-decl-spec-seq -> FBxS-decl-spec-seq cv-spec
+[(SeqNode)]
+FBVS-decl-spec-seq -> FxVS-decl-spec-seq built-in-type
+[(SeqNode)]
+FBVS-decl-spec-seq -> xBVS-decl-spec-seq friend-spec
+[(SeqNode)]
+FBVS-decl-spec-seq -> FBVS-decl-spec-seq ftor-spec
+[(SeqNode)]
+FBVS-decl-spec-seq -> FBVS-decl-spec-seq cv-spec
+[(SeqNode)]
+FBVS-decl-spec-seq -> FBVS-decl-spec-seq built-in-type
+
+# FUxx - friend user
+[(SeqNode)]
+FUxx-decl-spec-seq -> Fxxx-decl-spec-seq user-type
+[(SeqNode)]
+FUxx-decl-spec-seq -> xUxx-decl-spec-seq friend-spec
+
+# FUVx - friend user cv
+[(SeqNode)]
+FUVx-decl-spec-seq -> FUxx-decl-spec-seq cv-spec
+[(SeqNode)]
+FUVx-decl-spec-seq -> FxVx-decl-spec-seq user-type
+[(SeqNode)]
+FUVx-decl-spec-seq -> xUVx-decl-spec-seq friend-spec
+[(SeqNode)]
+FUVx-decl-spec-seq -> FUVx-decl-spec-seq cv-spec
+
+# FUxS - friend user ftor
+[(SeqNode)]
+FUxS-decl-spec-seq -> FUxx-decl-spec-seq ftor-spec
+[(SeqNode)]
+FUxS-decl-spec-seq -> FxxS-decl-spec-seq user-type
+[(SeqNode)]
+FUxS-decl-spec-seq -> xUxS-decl-spec-seq friend-spec
+[(SeqNode)]
+FUxS-decl-spec-seq -> FUxS-decl-spec-seq ftor-spec
+
+# FUVS - friend user cv ftor
+[(SeqNode)]
+FUVS-decl-spec-seq -> FUVx-decl-spec-seq ftor-spec
+[(SeqNode)]
+FUVS-decl-spec-seq -> FUxS-decl-spec-seq cv-spec
+[(SeqNode)]
+FUVS-decl-spec-seq -> FxVS-decl-spec-seq user-type
+[(SeqNode)]
+FUVS-decl-spec-seq -> xUVS-decl-spec-seq friend-spec
+[(SeqNode)]
+FUVS-decl-spec-seq -> FUVS-decl-spec-seq ftor-spec
+[(SeqNode)]
+FUVS-decl-spec-seq -> FUVS-decl-spec-seq cv-spec
+
+# FExx - friend elaborated
+[(SeqNode)]
+FExx-decl-spec-seq -> Fxxx-decl-spec-seq elaborated-type
+[(SeqNode)]
+FExx-decl-spec-seq -> xExx-decl-spec-seq friend-spec
+
+# FEVx - friend elaborated cv
+[(SeqNode)]
+FEVx-decl-spec-seq -> FExx-decl-spec-seq cv-spec
+[(SeqNode)]
+FEVx-decl-spec-seq -> FxVx-decl-spec-seq elaborated-type
+[(SeqNode)]
+FEVx-decl-spec-seq -> xEVx-decl-spec-seq friend-spec
+[(SeqNode)]
+FEVx-decl-spec-seq -> FEVx-decl-spec-seq cv-spec
+
+# FExS - friend elaborated ftor
+[(SeqNode)]
+FExS-decl-spec-seq -> FExx-decl-spec-seq ftor-spec
+[(SeqNode)]
+FExS-decl-spec-seq -> FxxS-decl-spec-seq elaborated-type
+[(SeqNode)]
+FExS-decl-spec-seq -> xExS-decl-spec-seq friend-spec
+[(SeqNode)]
+FExS-decl-spec-seq -> FExS-decl-spec-seq ftor-spec
+
+# FEVS - friend elaborated cv ftor
+[(SeqNode)]
+FEVS-decl-spec-seq -> FEVx-decl-spec-seq ftor-spec
+[(SeqNode)]
+FEVS-decl-spec-seq -> FExS-decl-spec-seq cv-spec
+[(SeqNode)]
+FEVS-decl-spec-seq -> FxVS-decl-spec-seq elaborated-type
+[(SeqNode)]
+FEVS-decl-spec-seq -> xEVS-decl-spec-seq friend-spec
+[(SeqNode)]
+FEVS-decl-spec-seq -> FEVS-decl-spec-seq ftor-spec
+[(SeqNode)]
+FEVS-decl-spec-seq -> FEVS-decl-spec-seq cv-spec
+
+# obj dcl
+obj-dcl -> obj-a-dcl
+
+# obj a dcl
+[DclNode]
+obj-a-dcl -> ptr-oper obj-a-dcl
+obj-a-dcl -> obj-a-direct-dcl
+
+# obj b dcl
+[(DclNode)]
+obj-b-dcl -> ptr-oper obj-a-dcl
+obj-b-dcl -> obj-b-direct-dcl
+
+# obj a direct dcl
+obj-a-direct-dcl -> obj-b-direct-dcl
+obj-a-direct-dcl -> obj-dcl-id
+
+# obj b direct dcl
+# try param decl body before direct initializer
+[DirectDcl1Node]
+obj-b-direct-dcl -> obj-b-direct-dcl param-decl-1-body > RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+
+[DirectDcl2Node]
+obj-b-direct-dcl -> obj-a-direct-dcl LBRACK_TOKEN block-opt 5 RBRACK_TOKEN
+
+[DirectDcl3Node]
+obj-b-direct-dcl -> LPAREN_TOKEN obj-b-dcl RPAREN_TOKEN
+
+# block opt
+block-opt -> 
+block-opt -> BLOCK_TOKEN
+
+# func dcl
+
+# pure func dcl
+[ PureDclNode ]
+pure-func-dcl -> func-dcl pure-opt
+
+# pure opt
+pure-opt -> pure
+pure-opt ->
+
+# pure
+[PureNode]
+pure -> ASSIGN_TOKEN ZERO_TOKEN
+
+# func dcl
+[(DclNode)]
+func-dcl -> ptr-oper func-dcl
+func-dcl -> func-a-direct-dcl
+
+# func a direct dcl
+[ DirectDcl4Node ]
+func-a-direct-dcl -> obj-dcl-id      param-decl-1-body > RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+[(DirectDcl4Node)]
+func-a-direct-dcl -> func-dcl-id       param-decl-1-body RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+[(DirectDcl1Node)]
+func-a-direct-dcl -> func-a-direct-dcl param-decl-1-body RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+[(DirectDcl2Node)]
+func-a-direct-dcl -> func-a-direct-dcl LBRACK_TOKEN block-opt 5 RBRACK_TOKEN
+[(DirectDcl3Node)]
+func-a-direct-dcl -> LPAREN_TOKEN func-dcl RPAREN_TOKEN
+
+# ctor dcl (function dcl with no return type)
+[(PureDclNode)]
+pure-ctor-dcl -> func-c-direct-dcl pure-opt
+
+# func c direct dcl
+[(DirectDcl4Node)]
+func-c-direct-dcl -> obj-dcl-id        param-decl-1-body RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+[(DirectDcl4Node)]
+func-c-direct-dcl -> func-dcl-id       param-decl-1-body RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+[(DirectDcl1Node)]
+func-c-direct-dcl -> func-c-direct-dcl param-decl-1-body RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+[(DirectDcl3Node)]
+func-c-direct-dcl -> LPAREN_TOKEN func-c-direct-dcl RPAREN_TOKEN
+
+#
+# param dcl
+#
+
+# param dcl
+param-dcl -> param-a-dcl
+
+# param a dcl
+[(DclNode)]
+param-a-dcl -> ptr-oper param-a-dcl
+[]
+param-a-dcl -> param-a-direct-dcl
+
+# param b dcl
+[(DclNode)]
+param-b-dcl -> ptr-oper param-a-dcl
+[]
+param-b-dcl -> param-b-direct-dcl
+
+# param a direct dcl
+[]
+param-a-direct-dcl -> param-b-direct-dcl
+[]
+param-a-direct-dcl -> obj-dcl-id
+
+# param b direct dcl
+[(DirectDcl1Node)]
+param-b-direct-dcl -> param-a-direct-dcl param-decl-1-body RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+
+[(DirectDcl2Node)]
+param-b-direct-dcl -> param-a-direct-dcl LBRACK_TOKEN block-opt 5 RBRACK_TOKEN
+
+[(DirectDcl3Node)]
+param-b-direct-dcl -> LPAREN_TOKEN param-b-dcl RPAREN_TOKEN
+
+#
+# abstract dcl
+#
+
+# abstract dcl
+[(DclNode)]
+abstract-dcl -> ptr-oper abstract-dcl-opt
+
+[]
+abstract-dcl -> abstract-direct-dcl
+
+# abstract direct dcl
+[(DirectDcl1Node)]
+abstract-direct-dcl -> abstract-direct-dcl-opt param-decl-1-body RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+
+[(DirectDcl2Node)]
+abstract-direct-dcl -> abstract-direct-dcl-opt LBRACK_TOKEN block-opt 5 RBRACK_TOKEN
+
+# on LPAREN_TOKEN try nested abstract declarator before parameter decl body
+[(DirectDcl3Node)]
+abstract-direct-dcl -> LPAREN_TOKEN > abstract-dcl RPAREN_TOKEN
+        
+# abstract dcl opt
+[]
+abstract-dcl-opt -> abstract-dcl
+abstract-dcl-opt ->
+
+# abstract direct dcl opt
+[]
+abstract-direct-dcl-opt -> abstract-direct-dcl
+abstract-direct-dcl-opt ->
+
+#
+# ptr oper
+#
+
+# ptr oper
+[PtrOper1Node]
+ptr-oper -> TIMES_TOKEN cv-spec-seq-opt
+
+[PtrOper2Node]
+ptr-oper -> BITAND_TOKEN
+
+[PtrOper3Node]
+ptr-oper -> obj-name DCOLON_TOKEN TIMES_TOKEN cv-spec-seq-opt
+         
+#
+# obj dcl id
+#
+
+# obj dcl id
+obj-dcl-id -> obj-id
+[(DirectDcl3Node)]
+obj-dcl-id -> LPAREN_TOKEN obj-dcl-id RPAREN_TOKEN
+
+# obj id
+[IdNode]
+obj-id -> obj-name
+
+# bitf dcl id
+bitf-dcl-id -> bitf-id
+[(DirectDcl3Node)]
+bitf-dcl-id -> LPAREN_TOKEN bitf-dcl-id RPAREN_TOKEN
+
+# bitf id
+[(IdNode)]
+bitf-id -> bitf-name
+
+#
+# func dcl id
+#
+
+# func dcl id
+[]
+func-dcl-id -> func-id
+[(DirectDcl3Node)]
+func-dcl-id -> LPAREN_TOKEN func-dcl-id RPAREN_TOKEN
+
+# func id
+[(IdNode)]
+func-id -> func-name
+
+#
+# param decl
+#
+
+# param decl 1 body
+[ParamDeclBody1Node]
+param-decl-1-body -> param-decl-1-list ellipse-opt
+[ParamDeclBody2Node]
+param-decl-1-body -> param-decl-1-list COMMA_TOKEN ELLIPSE_TOKEN
+[ParamDeclBody3Node]
+param-decl-1-body -> LPAREN_TOKEN ellipse-opt
+[ParamDeclBody4Node]
+param-decl-1-body -> LPAREN_TOKEN VOID_TOKEN
+
+# param init 1 list
+# accept on first param declaration -- don't try as direct initializer
+[(SeqNode)]
+param-decl-1-list < * -> LPAREN_TOKEN param-init-decl
+[(SeqNode)]
+param-decl-1-list -> param-decl-1-list COMMA_TOKEN param-init-decl
+
+# param decl 2 body
+[(ParamDeclBody1Node)]
+param-decl-2-body -> param-decl-2-list ellipse-opt
+[(ParamDeclBody2Node)]
+param-decl-2-body -> param-decl-2-list COMMA_TOKEN ELLIPSE_TOKEN
+[(ParamDeclBody3Node)]
+param-decl-2-body -> SEMI_TOKEN ellipse-opt
+[(ParamDeclBody4Node)]
+param-decl-2-body -> SEMI_TOKEN VOID_TOKEN
+
+# param init 2 list
+[(SeqNode)]
+param-decl-2-list -> SEMI_TOKEN param-init-decl
+[(SeqNode)]
+param-decl-2-list -> param-decl-2-list COMMA_TOKEN param-init-decl
+
+# param decl 3 body (for vdf delayed param list)
+[(ParamDeclBody1Node)]
+param-decl-3-body -> param-decl-3-list-opt ellipse-opt
+[(ParamDeclBody2Node)]
+param-decl-3-body -> param-decl-3-list COMMA_TOKEN ELLIPSE_TOKEN
+
+# param decl 3 list opt
+param-decl-3-list-opt -> param-decl-3-list
+param-decl-3-list-opt -> 
+
+# param decl 3 list
+[(SeqNode)]
+param-decl-3-list -> param-decl-3-list COMMA_TOKEN param-init-decl
+param-decl-3-list -> param-init-decl
+
+# ellipse opt
+ellipse-opt -> ELLIPSE_TOKEN
+ellipse-opt -> 
+
+#
+# param init decl
+#
+
+# param init decl (BLOCK_TOKEN can end with ')' or ',')
+[ ParamDecl1Node ]
+param-init-decl < * -> param-decl
+
+[ ParamDecl2Node ]
+param-init-decl < * -> param-decl ASSIGN_TOKEN BLOCK_TOKEN 4
+
+# tmpl param init decl (BLOCK_TOKEN can end with '>' or ',')
+[(ParamDecl1Node)]
+tmpl-param-init-decl < * -> param-decl 
+
+[(ParamDecl2Node)]
+tmpl-param-init-decl < * -> param-decl ASSIGN_TOKEN BLOCK_TOKEN 8
+
+#
+# abstract decl
+#
+
+# abstract decl
+[(Decl2Node)]
+abstract-decl -> xBxx-decl-spec-seq abstract-dcl-opt
+[(Decl2Node)]
+abstract-decl -> xBVx-decl-spec-seq abstract-dcl-opt
+[(Decl2Node)]
+abstract-decl -> xUxx-decl-spec-seq abstract-dcl-opt
+[(Decl2Node)]
+abstract-decl -> xUVx-decl-spec-seq abstract-dcl-opt
+[(Decl2Node)]
+abstract-decl -> xExx-decl-spec-seq abstract-dcl-opt
+[(Decl2Node)]
+abstract-decl -> xEVx-decl-spec-seq abstract-dcl-opt
+
+# [(Decl4Node)]
+# abstract-decl -> xBxS-decl-spec-seq abstract-dcl-opt
+# [(Decl4Node)]
+# abstract-decl -> xBVS-decl-spec-seq abstract-dcl-opt
+# [(Decl4Node)]
+# abstract-decl -> xUxS-decl-spec-seq abstract-dcl-opt
+# [(Decl4Node)]
+# abstract-decl -> xUVS-decl-spec-seq abstract-dcl-opt
+# [(Decl4Node)]
+# abstract-decl -> xExS-decl-spec-seq abstract-dcl-opt
+# [(Decl4Node)]
+# abstract-decl -> xEVS-decl-spec-seq abstract-dcl-opt
+
+# param decl
+[(Decl2Node)]
+param-decl -> xBxx-decl-spec-seq param-dcl
+[(Decl2Node)]
+param-decl -> xBVx-decl-spec-seq param-dcl
+[(Decl2Node)]
+param-decl -> xBxS-decl-spec-seq param-dcl
+[(Decl2Node)]
+param-decl -> xBVS-decl-spec-seq param-dcl
+[(Decl2Node)]
+param-decl -> xUxx-decl-spec-seq param-dcl
+[(Decl2Node)]
+param-decl -> xUVx-decl-spec-seq param-dcl
+[(Decl2Node)]
+param-decl -> xUxS-decl-spec-seq param-dcl
+[(Decl2Node)]
+param-decl -> xUVS-decl-spec-seq param-dcl
+[(Decl2Node)]
+param-decl -> xExx-decl-spec-seq param-dcl
+[(Decl2Node)]
+param-decl -> xEVx-decl-spec-seq param-dcl
+[(Decl2Node)]
+param-decl -> xExS-decl-spec-seq param-dcl
+[(Decl2Node)]
+param-decl -> xEVS-decl-spec-seq param-dcl
+
+# obj decl
+[Decl2Node]
+obj-decl -> xBxx-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> xBVx-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> xBxS-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> xBVS-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> xUxx-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> xUVx-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> xUxS-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> xUVS-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> xExx-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> xEVx-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> xExS-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> xEVS-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> TBxx-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> TBVx-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> TBxS-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> TBVS-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> TUxx-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> TUVx-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> TExx-decl-spec-seq obj-dcl
+[(Decl2Node)]
+obj-decl -> TEVx-decl-spec-seq obj-dcl
+
+# bitf decl
+# permit user types, might be a typedef
+[(Decl2Node)]
+bitf-decl -> xBxx-decl-spec-seq bitf-dcl-id
+[(Decl2Node)]
+bitf-decl -> xBVx-decl-spec-seq bitf-dcl-id
+[(Decl2Node)]
+bitf-decl -> xBxS-decl-spec-seq bitf-dcl-id
+[(Decl2Node)]
+bitf-decl -> xBVS-decl-spec-seq bitf-dcl-id
+[(Decl2Node)]
+bitf-decl -> xUxx-decl-spec-seq bitf-dcl-id
+[(Decl2Node)]
+bitf-decl -> xUVx-decl-spec-seq bitf-dcl-id
+[(Decl2Node)]
+bitf-decl -> xUxS-decl-spec-seq bitf-dcl-id
+[(Decl2Node)]
+bitf-decl -> xUVS-decl-spec-seq bitf-dcl-id
+
+# ctor decl (func decl with no return type)
+[ Decl1Node ]
+ctor-decl -> pure-ctor-dcl
+[(Decl2Node)]
+ctor-decl -> xxxS-decl-spec-seq pure-ctor-dcl
+[(Decl2Node)]
+ctor-decl -> FxxS-decl-spec-seq pure-ctor-dcl
+[(Decl2Node)]
+ctor-decl -> Fxxx-decl-spec-seq pure-ctor-dcl
+
+# func decl
+[(Decl2Node)]
+func-decl -> xBxx-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> xBVx-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> xBxS-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> xBVS-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> xUxx-decl-spec-seq >>++ pure-func-dcl
+[(Decl2Node)]
+func-decl -> xUVx-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> xUxS-decl-spec-seq >>++ pure-func-dcl
+[(Decl2Node)]
+func-decl -> xUVS-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> xExx-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> xEVx-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> xExS-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> xEVS-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> TBxx-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> TBVx-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> TUxx-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> TUVx-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> TExx-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> TEVx-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> FBxx-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> FBVx-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> FBxS-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> FBVS-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> FUxx-decl-spec-seq >>++ pure-func-dcl
+[(Decl2Node)]
+func-decl -> FUVx-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> FUxS-decl-spec-seq >>++ pure-func-dcl
+[(Decl2Node)]
+func-decl -> FUVS-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> FExx-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> FEVx-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> FExS-decl-spec-seq pure-func-dcl
+[(Decl2Node)]
+func-decl -> FEVS-decl-spec-seq pure-func-dcl
+
+#
+# throw spec
+#
+
+# throw spec opt
+throw-spec-opt -> throw-spec
+throw-spec-opt ->
+
+# throw spec
+[(SeqNode)]
+throw-spec -> THROW_TOKEN LPAREN_TOKEN type-id-list-opt RPAREN_TOKEN
+
+#
+# type id
+#
+
+# type id list opt
+type-id-list-opt -> 
+type-id-list-opt -> type-id-list
+
+# type id list
+[(SeqNode)]
+type-id-list -> type-id-list COMMA_TOKEN type-id
+[]
+type-id-list -> type-id
+
+# type id
+[TypeIdNode]
+type-id -> abstract-decl
+
+# namespace definition
+[NamespaceDefNode]
+namespace-def * -> namespace-head * < LBRACE_TOKEN decl-seq-opt RBRACE_TOKEN
+
+# namespace head
+[NamespaceHead1Node]
+namespace-head -> NAMESPACE_TOKEN obj-name
+
+[NamespaceHead2Node]
+namespace-head -> NAMESPACE_TOKEN
+
+# class def
+[ClassDefNode]
+class-def * -> class-head *< LBRACE_TOKEN mbr-decl-seq-opt RBRACE_TOKEN semi-opt
+
+# class head
+[ClassHeadNode]
+class-head -> class-key dll-api-opt obj-name base-clause-opt
+
+# dll api keyword
+dll-api-opt -> DLL_API_TOKEN
+dll-api-opt ->
+
+# semi opt
+semi-opt -> SEMI_TOKEN
+semi-opt ->
+
+# base clause opt
+base-clause-opt -> base-clause
+base-clause-opt ->
+
+# base clause
+[(SeqNode)]
+base-clause -> COLON_TOKEN base-spec-list
+
+# base spec list
+[(SeqNode)]
+base-spec-list -> base-spec-list COMMA_TOKEN base-spec
+[]
+base-spec-list -> base-spec
+
+# base spec
+[BaseSpec1Node]
+base-spec * -> obj-name
+
+[BaseSpec2Node]
+base-spec * -> VIRTUAL_TOKEN access-opt obj-name
+
+[BaseSpec3Node]
+base-spec * -> access virtual-opt obj-name
+
+# access opt
+access-opt -> 
+access-opt -> access
+
+# access
+access -> PUBLIC_TOKEN
+access -> PROTECTED_TOKEN
+access -> PRIVATE_TOKEN
+
+# virtual opt
+virtual-opt -> VIRTUAL_TOKEN
+virtual-opt ->
+
+# mbr decl seq opt
+[]
+mbr-decl-seq-opt -> mbr-decl-seq
+mbr-decl-seq-opt ->
+
+# mbr decl seq
+mbr-decl-seq -> mbr-decl-seq mbr-decl
+mbr-decl-seq -> mbr-decl
+
+# mbr decl
+mbr-decl -> access-spec
+mbr-decl -> simple-decl
+mbr-decl -> class-def
+mbr-decl -> class-decl
+mbr-decl -> friend-class-decl
+mbr-decl -> func-def semi-opt
+mbr-decl -> tmpl-decl
+mbr-decl -> lazy-ctor
+mbr-decl -> functor-def
+mbr-decl -> simple-functor-decl
+mbr-decl -> enum-def
+mbr-decl -> using-decl
+
+# access spec
+[AccessSpecNode]
+access-spec * -> access COLON_TOKEN
+
+# class decl
+[ClassDeclNode]
+class-decl -> xExx-decl-spec-seq SEMI_TOKEN
+
+# friend class decl
+[FriendClassDeclNode]
+friend-class-decl -> FExx-decl-spec-seq SEMI_TOKEN
+
+# func def
+[ FuncDefNode ]
+func-def * -> func-decl try-opt ctor-init-opt LBRACE_TOKEN block-opt 7 RBRACE_TOKEN handler-seq-opt
+
+[(FuncDefNode)]
+func-def * -> ctor-decl try-opt ctor-init-opt LBRACE_TOKEN block-opt 7 RBRACE_TOKEN handler-seq-opt
+
+# try opt
+try-opt -> TRY_TOKEN
+try-opt ->
+
+# ctor init opt
+ctor-init-opt -> ctor-init
+ctor-init-opt -> 
+
+# ctor init
+[(SeqNode)]
+ctor-init -> COLON_TOKEN mbr-init-list
+
+# mbr init list
+[(SeqNode)]
+mbr-init-list -> mbr-init-list COMMA_TOKEN mbr-init
+mbr-init-list -> mbr-init
+
+# mbr init
+[MbrInitNode]
+mbr-init * -> obj-name LPAREN_TOKEN expr-list-opt RPAREN_TOKEN 
+
+# handler seq opt
+handler-seq-opt -> handler-seq
+handler-seq-opt ->
+
+# handler seq
+[(SeqNode)]
+handler-seq -> handler-seq handler
+handler-seq -> handler
+
+# handler
+[HandlerNode]
+handler * -> CATCH_TOKEN LPAREN_TOKEN catch-decl RPAREN_TOKEN LBRACE_TOKEN block-opt 7 RBRACE_TOKEN
+
+# catch decl
+[(SeqNode)]
+catch-decl -> param-decl
+
+[(SeqNode)]
+catch-decl -> ELLIPSE_TOKEN
+
+# tmpl decl
+[TmplDeclNode]
+tmpl-decl * -> tmpl-spec tmpl-spec-decl
+
+# tmpl spec
+[TmplSpecNode]
+tmpl-spec * -> TEMPLATE_TOKEN LT_TOKEN tmpl-param-list-opt GT_TOKEN
+
+# tmpl param list opt
+tmpl-param-list-opt -> tmpl-param-list
+tmpl-param-list-opt -> 
+
+# tmpl param list
+[(SeqNode)]
+tmpl-param-list -> tmpl-param-list COMMA_TOKEN tmpl-param
+tmpl-param-list -> tmpl-param
+
+# tmpl param
+tmpl-param -> type-param
+tmpl-param -> tmpl-param-init-decl
+tmpl-param -> tmpl-tmpl-param
+
+# type param
+[TypeParam1Node]
+type-param < * -> type-key + obj-name
+
+[TypeParam2Node]
+type-param < * -> type-key + obj-name ASSIGN_TOKEN abstract-decl
+
+# type key
+type-key -> CLASS_TOKEN
+type-key -> TYPENAME_TOKEN
+
+# tmpl tmpl param
+[TmplTmplParam1Node]
+tmpl-tmpl-param < * -> TEMPLATE_TOKEN LT_TOKEN tmpl-param-list-opt GT_TOKEN CLASS_TOKEN obj-name
+
+[TmplTmplParam2Node]
+tmpl-tmpl-param < * -> TEMPLATE_TOKEN LT_TOKEN tmpl-param-list-opt GT_TOKEN CLASS_TOKEN obj-name ASSIGN_TOKEN obj-name
+
+# tmpl spec decl
+tmpl-spec-decl -> simple-decl
+tmpl-spec-decl -> class-def
+tmpl-spec-decl -> class-decl
+tmpl-spec-decl -> friend-class-decl
+tmpl-spec-decl -> func-def
+tmpl-spec-decl -> tmpl-decl
+tmpl-spec-decl -> lazy-ctor
+tmpl-spec-decl -> functor-def
+tmpl-spec-decl -> simple-functor-decl
+
+# template instantiation
+[TmplInstNode]
+tmpl-inst * -> tmpl-inst-begin tmpl-inst-decl
+
+# tmpl inst begin
+[TmplInstBeginNode]
+tmpl-inst-begin < * -> TEMPLATE_TOKEN 
+
+# template instantiation decl
+tmpl-inst-decl -> simple-decl
+tmpl-inst-decl -> class-decl
+
+# lazy ctor (class defn with ctor args)
+[LazyCtorNode]
+lazy-ctor * -> lazy-ctor-begin *< LBRACE_TOKEN mbr-decl-seq-opt RBRACE_TOKEN semi-opt
+
+# lazy ctor begin
+# virtual dtor if virtual spec
+# try lazy ctor before elab-class when followed by left paren (ie: 'class A (')
+[LazyCtorBegin1Node]
+lazy-ctor-begin -> class-key dll-api-opt obj-name param-decl-1-body > RPAREN_TOKEN lazy-base-clause-opt
+
+# maybe accept virtual, other decl specs?
+#[LazyCtorBegin2Node]
+#lazy-ctor-begin -> xxxS-decl-spec-seq class-key dll-api-opt obj-name param-decl-1-body > RPAREN_TOKEN lazy-base-clause-opt
+
+# lazy base clause opt
+lazy-base-clause-opt -> lazy-base-clause
+lazy-base-clause-opt ->
+
+# lazy base clause
+[(SeqNode)]
+lazy-base-clause * -> COLON_TOKEN lazy-base-spec-list
+
+# lazy-base spec list
+[(SeqNode)]
+lazy-base-spec-list -> lazy-base-spec-list COMMA_TOKEN lazy-base-spec
+lazy-base-spec-list -> lazy-base-spec
+
+# lazy base spec
+[LazyBaseSpec1Node]
+lazy-base-spec * -> obj-name base-init
+
+[LazyBaseSpec2Node]
+lazy-base-spec * -> VIRTUAL_TOKEN access-opt obj-name base-init
+
+[LazyBaseSpec3Node]
+lazy-base-spec * -> access virtual-opt obj-name base-init
+
+lazy-base-spec -> base-spec
+
+# base init opt
+base-init-opt -> base-init
+base-init-opt -> 
+
+# base init
+[(SeqNode)]
+base-init -> LPAREN_TOKEN expr-list-opt RPAREN_TOKEN 
+
+# expr list opt
+expr-list-opt -> expr-list
+expr-list-opt -> 
+
+# functor dcl
+[(PureDclNode)]
+pure-functor-dcl -> functor-dcl pure-opt
+
+# functor dcl
+[(DclNode)]
+functor-dcl -> ptr-oper functor-dcl
+functor-dcl -> functor-direct-dcl
+
+# functor a direct dcl
+[ DirectDcl5Node ]
+functor-direct-dcl -> obj-dcl-id         param-decl-1-body param-decl-2-body RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+[(DirectDcl1Node)]
+functor-direct-dcl -> functor-direct-dcl param-decl-1-body RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+[(DirectDcl2Node)]
+functor-direct-dcl -> functor-direct-dcl LBRACK_TOKEN block-opt 5 RBRACK_TOKEN
+[(DirectDcl3Node)]
+functor-direct-dcl -> LPAREN_TOKEN functor-dcl RPAREN_TOKEN
+
+# functor decl
+[(Decl2Node)]
+functor-decl -> xBxx-decl-spec-seq pure-functor-dcl
+[(Decl2Node)]
+functor-decl -> xBVx-decl-spec-seq pure-functor-dcl
+[(Decl2Node)]
+functor-decl -> xBxS-decl-spec-seq pure-functor-dcl
+[(Decl2Node)]
+functor-decl -> xBVS-decl-spec-seq pure-functor-dcl
+[(Decl2Node)]
+functor-decl -> xUxx-decl-spec-seq >>++ pure-functor-dcl
+[(Decl2Node)]
+functor-decl -> xUVx-decl-spec-seq pure-functor-dcl
+[(Decl2Node)]
+functor-decl -> xUxS-decl-spec-seq >>++ pure-functor-dcl
+[(Decl2Node)]
+functor-decl -> xUVS-decl-spec-seq pure-functor-dcl
+[(Decl2Node)]
+functor-decl -> xExx-decl-spec-seq pure-functor-dcl
+[(Decl2Node)]
+functor-decl -> xEVx-decl-spec-seq pure-functor-dcl
+[(Decl2Node)]
+functor-decl -> xExS-decl-spec-seq pure-functor-dcl
+[(Decl2Node)]
+functor-decl -> xEVS-decl-spec-seq pure-functor-dcl
+
+# functor def
+[FunctorDefNode]
+functor-def * -> functor-decl lazy-base-clause-opt try-opt LBRACE_TOKEN block-opt 7 RBRACE_TOKEN handler-seq-opt
+
+# simple functor decl
+[FunctorDeclTypeNode]
+simple-functor-decl -> functor-decl lazy-base-clause-opt SEMI_TOKEN
+
+# enum def
+[EnumDefNode]
+enum-def * -> ENUM_TOKEN obj-name-opt * < LBRACE_TOKEN enum-body-opt RBRACE_TOKEN semi-opt
+
+# obj name opt
+obj-name-opt -> obj-name
+obj-name-opt ->
+
+# enum body opt
+enum-body-opt -> enum-body
+enum-body-opt ->
+
+# enum body
+[(SeqNode)]
+enum-body -> enumtor-decl-list comma-opt
+
+# comma opt
+comma-opt -> COMMA_TOKEN
+comma-opt -> 
+
+# enumtor list
+[(SeqNode)]
+enumtor-decl-list -> enumtor-decl-list COMMA_TOKEN enumtor-decl
+enumtor-decl-list -> enumtor-decl
+
+# enumtor decl
+[EnumtorDecl1Node]
+enumtor-decl < * -> obj-name
+# init can end with '}' or ','
+[EnumtorDecl2Node]
+enumtor-decl < * -> obj-name ASSIGN_TOKEN BLOCK_TOKEN 9
+
+# using declaration
+[UsingDeclNode]
+using-decl * -> USING_TOKEN obj-name SEMI_TOKEN
+
+# using directive
+[UsingDirNode]
+using-dir * -> USING_TOKEN NAMESPACE_TOKEN obj-name SEMI_TOKEN
+
+# linkage specifications
+
+# linkage spec
+# will just pop the scope so can use same node
+[ LinkageSpecNode ]
+linkage-spec * -> linkage-block-begin * < LBRACE_TOKEN decl-seq-opt RBRACE_TOKEN
+[(LinkageSpecNode)]
+linkage-spec * -> linkage-decl-begin * linkage-spec-decl
+
+# start of linkage block
+[LinkageBlockBeginNode] 
+linkage-block-begin -> EXTERN_TOKEN LITERAL_STRING_TOKEN 
+
+# start of linkage decl
+[LinkageDeclBeginNode] 
+linkage-decl-begin -> EXTERN_TOKEN LITERAL_STRING_TOKEN 
+
+# linkage decl
+linkage-spec-decl -> func-def
+linkage-spec-decl -> simple-decl
+
+#
+# PRL EXTRAS
+#
+
+# decl
+decl -> nav-def
+decl -> vdf-def
+
+# nav def
+[NavDefNode]
+nav-def * -> nav-head LBRACE_TOKEN nav-spec-seq-opt RBRACE_TOKEN
+
+# nav head
+[NavHeadNode]
+nav-head * -> NAVIGATOR_TOKEN nav-decl lazy-base-clause-opt 
+
+# nav decl
+[(Decl2Node)]
+nav-decl -> xBxx-decl-spec-seq   nav-dcl
+[(Decl2Node)]
+nav-decl -> xBVx-decl-spec-seq   nav-dcl
+[(Decl2Node)]
+nav-decl -> xBxS-decl-spec-seq   nav-dcl
+[(Decl2Node)]
+nav-decl -> xBVS-decl-spec-seq   nav-dcl
+[(Decl2Node)]
+nav-decl -> xUxx-decl-spec-seq   nav-dcl
+[(Decl2Node)]
+nav-decl -> xUVx-decl-spec-seq   nav-dcl
+[(Decl2Node)]
+nav-decl -> xUxS-decl-spec-seq   nav-dcl
+[(Decl2Node)]
+nav-decl -> xUVS-decl-spec-seq   nav-dcl
+[(Decl2Node)]
+nav-decl -> xExx-decl-spec-seq   nav-dcl
+[(Decl2Node)]
+nav-decl -> xEVx-decl-spec-seq   nav-dcl
+[(Decl2Node)]
+nav-decl -> xExS-decl-spec-seq   nav-dcl
+[(Decl2Node)]
+nav-decl -> xEVS-decl-spec-seq   nav-dcl
+
+# nav dcl
+[(DclNode)]
+nav-dcl -> ptr-oper nav-dcl
+nav-dcl -> nav-direct-dcl
+
+# nav a direct dcl
+[NavDirectDcl1Node]
+nav-direct-dcl -> obj-dcl-id     LPAREN_TOKEN nav-node-type RPAREN_TOKEN param-decl-1-body RPAREN_TOKEN
+[(DirectDcl1Node)]
+nav-direct-dcl -> nav-direct-dcl param-decl-1-body RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+[(DirectDcl2Node)]
+nav-direct-dcl -> nav-direct-dcl LBRACK_TOKEN block-opt 5 RBRACK_TOKEN
+[(DirectDcl3Node)]
+nav-direct-dcl -> LPAREN_TOKEN nav-dcl RPAREN_TOKEN
+
+# nav node type
+nav-node-type -> xUxx-decl-spec-seq
+nav-node-type -> xUVx-decl-spec-seq
+nav-node-type -> xExx-decl-spec-seq
+nav-node-type -> xEVx-decl-spec-seq
+
+# nav decl seq opt
+nav-spec-seq-opt -> nav-spec-seq
+nav-spec-seq-opt ->
+
+# nav spec seq
+nav-spec-seq -> nav-spec-seq nav-spec
+nav-spec-seq -> nav-spec
+
+# nav spec
+nav-spec -> access-spec
+nav-spec -> simple-decl
+nav-spec -> class-def
+nav-spec -> class-decl
+nav-spec -> friend-class-decl
+nav-spec -> func-def
+nav-spec -> tmpl-decl
+nav-spec -> lazy-ctor
+nav-spec -> functor-def
+nav-spec -> simple-functor-decl
+nav-spec -> enum-def
+nav-spec -> using-decl
+nav-spec -> nav-visit-func-def
+nav-spec -> return-stmt
+
+# nav visit func def 
+# try nav on node def first
+[NavVisitFuncDefNode]
+nav-visit-func-def * -> obj-name LPAREN_TOKEN >>> obj-name RPAREN_TOKEN LBRACE_TOKEN block-opt 7 RBRACE_TOKEN
+
+# nav return stmt
+[ReturnStmtNode]
+return-stmt * -> RETURN_TOKEN BLOCK_TOKEN 10 SEMI_TOKEN
+
+# vdf def
+[VdfDefNode]
+vdf-def * -> vdf-head LBRACE_TOKEN vdf-spec-seq-opt RBRACE_TOKEN
+
+# vdf head
+[VdfHeadNode]
+vdf-head * -> VDF_TOKEN func-decl
+
+# vdf spec seq opt
+vdf-spec-seq-opt -> vdf-spec-seq
+vdf-spec-seq-opt ->
+
+# vdf spec seq
+vdf-spec-seq -> vdf-spec
+vdf-spec-seq -> vdf-spec-seq vdf-spec
+
+# vdf spec
+vdf-spec -> vdf-functor-def
+vdf-spec -> vdf-tmpl-functor-def
+vdf-spec -> vdf-short-data-def
+vdf-spec -> vdf-block-data-def
+
+# vdf functor def
+# try IDENT_TOKEN as obj name before IDENT_TOKEN as block name
+[VdfFunctorDefNode]
+vdf-functor-def * -> obj-name > param-decl-1-body RPAREN_TOKEN try-opt LBRACE_TOKEN block-opt 7 RBRACE_TOKEN handler-seq-opt
+
+# vdf tmpl functor def
+[(TmplDeclNode)]
+vdf-tmpl-functor-def * -> tmpl-spec vdf-functor-def
+
+# vdf short data def
+[VdfShortData1DefNode]
+vdf-short-data-def * -> xUxx-decl-spec-seq IDENT_TOKEN vdf-data-param-list-alt-opt vdf-direct-obj-init-opt SEMI_TOKEN
+[VdfShortData2DefNode]
+vdf-short-data-def * -> xUxx-decl-spec-seq LITERAL_STRING_TOKEN vdf-data-param-list-alt-opt vdf-direct-obj-init-opt SEMI_TOKEN
+
+# vdf data param list alt opt
+vdf-data-param-list-alt-opt -> vdf-data-param-list-alt
+vdf-data-param-list-alt-opt ->  
+
+# vdf data param list
+[ VdfDataParamListNode ]
+vdf-data-param-list -> LPAREN_TOKEN block-opt 2 RPAREN_TOKEN
+
+# vdf data param list alt
+[(VdfDataParamListNode)]
+vdf-data-param-list-alt -> LT_TOKEN block-opt 1 GT_TOKEN
+
+# vdf direct obj init opt
+vdf-direct-obj-init-opt -> vdf-direct-obj-init
+vdf-direct-obj-init-opt -> 
+
+# vdf direct obj init
+[ObjInit4Node]
+vdf-direct-obj-init -> LPAREN_TOKEN BLOCK_TOKEN 2 RPAREN_TOKEN
+
+# vdf block data def
+[VdfBlockDataDefNode]
+vdf-block-data-def * -> vdf-block-data-head LBRACE_TOKEN simple-vdf-obj-decl-seq-opt return-stmt-opt RBRACE_TOKEN
+
+# vdf block data head
+[VdfBlockDataHead1Node]
+vdf-block-data-head < * -> IDENT_TOKEN vdf-data-param-list-alt-opt
+[VdfBlockDataHead2Node]
+vdf-block-data-head < * -> LITERAL_STRING_TOKEN vdf-data-param-list-alt-opt
+
+# return stmt opt
+return-stmt-opt -> return-stmt
+return-stmt-opt ->
+
+# simple vdf obj decl seq opt
+simple-vdf-obj-decl-seq-opt -> simple-vdf-obj-decl-seq
+simple-vdf-obj-decl-seq-opt -> 
+ 
+# simple vdf obj decl seq
+simple-vdf-obj-decl-seq -> simple-vdf-obj-decl
+simple-vdf-obj-decl-seq -> simple-vdf-obj-decl-seq simple-vdf-obj-decl
+
+# simple vdf obj decl
+[(SimpleDeclNode)]
+simple-vdf-obj-decl * -> nested-simple-vdf-obj-decl SEMI_TOKEN
+
+# nested simple vdf obj decl
+# try LPAREN_TOKEN as start of direct init before LPAREN_TOKEN as start of func param
+[(NestedSimpleDecl1Node)]
+nested-simple-vdf-obj-decl < * -> nested-vdf-obj-decl + vdf-obj-init-opt
+
+# vdf obj init opt
+vdf-obj-init-opt -> vdf-obj-init
+vdf-obj-init-opt ->
+
+# vdf obj init
+[(ObjInit1Node)]
+vdf-obj-init -> ASSIGN_TOKEN BLOCK_TOKEN 3
+vdf-obj-init -> vdf-direct-obj-init
+
+# nested vdf obj decl
+[(NestedDeclNode)]
+nested-vdf-obj-decl -> nested-simple-vdf-obj-decl COMMA_TOKEN vdf-obj-dcl
+nested-vdf-obj-decl -> vdf-obj-decl
+
+# vdf obj decl
+[(Decl2Node)]
+vdf-obj-decl -> xBxx-decl-spec-seq  vdf-obj-dcl
+[(Decl2Node)]
+vdf-obj-decl -> xBVx-decl-spec-seq  vdf-obj-dcl
+[(Decl2Node)]
+vdf-obj-decl -> xBxS-decl-spec-seq  vdf-obj-dcl
+[(Decl2Node)]
+vdf-obj-decl -> xBVS-decl-spec-seq  vdf-obj-dcl
+[(Decl2Node)]
+vdf-obj-decl -> xUxx-decl-spec-seq  vdf-obj-dcl
+[(Decl2Node)]
+vdf-obj-decl -> xUVx-decl-spec-seq  vdf-obj-dcl
+[(Decl2Node)]
+vdf-obj-decl -> xUxS-decl-spec-seq  vdf-obj-dcl
+[(Decl2Node)]
+vdf-obj-decl -> xUVS-decl-spec-seq  vdf-obj-dcl
+[(Decl2Node)]
+vdf-obj-decl -> xExx-decl-spec-seq  vdf-obj-dcl
+[(Decl2Node)]
+vdf-obj-decl -> xEVx-decl-spec-seq  vdf-obj-dcl
+[(Decl2Node)]
+vdf-obj-decl -> xExS-decl-spec-seq  vdf-obj-dcl
+[(Decl2Node)]
+vdf-obj-decl -> xEVS-decl-spec-seq  vdf-obj-dcl
+
+# vdf obj dcl
+vdf-obj-dcl -> vdf-obj-a-dcl
+
+# vdf obj a dcl
+[(DclNode)]
+vdf-obj-a-dcl -> ptr-oper vdf-obj-a-dcl
+vdf-obj-a-dcl -> vdf-obj-a-direct-dcl
+
+# vdf obj b dcl
+[(DclNode)]
+vdf-obj-b-dcl -> ptr-oper vdf-obj-a-dcl
+vdf-obj-b-dcl -> vdf-obj-b-direct-dcl
+
+# vdf obj a direct dcl
+vdf-obj-a-direct-dcl -> vdf-obj-b-direct-dcl
+vdf-obj-a-direct-dcl -> obj-dcl-id
+
+# vdf b direct dcl
+[ DirectDcl6Node ]
+vdf-obj-b-direct-dcl -> vdf-obj-b-direct-dcl vdf-data-param-list cv-spec-seq-opt throw-spec-opt
+[(DirectDcl2Node)]
+vdf-obj-b-direct-dcl -> vdf-obj-a-direct-dcl LBRACK_TOKEN block-opt 5 RBRACK_TOKEN
+[(DirectDcl3Node)]
+vdf-obj-b-direct-dcl -> LPAREN_TOKEN vdf-obj-b-dcl RPAREN_TOKEN
+
+# extra tokens
+token -> DOLLAR_TOKEN HASH_TOKEN DBLHASH_TOKEN DOT_TOKEN DOT_TIMES_TOKEN QMARK_TOKEN
+         LITERAL_INT_TOKEN LITERAL_FLOAT_TOKEN LITERAL_CHAR_TOKEN PP_NUMBER_TOKEN UNKNOWN_TOKEN
+
+# must be last token
+last-token -> IDENT_PARAM_START_TOKEN
+

@@ -1,0 +1,120 @@
+// smtc_PrintNavSubmitFuncDefn.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+#include "smtc_NavSubmitFuncDefnPtr.h"
+#include "smtc_NsPtr.h"
+$end
+
+$src
+// std lib
+#include <algorithm>
+
+// semantic
+#include "smtc_GetNameLoc.h"
+#include "smtc_NameToString.h"
+#include "smtc_NavSubmitFuncDefn.h"
+#include "smtc_Obj.h"
+#include "smtc_Output.h"
+#include "smtc_Param.h"
+#include "smtc_PrintCode.h"
+#include "smtc_PrintFuncDecl.h"
+#include "smtc_PrintNsClose.h"
+#include "smtc_PrintNsOpen.h"
+#include "smtc_PrintObjDecl.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // PrintNavSubmitFuncDefn
+  struct PrintNavSubmitFuncDefn (NamePtr const & qual_name) : PrintFuncDecl (qual_name)
+  {
+    // print in ns
+    void print (FilePtr const & file, SectionKind skind, NavSubmitFuncDefnPtr const & func_defn, NsPtr const & ns) const
+    {
+      int ns_depth = printNsOpen (file, skind, ns);
+      print (file, skind, func_defn);
+      printNsClose (file, skind, ns_depth);
+    }
+
+    // print
+    void print (FilePtr const & file, SectionKind skind, NavSubmitFuncDefnPtr const & func_defn) const
+    {
+      printLine (file, skind, getNameLoc (func_defn->getName ()), declToString (func_defn));
+      printOpenBrace (file, skind);
+      // object definitions
+      ObjPtrVector const & obj_set = func_defn->getObjSet ();
+      std::for_each (obj_set.begin (), obj_set.end (), PrintSubmitObj (file, skind));
+      // navigate call
+      ParamPtrVector const & param_set = func_defn->getParamSet ();
+      util::String str = nameToString (param_set.front ()->getName ());
+      str += ".navigate (";
+      NamePtr const & nav_name = func_defn->getNavName ();
+      str += nameToString (nav_name);
+      str += " (";
+      // params are next, minus node param
+      bool first = true;
+      std::for_each (param_set.begin () + 1, param_set.end (), AppendName <ParamPtr> (str, first));
+      // then objects
+      std::for_each (obj_set.begin (), obj_set.end (), AppendName <ObjPtr> (str, first));
+      str += "));";
+      printLine (file, skind, getNameLoc (nav_name), str);
+      // return stmt
+      gram::Block const & ret_stmt = func_defn->getReturnStmt ();
+      if (ret_stmt.isSet ())
+      {
+        str = "return";
+        str += ret_stmt.toString ();
+        str += ';';
+        printLine (file, skind, ret_stmt.getLoc (), str);
+      }
+      printCloseBrace (file, skind);
+
+    }
+
+    // print submit obj
+    void PrintSubmitObj (FilePtr const & file, SectionKind skind; ObjPtr const & obj) const
+    {
+      PrintObjDecl printer;
+      printer.with_init = true;
+      printer.print (file, skind, obj);
+    }
+
+    // append name to string, with comma before
+    // T will be ParamPtr or ObjPtr
+    template <class T>
+    void AppendName (util::String & str, bool & first; T const & t)
+    {
+      if (first)
+      {
+        first = false;
+      }
+      else
+      {
+        str += ", ";
+      }
+      str += nameToString (t->getName ());
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // types
+  class Output;
+
+  // print nav submit func defn
+  void printNavSubmitFuncDefn (Output & out, NavSubmitFuncDefnPtr const & func_defn, NsPtr const & ns, NamePtr const & qual_name)
+  {
+    PrintNavSubmitFuncDefn printer (qual_name);
+    printer.not_static = true;
+    printer.print (out.getSrcFile (), BODY_SECTION, func_defn, ns);
+  }
+}

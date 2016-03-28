@@ -1,0 +1,27 @@
+// smtc_CreateEnum.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EnumPtr.h"
+#include "smtc_EnumtorPtrVector.h"
+#include "smtc_NamePtr.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+// semantic
+#include "smtc_Enum.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create enum
+  EnumPtr createEnum (util::Loc const & loc, NamePtr const & name, EnumtorPtrVector const & enumtor_set)
+  {
+    return new Enum (loc, name, enumtor_set);
+  }
+}

@@ -1,0 +1,51 @@
+// smtc_PrintHandler.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FilePtr.h"
+#include "smtc_HandlerPtr.h"
+#include "smtc_SectionKind.h"
+$end
+
+$src
+// semantic
+#include "smtc_Handler.h"
+#include "smtc_Param.h"
+#include "smtc_PrintCode.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // using util
+  using namespace util;
+
+  // print handler
+  void printHandler (FilePtr const & file, SectionKind skind, HandlerPtr const & handler)
+  {
+    String str = "catch";
+    appendWithSpace (str, '(');
+    ParamPtr const & catch_param = handler->getCatchParam ();
+    if (catch_param.isSet ())
+    {
+      str += catch_param->toString (false);
+    }
+    else
+    {
+      str += "...";
+    }
+    str += ')';
+    printLine (file, skind, handler->getLoc (), str);
+    printEnclosedBlock (file, skind, handler->getBody ());
+  }
+
+  // PrintHandler
+  inline void PrintHandler (FilePtr const & file, SectionKind skind; HandlerPtr const & handler) const
+  {
+    printHandler (file, skind, handler);
+  }
+}

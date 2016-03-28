@@ -1,0 +1,48 @@
+// smtc_HasLazyBaseSpecArg.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_BaseSpecPtr.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// std lib
+#include <cstring>
+
+// semantic
+#include "smtc_LazyBaseSpec.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // true if lazy base spec has arg
+  bool hasLazyBaseSpecArg (BaseSpecPtr const & base_spec, util::String const & arg)
+  {
+    bool result = false;
+    if (base_spec->isLazy ())
+    {
+      LazyBaseSpec const & lazy_base_spec = static_cast <LazyBaseSpec const &> (* base_spec);
+      gram::BlockVector const & arg_set = lazy_base_spec.getArgSet ();
+      for (gram::BlockVectorConstIter beg = arg_set.begin (), end = arg_set.end (); beg != end; ++ beg)
+      {
+        if (beg->toString () == arg.c_str ())
+        {
+          result = true;
+          break;
+        }
+      }
+    }
+    return result;
+  }
+
+  // functor: true if lazy base spec has arg
+  inline bool HasLazyBaseSpecArg (util::String const & arg; BaseSpecPtr const & base_spec) const
+  {
+    return hasLazyBaseSpecArg (base_spec, arg);
+  }
+}

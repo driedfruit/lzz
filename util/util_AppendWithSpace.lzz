@@ -1,0 +1,53 @@
+// util_AppendWithSpace.lzz
+//
+
+$hdr
+// util
+#include "util_String.h"
+$end
+
+$src
+$end
+
+// util
+namespace util
+{
+  // append with one space if str1 non-empty
+  void appendWithSpace (util::String & str1, util::String const & str2)
+  {
+    if (! str2.empty ())
+    {
+      if (! str1.empty ())
+      {
+        str1 += ' ';
+      }
+      str1 += str2;
+    }
+  }
+
+  // same but using char const *
+  void appendWithSpace (util::String & str1, char const * str2)
+  {
+    if (str2 [0] != '\0')
+    {
+      if (! str1.empty ())
+      {
+        str1 += ' ';
+      }
+      str1 += str2;
+    }
+  }
+
+  // same but using char
+  void appendWithSpace (util::String & str1, char ch)
+  {
+    if (ch != ' ')
+    {
+      if (! str1.empty ())
+      {
+        str1 += ' ';
+      }
+      str1 += ch;
+    }
+  }
+}

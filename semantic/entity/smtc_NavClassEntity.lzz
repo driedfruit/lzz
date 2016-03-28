@@ -1,0 +1,45 @@
+// smtc_NavClassEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ClassDefnEntity.h"
+#include "smtc_NavClassPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_EntityVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // NavClassEntity
+  class NavClassEntity : public ClassDefnEntity
+  {
+  public:
+    // constructor
+    inline NavClassEntity (NavClassPtr const & nav_class)
+      : ClassDefnEntity (nav_class)
+    {
+    }
+
+    // destructor
+    ~ NavClassEntity ()
+    {
+    }
+
+    // accept visitor
+    void accept (EntityVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get class decl
+    NavClassPtr getNavClass () const
+    {
+      return getClassDecl ();
+    }
+  }
+}

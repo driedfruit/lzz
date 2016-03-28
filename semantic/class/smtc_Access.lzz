@@ -1,0 +1,22 @@
+// smtc_Access.lzz
+//
+
+// semantic
+namespace smtc
+{
+  // Access
+  enum Access
+  {
+    // default access
+    DEFAULT_ACCESS,
+
+    // public
+    PUBLIC_ACCESS,
+
+    // private
+    PRIVATE_ACCESS,
+
+    // protected
+    PROTECTED_ACCESS,
+  }
+}

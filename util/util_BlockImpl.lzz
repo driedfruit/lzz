@@ -1,0 +1,167 @@
+// util_BlockImpl.lzz
+//
+// captured text with location
+//
+
+$hdr
+// util
+#include "util_Loc.h"
+#include "util_String.h"
+$end
+
+$src
+// std lib
+#include <cstdlib>
+#include <cctype>
+#include <cstring>
+$end
+
+// util
+namespace util
+{
+  // BlockImpl
+  class BlockImpl
+  {
+    // loc
+    Loc m_loc;
+
+    // data
+    char * m_data;
+
+    // length of data
+    int m_length;
+
+    // size allocated
+    int m_size;
+
+    // number of lines
+    int m_num_lines;
+
+  public:
+    // constructor
+    BlockImpl (Loc const & loc)
+      : m_loc (loc), m_size (32), m_length (0), m_num_lines (0)
+    {
+      m_data = (char *) malloc (m_size);
+      m_data [0] = '\0';
+    }
+
+    // destructor
+    ~ BlockImpl ()
+    {
+      free (m_data);
+    }
+
+    // set location (used to set location of left brace for correct indentation)
+    void setLoc (Loc const & loc)
+    {
+      m_loc = loc;
+    }
+
+    // get location
+    inline Loc const & getLoc () const
+    {
+      return m_loc;
+    }
+
+    // append
+    void append (char ch)
+    {
+      if (m_length + 1 == m_size)
+      {
+        m_size *= 2;
+        m_data = (char *) realloc (m_data, m_size);
+      }
+      m_data [m_length] = ch;
+      m_data [++ m_length] = '\0';
+      if (ch == '\n')
+      {
+        m_num_lines ++;
+      }
+    }
+
+    // append
+    void append (char const * str)
+    {
+      for (char const * s = str; * s != '\0'; ++ s)
+      {
+        append (* s);
+      }
+    }
+
+    // get c string
+    inline const char * c_str () const
+    {
+      return m_data;
+    }
+
+    // get number of lines
+    inline int getNumLines () const
+    {
+      return m_num_lines;
+    }
+
+    // get length
+    inline int getLength () const
+    {
+      return m_length;
+    }
+
+    // freeze
+    void freeze ()
+    {
+      // free unused memory
+      m_size = m_length + 1;
+      m_data = (char *) realloc (m_data, m_size);
+    }
+
+    // trim string
+    void trim ()
+    {
+      char * s = m_data;
+      while (* s && isspace (* s))
+      {
+        if (* s == '\n')
+        {
+          -- m_num_lines;
+        }
+        ++ s;
+      }
+      if (s != m_data)
+      {
+        m_length -= s - m_data;
+        memmove (m_data, s, m_length);
+      }
+      s = m_data + m_length - 1;
+      while (s >= m_data && isspace (* s))
+      {
+        if (* s == '\n')
+        {
+          -- m_num_lines;
+        }
+        -- s;
+      }
+      m_length = s + 1 - m_data; 
+      * (s + 1) = '\0';
+      // free excess memory
+      freeze ();
+    }
+
+    // true if empty (has only white space characters, if any)
+    bool isEmpty () const
+    {
+      for (char * s = m_data; * s != '\0'; ++ s)
+      {
+        if (! isspace (* s))
+        {
+          return false;
+        }
+      }
+      return true;
+    }
+
+  private:
+    // no copying
+    BlockImpl (BlockImpl const & impl);
+  }
+}

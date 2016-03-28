@@ -1,0 +1,28 @@
+// smtc_PrintNsUsingDir.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_UsingDirPtr.h"
+#include "smtc_NsPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_Output.h"
+#include "smtc_PrintUsingDir.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class Output;
+
+  // print ns using dir
+  void printNsUsingDir (Output & out, UsingDirPtr const & using_dir, NsPtr const & ns)
+  {
+    // print in source file
+    printUsingDir (out.getSrcFile (), DECLARATION_SECTION, using_dir, ns);
+  }
+}

@@ -1,0 +1,25 @@
+// smtc_CreateTmplClassDecl.lzz
+//
+
+namespace smtc
+{
+  // create template class decl
+  TmplClassDeclPtr createTmplClassDecl (TmplSpecPtrVector const & tmpl_spec_set, ClassKey key, NamePtr const & name)
+  {
+    bool is_dll_api = false;
+    ClassDeclPtr class_decl = createClassDecl (key, name, is_dll_api);
+    return new TmplClassDecl (tmpl_spec_set, class_decl);
+  }
+}
+
+#hdr
+#include "smtc_ClassKey.h"
+#include "smtc_NamePtr.h"
+#include "smtc_TmplClassDeclPtr.h"
+#include "smtc_TmplSpecPtrVector.h"
+#end
+
+#src
+#include "smtc_CreateClassDecl.h"
+#include "smtc_TmplClassDecl.h"
+#end

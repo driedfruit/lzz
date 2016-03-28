@@ -1,0 +1,45 @@
+// smtc_NavSubmitFuncDefnEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FuncDeclEntity.h"
+#include "smtc_NavSubmitFuncDefnPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_EntityVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // NavSubmitFuncDefnEntity
+  class NavSubmitFuncDefnEntity : public FuncDeclEntity
+  {
+  public:
+    // constructor
+    NavSubmitFuncDefnEntity (NavSubmitFuncDefnPtr const & nav_submit_func_defn)
+      : FuncDeclEntity (nav_submit_func_defn)
+    {
+    }
+
+    // destructor
+    ~ NavSubmitFuncDefnEntity ()
+    {
+    }
+
+    // accept visitor
+    void accept (EntityVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get nav submit func defn
+    inline NavSubmitFuncDefnPtr getNavSubmitFuncDefn () const
+    {
+      return getFuncDecl ();
+    }
+  }
+}

@@ -1,0 +1,68 @@
+// util_BitOp.lzz
+//
+
+$hdr
+$end
+
+$src
+$end
+
+// util
+namespace util
+{
+  // set bit
+  template <class T>
+  inline void setBit (T & t, int b)
+  {
+    t |= b;
+  }
+
+  // is bit set
+  template <class T>
+  inline bool isBitSet (T const & t, int b)
+  {
+    return (t & b) != 0;
+  }
+
+  // is bits set
+  template <class T>
+  inline bool isBitsSet (T const & t, int b)
+  {
+    return (t & b) == b;
+  }
+
+  // set flag (same as set bit)
+  template <class T>
+  inline void setFlag (T & t, int b)
+  {
+    t |= b;
+  }
+
+  // has flag (same as isBitSet)
+  template <class T>
+  inline bool hasFlag (T const & t, int b)
+  {
+    return (t & b) != 0;
+  }
+
+  // has flags (same as isBitsSet) 
+  template <class T>
+  inline bool hasFlags (T const & t, int b)
+  {
+    return (t & b) == b;
+  }
+
+  // clear bit
+  template <class T>
+  inline void clearBit (T & t, int b)
+  {
+    t &= ~ b;
+  }
+
+  // clear flag
+  template <class T>
+  inline void clrFlag (T & t, int b)
+  {
+    t &= ~ b;
+  }
+}

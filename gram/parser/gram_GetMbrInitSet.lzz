@@ -1,0 +1,53 @@
+// gram_GetMbrInitSet.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_MbrInitPtrVector.h"
+
+// basil
+#include "basl_Nonterm.h"
+$end
+
+$src
+// gram
+#include "gram_BlockTable.h"
+#include "gram_GetNodeBlockSet.h"
+#include "gram_GetNodeName.h"
+#include "gram_Nonterm.h"
+#include "gram_Visitor.h"
+
+// semantic
+#include "smtc_GetMbrInit.h"
+$end
+
+// private namespace
+namespace
+{
+  // using gram
+  using namespace gram;
+
+  // get mbr init set
+  struct GetMbrInitSet (smtc::MbrInitPtrVector & mbr_init_set)
+    : Visitor
+  {
+    // mbr-init -> obj-name LPAREN expr-list-opt RPAREN 
+    void visit (MbrInitNode & node) const
+    {
+      smtc::NamePtr name = getNodeName (node.getObjName ());
+      BlockVector arg_set;
+      getNodeBlockSet (node.getExprListOpt (), arg_set);
+      mbr_init_set.push_back (smtc::getMbrInit (name, arg_set));
+    }
+  }
+}
+
+// gram
+namespace gram
+{
+  // get mbr init set
+  void getMbrInitSet (basl::Nonterm & nonterm, smtc::MbrInitPtrVector & mbr_init_set)
+  {
+    nonterm.accept (GetMbrInitSet (mbr_init_set));
+  }
+}

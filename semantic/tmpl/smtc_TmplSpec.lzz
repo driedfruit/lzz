@@ -1,0 +1,51 @@
+// smtc_TmplSpec.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ParamPtrVector.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // TmplSpec
+  class TmplSpec
+  {
+    // loc
+    util::Loc m_loc;
+
+    // param set
+    ParamPtrVector m_param_set;
+
+  public:
+    // constructor
+    TmplSpec (util::Loc const & loc, ParamPtrVector const & param_set)
+      : m_loc (loc), m_param_set (param_set)
+    {
+    }
+
+    // destructor
+    ~ TmplSpec ()
+    {
+    }
+
+    // get loc
+    inline util::Loc const & getLoc () const
+    {
+      return m_loc;
+    }
+
+    // get param set
+    inline ParamPtrVector const & getParamSet () const
+    {
+      return m_param_set;
+    }
+  }
+}

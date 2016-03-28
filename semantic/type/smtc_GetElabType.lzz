@@ -1,0 +1,24 @@
+// smtc_GetElabType.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ClassKey.h"
+#include "smtc_NamePtr.h"
+#include "smtc_TypePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_ElabType.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // get elab type
+  TypePtr getElabType (ClassKey key, NamePtr const & name)
+  {
+    return new ElabType (key, name);
+  }
+}

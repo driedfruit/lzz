@@ -1,0 +1,71 @@
+// smtc_ElabType.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ClassKey.h"
+#include "smtc_NamePtr.h"
+#include "smtc_Type.h"
+$end
+
+$src
+// semantic
+#include "smtc_AppendCv.h"
+#include "smtc_ClassKeyToString.h"
+#include "smtc_NameToString.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // ElabType
+  class ElabType : public Type
+  {
+    // class key
+    ClassKey m_key;
+
+    // name
+    NamePtr m_name;
+
+  public:
+    // constructor
+    ElabType (ClassKey key, NamePtr const & name)
+      : m_key (key), m_name (name)
+    {
+    }
+
+    // destructor
+    ~ ElabType ()
+    {
+    }
+
+    // get kind
+    TypeKind getKind () const
+    {
+      return ELAB_TYPE;
+    }
+
+    // to string
+    util::String toString (util::String const & dcl, bool c, bool v) const
+    {
+      using namespace util;
+      String str = classKeyToString (m_key);
+      appendWithSpace (str, nameToString (m_name));
+      appendCv (str, c, v);
+      if (! (c || v) && dcl [0] == ':')
+      {
+        appendWithSpace (str, '(');
+        str += dcl;
+        str += ')';
+      }
+      else
+      {
+        appendWithSpace (str, dcl);
+      }
+      return str;
+    }
+  }
+}

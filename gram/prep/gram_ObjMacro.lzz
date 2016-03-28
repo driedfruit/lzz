@@ -1,0 +1,37 @@
+// gram_ObjMacro.lzz
+//
+
+$hdr
+// gram
+#include "gram_RepMacro.h"
+$end
+
+$src
+// gram
+$end
+
+// gram
+namespace gram
+{
+  // ObjMacro
+  class ObjMacro : public RepMacro
+  {
+  public:
+    // constructor
+    ObjMacro (util::Loc const & loc, util::Ident const & name, basl::TokenVector const & rep_set)
+      : RepMacro (loc, name, rep_set)
+    {
+    }
+
+    // destructor
+    ~ ObjMacro ()
+    {
+    }
+
+    // get kind
+    MacroKind getKind () const
+    {
+      return OBJ_MACRO;
+    }
+  }
+}

@@ -1,0 +1,63 @@
+// smtc_NavSubmitFuncDefn.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FuncDecl.h"
+#include "smtc_ObjPtrVector.h"
+
+// gram
+#include "gram_Block.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // NavSubmitFuncDefn
+  class NavSubmitFuncDefn : public FuncDecl
+  {
+    // nav name
+    NamePtr m_nav_name;
+
+    // objects
+    ObjPtrVector m_obj_set;
+
+    // return stmt (not set if no return stmt)
+    gram::Block m_ret_stmt;
+
+  public:
+    // constructor
+    inline NavSubmitFuncDefn (int flags, CvType const & ret_type, NamePtr const & name, ParamPtrVector const & param_set,
+        NamePtr const & nav_name, ObjPtrVector const & obj_set, gram::Block const & ret_stmt)
+      : FuncDecl (Linkage (), flags, ret_type, name, param_set, false, Cv (), ThrowSpecPtr ()),
+        m_nav_name (nav_name), m_obj_set (obj_set), m_ret_stmt (ret_stmt)
+    {
+    }
+
+    // destructor
+    ~ NavSubmitFuncDefn ()
+    {
+    }
+
+    // get nav name
+    inline NamePtr const & getNavName () const
+    {
+      return m_nav_name;
+    }
+
+    // get obj set
+    inline ObjPtrVector const & getObjSet () const
+    {
+      return m_obj_set;
+    }
+
+    // get return stmt (not set if no return stmt)
+    gram::Block const & getReturnStmt () const
+    {
+      return m_ret_stmt;
+    }
+  }
+}

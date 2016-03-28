@@ -1,0 +1,48 @@
+// smtc_InstantiateClass.lzz
+//
+// instantiate class
+//
+
+namespace smtc
+{
+  // instantiate class
+  void instantiateClass (ScopePtr const & scope, ClassKey key, NamePtr const & name, bool is_dll_api)
+  {
+    scope->accept (InstantiateClass (key, name, is_dll_api));
+  }
+}
+
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // instantiate class
+  struct InstantiateClass (ClassKey key, NamePtr const & name, bool is_dll_api)
+    : ScopeVisitor
+  {
+    // ns scope
+    void visit (NsScope const & scope) const
+    {
+      // create class decl and add to namespace
+      ClassDeclPtr class_decl = createClassDecl (key, name, is_dll_api);
+      scope.getNs ()->addEntity (createClassInstEntity (class_decl));
+    }
+  }
+}
+
+#hdr
+#include "smtc_ClassKey.h"
+#include "smtc_NamePtr.h"
+#include "smtc_ScopePtr.h"
+#end
+
+#src
+#include "smtc_CreateClassDecl.h"
+#include "smtc_CreateClassInstEntity.h"
+#include "smtc_Message.h"
+#include "smtc_Ns.h"
+#include "smtc_NsScope.h"
+#include "smtc_ScopeVisitor.h"
+#include "smtc_TmplInstScope.h"
+#end

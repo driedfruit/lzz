@@ -1,0 +1,51 @@
+// smtc_TryBlock.lzz
+//
+
+$hdr
+// sematnic
+#include "smtc_HandlerPtrVector.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // TryBlock
+  class TryBlock
+  {
+    // location of 'try'
+    util::Loc m_loc;
+
+    // handler seq
+    HandlerPtrVector m_handler_seq;
+
+  public:
+    // constructor
+    TryBlock (util::Loc const & loc, HandlerPtrVector const & handler_seq)
+      : m_loc (loc), m_handler_seq (handler_seq)
+    {
+    }
+
+    // destructor
+    ~ TryBlock ()
+    {
+    }
+
+    // get loc
+    inline util::Loc const & getLoc () const
+    {
+      return m_loc;
+    }
+
+    // get handler seq
+    inline HandlerPtrVector const & getHandlerSeq () const
+    {
+      return m_handler_seq;
+    }
+  }
+}

@@ -1,0 +1,48 @@
+// smtc_FrndFuncDefnEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Entity.h"
+#include "smtc_FuncDefnPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_EntityVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // FrndFuncDefnEntity
+  class FrndFuncDefnEntity : public Entity
+  {
+    // func defn
+    FuncDefnPtr m_func_defn;
+
+  public:
+    // constructor
+    FrndFuncDefnEntity (FuncDefnPtr const & func_defn)
+      : m_func_defn (func_defn)
+    {
+    }
+
+    // destructor
+    ~ FrndFuncDefnEntity ()
+    {
+    }
+
+    // accept visitor
+    void accept (EntityVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get func defn
+    inline FuncDefnPtr const & getFuncDefn () const
+    {
+      return m_func_defn;
+    }
+  }
+}

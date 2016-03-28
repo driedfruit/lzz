@@ -1,0 +1,26 @@
+// smtc_CreateLinkageNs.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NsPtr.h"
+
+// util
+#include "util_Ident.h"
+#include "util_Loc.h"
+$end
+
+$src
+// semantic
+#include "smtc_LinkageNs.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create linkage namespace
+  NsPtr createLinkageNs (NsPtr const & encl_ns, util::Loc const & loc, util::Ident const & linkage)
+  {
+    return new LinkageNs (encl_ns, loc, linkage);
+  }
+}

@@ -1,0 +1,31 @@
+// smtc_GetCvType.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CvType.h"
+$end
+
+$inl
+// semantic
+#include "smtc_GetCv.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // get cv type
+  inline CvType getCvType (TypePtr const & type, bool c, bool v)
+  {
+    return CvType (type, getCv (c, v));
+  }
+
+  // get cv type
+  inline CvType getCvType (TypePtr const & type, Cv const & cv = Cv ())
+  {
+    return CvType (type, cv);
+  }
+}

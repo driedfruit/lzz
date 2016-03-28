@@ -1,0 +1,23 @@
+// smtc_CreateNsEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EntityPtr.h"
+#include "smtc_NsPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_NsEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create namespace entity
+  EntityPtr createNsEntity (NsPtr const & ns)
+  {
+    return new NsEntity (ns);
+  }
+}

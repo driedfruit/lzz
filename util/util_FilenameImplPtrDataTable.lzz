@@ -1,0 +1,25 @@
+// util_FilenameImplPtrDataTable.lzz
+//
+
+$hdr
+// util
+#include "util_DataTable.h"
+#include "util_FilenameImplPtr.h"
+$end
+
+$src
+// util
+#include "util_DataTable.tpl"
+$end
+
+// util
+namespace util
+{
+  // FilenameImplPtrDataTable
+  typedef DataTable <FilenameImplPtr> FilenameImplPtrDataTable;
+  typedef DataTableFindResult <FilenameImplPtr> FilenameImplPtrDataTableFindResult;
+  template class DataTable <FilenameImplPtr>;
+  template class DataTableNode <FilenameImplPtr>;
+  template class DataTableIter <FilenameImplPtr>;
+  template class DataTableFindResult <FilenameImplPtr>;
+}

@@ -1,0 +1,42 @@
+// smtc_IsNameBitf.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_Name.h"
+#include "smtc_NameVisitor.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // IsNameBitf
+  struct IsNameBitf (bool & result) : NameVisitor
+  {
+    // bitf name
+    void visit (BitfName const & name) const
+    {
+      result = true;
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // true if name is bitfield
+  bool isNameBitf (NamePtr const & name)
+  {
+    bool result = false;
+    name->accept (IsNameBitf (result));
+    return result;
+  }
+}

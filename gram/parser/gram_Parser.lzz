@@ -1,0 +1,205 @@
+// gram_Parser.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Output.h"
+#include "smtc_ScopePtr.h"
+
+// basil
+#include "basl_SyntaxTree.h"
+#include "basl_TokenDeque.h"
+
+// util
+#include "util_Loc.h"
+#include "util_String.h"
+$end
+
+$src
+// gram
+#include "gram_LexPPNumber.h"
+#include "gram_ParseRecoverOpt.h"
+#include "gram_ParserData.h"
+#include "gram_CSPrep.h"
+#include "gram_TokenNumber.h"
+#include "gram_VisitNode.h"
+
+// semantic
+#include "smtc_ScopePtrDeque.h"
+
+// basil
+#include "basl_ErrorRec.h"
+#include "basl_Lexer.h"
+#include "basl_Parse.h"
+#include "basl_Parser.h"
+#include "basl_SyntaxTree.h"
+
+// config
+#include "conf_Config.h"
+$end
+
+// private namespace
+namespace 
+{
+  // using gram
+  using namespace gram;
+
+  // LzzParser: standard parser
+  class LzzParser : public basl::Parser
+  {
+    // scope stack
+    smtc::ScopePtrDeque ss; 
+
+  public:
+    // constructor
+    LzzParser (smtc::ScopePtr const & scope)
+    {
+      ss.push_back (scope);
+    }
+
+    // on node, returns false if syntax error
+    bool onNode (basl::Nonterm & nonterm)
+    {
+      visitNode (nonterm, ss);
+      return true;
+    }
+  }
+
+  // LzzLexer: standard lexer
+  class LzzLexer : public basl::Lexer
+  {
+    // preprocessor
+    CSPrep prep;
+
+  public:
+    // constructor
+    LzzLexer (util::String const & filename, smtc::Output & output)
+      : prep (filename, & output)
+    {
+    }
+
+    // constructor for nested parsing
+    LzzLexer (util::String const & str, util::Loc const & loc)
+      : prep (str, loc)
+    {
+    }
+    
+    // get next token
+    basl::Token getNextToken (int lex_state)
+    {
+      basl::Token token = prep.getNextToken (lex_state);
+      // convert pp-numbers to int and float literals
+      if (token.getNumber () == PP_NUMBER_TOKEN)
+      {
+        lexPPNumber (token);
+      }
+      return token;
+    }
+  }
+
+  // LzzPPParser: parser for preprocessed output
+  class LzzPPParser : public basl::Parser
+  {
+  public:
+    // constructor
+    LzzPPParser ()
+    {
+    }
+
+    // on node, returns false if syntax error
+    bool onNode (basl::Nonterm & nonterm)
+    {
+      return true;
+    }
+  }
+
+  // LzzPPLexer: lexer for preprocessed output
+  class LzzPPLexer : public basl::Lexer
+  {
+    // preprocessor
+    CSPrep prep;
+    
+    // token set
+    basl::TokenDeque & token_set;
+
+  public:
+    // constructor
+    LzzPPLexer (util::String const & filename, basl::TokenDeque & token_set)
+      : prep (filename, 0), token_set (token_set)
+    {
+    }
+
+    // get next token
+    basl::Token getNextToken (int lex_state)
+    {
+      basl::Token token = prep.getNextToken (lex_state);
+      token_set.push_back (token);
+      return token;
+    }
+  }
+
+  // InitErrorRec
+  struct InitErrorRec
+  {
+    // error rec
+    basl::ErrorRec error_rec;
+
+    // constructor
+    InitErrorRec ()
+    {
+      parseRecoverOpt (error_rec);
+    }
+  }
+
+  // get error rec
+  basl::ErrorRec const & getErrorRec ()
+  {
+    // initialize error rec only once
+    static InitErrorRec init_error_rec;
+    return init_error_rec.error_rec;
+  }
+}
+
+// gram
+namespace gram
+{
+  // parse file
+  void parse (util::String const & filename, smtc::ScopePtr const & scope, smtc::Output & output)
+  {
+    LzzLexer lexer (filename, output);
+    LzzParser parser (scope);
+    bool trace = false;
+#ifdef DEBUG_BUILD
+    trace = conf::getOptionValue (conf::opt_trace);
+#endif
+    basl::SyntaxTree tree;
+    basl::parse (* getParserData (), lexer, parser, 0, getErrorRec (), trace, tree);
+  }
+
+  // parse string at loc at start state, return tree
+  basl::SyntaxTree parseString (util::String const & str, util::Loc const & loc, int state, smtc::ScopePtr const & scope)
+  {
+    LzzLexer lexer (str, loc);
+    LzzParser parser (scope);
+    bool trace = false;
+#ifdef DEBUG_BUILD
+    trace = conf::getOptionValue (conf::opt_trace);
+#endif
+    basl::SyntaxTree tree;
+    basl::parse (* getParserData (), lexer, parser, state, getErrorRec (), trace, tree);
+    return tree;
+  }
+
+  // preprocess file
+  void ppParse (util::String const & filename, basl::TokenDeque & token_set)
+  {
+    LzzPPLexer lexer (filename, token_set);
+    LzzPPParser parser;
+    bool trace = false;
+#ifdef DEBUG_BUILD
+    trace = conf::getOptionValue (conf::opt_trace);
+#endif
+    basl::SyntaxTree tree;
+    basl::parse (* getParserData (), lexer, parser, 0, getErrorRec (), trace, tree);
+  }
+}

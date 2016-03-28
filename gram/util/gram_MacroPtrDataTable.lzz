@@ -1,0 +1,30 @@
+// gram_MacroPtrDataTable.lzz
+//
+
+$hdr
+// gram
+#include "gram_MacroPtr.h"
+
+// util
+#include "util_DataTable.h"
+$end
+
+$src
+// util
+#include "util_DataTable.tpl"
+$end
+
+// gram
+namespace gram
+{
+  // MacroPtrDataTable
+  typedef class util::DataTable <MacroPtr> MacroPtrDataTable;
+  typedef class util::DataTableIter <MacroPtr> MacroPtrDataTableIter;
+  typedef class util::DataTableFindResult <MacroPtr> MacroPtrDataTableFindResult;
+}
+
+// instantiations
+template class util::DataTableNode <gram::MacroPtr>;
+template class util::DataTableFindResult <gram::MacroPtr>;
+template class util::DataTable <gram::MacroPtr>;
+template class util::DataTableIter <gram::MacroPtr>;

@@ -1,0 +1,20 @@
+// util_TrimBlock.lzz
+//
+
+$hdr
+// util
+#include "util_Block.h"
+$end
+
+$src
+$end
+
+// util
+namespace util
+{
+  // TrimBlock
+  inline void TrimBlock (; Block const & block) const
+  {
+    block.trim ();
+  }
+}

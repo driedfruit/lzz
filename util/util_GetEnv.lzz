@@ -1,0 +1,38 @@
+// util_GetEnv.lzz
+//
+
+#hdr
+// util
+#include "util_String.h"
+#end
+
+#src
+// std lib
+#include <cstdlib>
+#end
+
+// util
+namespace util
+{
+  // get the value of the environment variable name, return true if variable is set, false otherwise
+  bool getEnv (char const * name, util::String & value)
+  {
+    bool result = false;
+    const char * env_str = getenv (name);
+    if (env_str)
+    {
+      value = env_str;
+      result = true;
+    }
+    return result;
+  }
+
+  // get the value of the environment variable name, return the value, an empty string if
+  // not set or set to nothing
+  util::String getEnv (char const * name)
+  {
+    util::String value;
+    getEnv (name, value);
+    return value;
+  }
+}

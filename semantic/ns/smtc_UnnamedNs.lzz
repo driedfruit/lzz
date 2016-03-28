@@ -1,0 +1,40 @@
+// smtc_UnnamedNs.lzz
+//
+// an unnamed namespace
+//
+
+#hdr
+// semantic
+#include "smtc_NestedNs.h"
+#end
+
+#src
+// semantic
+#include "smtc_NsVisitor.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // NamedNs
+  class UnnamedNs : public NestedNs
+  {
+  public:
+    // constructor
+    UnnamedNs (NsPtr const & encl_ns, util::Loc const & loc)
+      : NestedNs (encl_ns, loc)
+    {
+    }
+
+    // destructor
+    ~ UnnamedNs ()
+    {
+    }
+
+    // accept visitor
+    void accept (NsVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+  }
+}

@@ -1,0 +1,181 @@
+// msg_Recorder.lzz
+//
+
+#hdr
+// message
+#include "msg_Severity.h"
+#end
+
+#src
+// std lib
+#include <cassert>
+#end
+
+// private namespace
+namespace
+{
+  using namespace msg;
+
+  //
+  // Recorder
+  //
+  // records severity of printed messages
+  // 
+  class Recorder
+  {
+    // true if has fatal errors
+    bool has_fatal;
+    bool has_any_fatal;
+
+    // true if any warnings
+    bool has_warning;
+    bool has_any_warning;
+
+    // has info
+    bool has_info;
+    bool has_any_info;
+
+  public:
+    // constructor
+    Recorder ()
+      : has_fatal (false), has_warning (false), has_info (false),
+        has_any_fatal (false), has_any_warning (false), has_any_info (false)
+    {
+    }
+
+    // reset
+    void reset ()
+    {
+      has_fatal = false;
+      has_warning = false;
+      has_info = false;
+    }
+
+    // record message severity
+    void record (Severity s)
+    {
+      if (s == ERROR_MSG)
+      {
+        has_fatal = true;
+        has_any_fatal = true;
+      }
+      else if (s == WARNING_MSG)
+      {
+        has_warning = true;
+        has_any_warning = true;
+      }
+      else if (s == INFO_MSG)
+      {
+        has_info = true;
+        has_any_info = true;
+      }
+      else
+      {
+        assert (false);
+      }
+    }
+
+    // true if has fatal errors
+    inline bool hasFatalMessage () const
+    {
+      return has_fatal;
+    }
+
+    // true if has warnings
+    inline bool hasWarningMessage () const
+    {
+      return has_warning;
+    }
+
+    // true if has info message
+    inline bool hasInfoMessage () const
+    {
+      return has_info;
+    }
+
+    // true if has any fatal errors
+    inline bool hasAnyFatalMessage () const
+    {
+      return has_any_fatal;
+    }
+
+    // true if has any warnings
+    inline bool hasAnyWarningMessage () const
+    {
+      return has_any_warning;
+    }
+
+    // true if has any info message
+    inline bool hasAnyInfoMessage () const
+    {
+      return has_any_info;
+    }
+  }
+
+  // get message recorder
+  Recorder & getRecorder ()
+  {
+    static Recorder recorder;
+    return recorder;
+  }
+}
+
+// message
+namespace msg
+{
+  // record message severity
+  void recordSeverity (Severity s)
+  {
+    getRecorder ().record (s);
+  }
+
+  // reset message recorder
+  void resetRecorder ()
+  {
+    getRecorder ().reset ();
+  }
+
+  // true if has fatal message
+  bool hasFatalMessage ()
+  {
+    return getRecorder ().hasFatalMessage ();
+  }
+
+  // true if has warning message
+  bool hasWarningMessage ()
+  {
+    return getRecorder ().hasWarningMessage ();
+  }
+
+  // true if has info message
+  bool hasInfoMessage ()
+  {
+    return getRecorder ().hasInfoMessage ();
+  }
+
+  // reset does not set to false the any flags
+
+  // true if has any fatal message
+  bool hasAnyFatalMessage ()
+  {
+    return getRecorder ().hasAnyFatalMessage ();
+  }
+
+  // true if has any warning message
+  bool hasAnyWarningMessage ()
+  {
+    return getRecorder ().hasAnyWarningMessage ();
+  }
+
+  // true if has any info message
+  bool hasAnyInfoMessage ()
+  {
+    return getRecorder ().hasAnyInfoMessage ();
+  }
+
+  // true has any message
+  bool hasAnyMessage ()
+  {
+    return hasAnyFatalMessage () || hasAnyWarningMessage () || hasAnyInfoMessage ();
+  }
+}

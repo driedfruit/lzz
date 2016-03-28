@@ -1,0 +1,95 @@
+// basl_SyntaxTree.lzz
+//
+// manages nodes in syntax tree
+// nodes are reused, allocated as needed and deleted at end of program
+//
+// Copyright (C) 2002, Michael Spencer
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, subject to the following
+// restrictions:
+// 
+//   1. The origin of this software must not be misrepresented; you must
+//      not claim that you wrote the original software. If you use this
+//      software in a product, an acknowledgment in the product
+//      documentation would be appreciated but is not required.
+// 
+//   2. Altered source versions must be plainly marked as such, and must
+//      not be misrepresented as being the original software.
+// 
+// Basil documentation, as well as the latest version, is available at
+// http://www.lazycplusplus.com/basil.
+//
+// Send comments and bug reports to michael_spencer@lazycplusplus.com.
+// 
+
+$hdr
+$end
+
+$src
+// basil
+#include "basl_Node.h"
+#include "basl_NodePool.h"
+$end
+
+// basl
+namespace basl
+{
+  // types
+  struct Node;
+
+  // SyntaxTree
+  class SyntaxTree
+  {
+    // node
+    Node * m_node;
+
+  public:
+    // constructor
+    SyntaxTree (Node * node = 0)
+      : m_node (node)
+    {
+      addNodeRef (m_node);
+    }
+
+    // copy constructor
+    SyntaxTree (SyntaxTree const & tree)
+      : m_node (tree.m_node)
+    {
+      addNodeRef (m_node);
+    }
+  
+    // destructor
+    ~ SyntaxTree ()
+    {
+      remNodeRef (m_node);
+    }
+
+    // copy assignment
+    SyntaxTree & operator = (SyntaxTree const & tree)
+    {
+      addNodeRef (tree.m_node);
+      remNodeRef (m_node);
+      m_node = tree.m_node;
+      return * this;
+    }
+
+    // true if empty
+    inline bool isEmpty () const
+    {
+      return m_node == 0;
+    }
+
+    // get node
+    inline Node & getNode () const
+    {
+      return * m_node;
+    }
+
+    // pointer
+    inline Node * pointer () const
+    {
+      return m_node;
+    }
+  }
+}

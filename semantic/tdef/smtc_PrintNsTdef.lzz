@@ -1,0 +1,29 @@
+// smtc_PrintNsTdef.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NsPtr.h"
+#include "smtc_TdefPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_IsNsEnclUnmd.h"
+#include "smtc_Output.h"
+#include "smtc_PrintTdef.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class Output;
+
+  // print ns tdef
+  void printNsTdef (Output & out, TdefPtr const & tdef, NsPtr const & ns)
+  {
+    FilePtr file = isNsEnclUnmd (ns) ? out.getSrcFile () : out.getHdrFile ();
+    printTdef (file, tdef, ns);
+  }
+}

@@ -1,0 +1,102 @@
+// smtc_GetNodeBaseName.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_BaseNamePtr.h"
+
+// basil
+#include "basl_Nonterm.h"
+$end
+
+$src
+// std lib
+#include <cassert>
+
+// gram
+#include "gram_GetNodeDcl.h"
+#include "gram_GetNodeOper.h"
+#include "gram_Nonterm.h"
+#include "gram_Visitor.h"
+
+// semantic
+#include "smtc_CreateConvBaseName.h"
+#include "smtc_CreateDtorBaseName.h"
+#include "smtc_CreateIdentBaseName.h"
+#include "smtc_CreateOperBaseName.h"
+
+// basil
+#include "basl_Nonterm.h"
+$end
+
+// private namespace
+namespace
+{
+  // using gram
+  using namespace gram;
+
+  // get node base name
+  struct GetNodeBaseName (smtc::BaseNamePtr & base_name)
+    : Visitor ()
+  {
+    // obj-base-name -> macro-opt IDENT
+    void visit (BaseName1Node & node) const
+    {
+      util::Ident macro;
+      if (node.getMacroOpt ().isSet ())
+      {
+        macro = node.getMacroOpt ().getLexeme ();
+      }
+      base_name = smtc::createIdentBaseName (node.getIDENT_TOKEN ().getLoc (), macro, node.getIDENT_TOKEN ().getLexeme ());
+    }
+
+    // func-base-name -> macro-opt BITNOT IDENT
+    void visit (BaseName2Node & node) const
+    {
+      util::Ident macro;
+      if (node.getMacroOpt ().isSet ())
+      {
+        macro = node.getMacroOpt ().getLexeme ();
+      }
+      base_name = smtc::createDtorBaseName (node.getBITNOT_TOKEN ().getLoc (), macro, node.getIDENT_TOKEN ().getLexeme ());
+    }
+
+    // func-base-name -> macro-opt OPERATOR oper
+    void visit (BaseName3Node & node) const
+    {
+      util::Ident macro;
+      if (node.getMacroOpt ().isSet ())
+      {
+        macro = node.getMacroOpt ().getLexeme ();
+      }
+      smtc::OperKind kind = getNodeOper (node.getOper ());
+      base_name = smtc::createOperBaseName (node.getOPERATOR_TOKEN ().getLoc (), macro, kind);
+    }
+
+    // func-base-name -> macro-opt OPERATOR abstract-decl >
+    void visit (BaseName4Node & node) const
+    {
+      util::Ident macro;
+      if (node.getMacroOpt ().isSet ())
+      {
+        macro = node.getMacroOpt ().getLexeme ();
+      }
+      smtc::CvType cv_type;
+      getNodeAbstractDcl (node.getAbstractDecl (), cv_type);
+      base_name = smtc::createConvBaseName (node.getOPERATOR_TOKEN ().getLoc (), macro, cv_type);
+    }
+  }
+}
+
+// gram
+namespace gram
+{
+  // get base name
+  smtc::BaseNamePtr getNodeBaseName (basl::Nonterm & nonterm)
+  {
+    smtc::BaseNamePtr base_name;
+    nonterm.accept (GetNodeBaseName (base_name));
+    assert (base_name.isSet ());
+    return base_name;
+  }
+}

@@ -1,0 +1,23 @@
+// smtc_CreateClassDefnEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EntityPtr.h"
+#include "smtc_ClassDefnPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_ClassDefnEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create class defn entity
+  EntityPtr createClassDefnEntity (ClassDefnPtr const & class_defn)
+  {
+    return new ClassDefnEntity (class_defn);
+  }
+}

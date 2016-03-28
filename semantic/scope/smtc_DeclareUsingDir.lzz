@@ -1,0 +1,55 @@
+// smtc_DeclareUsingDir.lzz
+//
+// declare using directive
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+#include "smtc_ScopePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_CreateUsingDir.h"
+#include "smtc_CreateUsingDirEntity.h"
+#include "smtc_Ns.h"
+#include "smtc_NsScope.h"
+#include "smtc_ScopeVisitor.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // DeclareUsingDir
+  struct DeclareUsingDir (NamePtr const & name)
+    : ScopeVisitor
+  {
+    // ns scope
+    void visit (NsScope const & scope) const
+    {
+      // add entity to ns
+      scope.getNs ()->addEntity (buildEntity ());
+    }
+
+    // build entity
+    EntityPtr buildEntity () const
+    {
+      UsingDirPtr using_dir = createUsingDir (name);
+      return createUsingDirEntity (using_dir);
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // declare using directive
+  void declareUsingDir (ScopePtr const & scope, NamePtr const & name)
+  {
+    scope->accept (DeclareUsingDir (name));
+  }
+}

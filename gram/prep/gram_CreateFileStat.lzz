@@ -1,0 +1,33 @@
+// gram_CreateFileStat.lzz
+//
+
+$hdr
+// gram
+#include "gram_FileStatPtr.h"
+
+// util
+#include "util_Filename.h"
+#include "util_Loc.h"
+#include "util_String.h"
+$end
+
+$src
+// gram
+#include "gram_FileStat.h"
+$end
+
+// gram
+namespace gram
+{
+  // create file stat
+  FileStatPtr createFileStat (util::Filename const & filename, bool insert)
+  {
+    return new FileStat (filename, insert);
+  }
+
+  // create file stat with string and loc instead of filename, used for nested parsing
+  FileStatPtr createFileStat (util::String const & str, util::Loc const & loc, bool insert)
+  {
+    return new FileStat (str, loc, insert);
+  }
+}

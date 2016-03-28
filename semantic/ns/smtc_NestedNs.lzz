@@ -1,0 +1,55 @@
+// smtc_NestedNs.lzz
+//
+
+#hdr
+// semantic
+#include "smtc_NsPtr.h"
+#include "smtc_Ns.h"
+
+// util
+#include "util_Loc.h"
+#end
+
+#src
+#end
+
+// semantic
+namespace smtc
+{
+  // types
+  struct NsVisitor;
+
+  // NestedNs
+  class NestedNs : public Ns
+  {
+    // enclosing namespace
+    NsPtr m_encl_ns;
+
+    // loc
+    util::Loc m_loc;
+
+  public:
+    // constructor
+    NestedNs (NsPtr const & encl_ns, util::Loc const & loc)
+      : m_encl_ns (encl_ns), m_loc (loc)
+    {
+    }
+
+    // destructor
+    ~ NestedNs ()
+    {
+    }
+
+    // get enclosing ns
+    inline NsPtr const & getEnclNs () const
+    {
+      return m_encl_ns;
+    }
+
+    // get loc
+    inline util::Loc const & getLoc () const
+    {
+      return m_loc;
+    }
+  }
+}

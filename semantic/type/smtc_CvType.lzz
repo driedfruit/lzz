@@ -1,0 +1,78 @@
+// smtc_CvType.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Cv.h"
+#include "smtc_TypePtr.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// semantic
+#include "smtc_Cv.h"
+#include "smtc_Type.h"
+$end
+
+// smtc
+namespace smtc
+{
+  // CvType
+  class CvType
+  {
+    // type
+    TypePtr m_type;
+
+    // cv
+    Cv m_cv;
+
+  public:
+    // constructor
+    explicit CvType ()
+    {
+    }
+
+    // constructor
+    explicit CvType (TypePtr const & type, Cv const & cv = Cv ())
+      : m_type (type), m_cv (cv)
+    {
+    }
+
+    // destructor
+    ~ CvType ()
+    {
+    }
+
+    // true if set
+    inline bool isSet () const
+    {
+      return m_type.isSet ();
+    }
+
+    // get type
+    inline TypePtr const & getType () const
+    {
+      return m_type;
+    }
+
+    // get cv
+    inline Cv const & getCv () const
+    {
+      return m_cv;
+    }
+
+    // to string
+    inline util::String toString () const
+    {
+      return toString (util::String (), false, false);
+    }
+
+    // to string
+    util::String toString (util::String const & dcl, bool c = false, bool v = false) const
+    {
+      return m_type->toString (dcl, c || m_cv.isConst (), v || m_cv.isVolatile ());
+    }
+  }
+}

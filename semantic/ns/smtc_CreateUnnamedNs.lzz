@@ -1,0 +1,25 @@
+// smtc_CreateUnnamedNs.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NsPtr.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+// semantic
+#include "smtc_UnnamedNs.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create named namespace
+  NsPtr createUnnamedNs (NsPtr const & encl_ns, util::Loc const & loc)
+  {
+    return new UnnamedNs (encl_ns, loc);
+  }
+}

@@ -1,0 +1,28 @@
+// smtc_CreateCopyInit.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_InitPtr.h"
+
+// gram
+#include "gram_Block.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+// semantic
+#include "smtc_CopyInit.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create copy init
+  InitPtr createCopyInit (util::Loc const & loc, gram::Block const & block)
+  {
+    return new CopyInit (loc, block);
+  }
+}

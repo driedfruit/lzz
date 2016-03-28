@@ -1,0 +1,45 @@
+// gram_RepMacro.lzz
+//
+// replacement macro
+//
+
+$hdr
+// gram
+#include "gram_Macro.h"
+
+// basil
+#include "basl_TokenVector.h"
+$end
+
+$src
+// gram
+$end
+
+// gram
+namespace gram
+{
+  // RepMacro
+  class RepMacro : public Macro
+  {
+    // replacement token set
+    basl::TokenVector m_rep_set;
+
+  public:
+    // constructor
+    RepMacro (util::Loc const & loc, util::Ident const & name, basl::TokenVector const & rep_set)
+      : Macro (loc, name), m_rep_set (rep_set)
+    {
+    }
+
+    // destructor
+    inline ~ RepMacro ()
+    {
+    }
+
+    // get replacement token set
+    inline basl::TokenVector const & getRepSet () const
+    {
+      return m_rep_set;
+    }
+  }
+}

@@ -1,0 +1,345 @@
+// util_DataTable.lzz
+//
+
+// create tpl file
+$pragma tpl
+
+$hdr
+// library
+#include <stddef.h>
+#include <assert.h>
+$end
+
+// util
+namespace util
+{
+  // DataTableNode
+  template <class T>
+  struct DataTableNode
+  {
+    // handle
+    size_t handle;
+
+    // bit
+    size_t bit_mask;
+
+    // data
+    T data;
+
+    // left node
+    DataTableNode <T> * left;
+    
+    // right node
+    DataTableNode <T> * right;
+
+    // constructor
+    DataTableNode (size_t handle, size_t bit_mask, T const & data)
+      : handle (handle), bit_mask (bit_mask), data (data)
+    {
+    }
+
+    // destructor
+    ~ DataTableNode ()
+    {
+      if (left->bit_mask > bit_mask)
+      {
+        delete left;
+      }
+      if (right->bit_mask > bit_mask)
+      {
+        delete right;
+      }
+    }
+
+  }
+
+  // FindDataResult
+  template <class T>
+  class DataTableFindResult
+  {
+    // data
+    T * m_data;
+
+    // handle
+    size_t m_handle;
+
+    // bit mask
+    size_t m_dif_bit_mask;
+
+  public:
+
+    // constructor if data found
+    DataTableFindResult (T & data)
+      : m_data (& data)
+    {
+    }
+
+    // constructor if not found
+    DataTableFindResult (size_t handle, size_t dif_bit_mask)
+      : m_data (0), m_handle (handle), m_dif_bit_mask (dif_bit_mask)
+    {
+    }
+
+    // destructor
+    ~ DataTableFindResult ()
+    {
+    }
+
+    // has data
+    inline bool hasData () const
+    {
+      return m_data != 0;
+    }
+
+    // get data
+    inline T & getData ()
+    {
+      assert (hasData ());
+      return * m_data;
+    }
+
+    // get dif bit mask
+    inline size_t getDifBitMask () const
+    {
+      return m_dif_bit_mask;
+    }
+
+    // get handle
+    inline size_t getHandle () const
+    {
+      return m_handle;
+    }
+  }
+
+  // DataTableIter
+  template <class T>
+  class DataTableIter
+  {
+    // nodes to visit, max depth is number of bits in size_t
+    const DataTableNode <T> * m_visit [sizeof (size_t) * 8];
+
+    // index of next node to visit
+    int m_next;
+
+  public:
+
+    // constructor
+    DataTableIter (DataTableNode <T> const * m_root)
+      : m_next (0)
+    {
+      if (m_root->handle != 0)
+      {
+        m_visit [m_next ++] = m_root;
+      }
+    }
+
+    // destructor
+    ~ DataTableIter ()
+    {
+    }
+
+    // true if has more elements
+    bool hasMoreElements () const
+    {
+      return m_next > 0;
+    }
+
+    // get next element
+    T const & getNextElement ()
+    {
+      const DataTableNode <T> * n = m_visit [-- m_next];
+      if (n->right->handle != 0 && n->right->bit_mask > n->bit_mask)
+      {
+        m_visit [m_next ++] = n->right;
+      }
+      if (n->left->handle  != 0 && n->left->bit_mask  > n->bit_mask)
+      {
+        m_visit [m_next ++] = n->left;
+      }
+      return n->data;
+    }
+  }
+
+  // DataTable
+  template <class T>
+  class DataTable
+  {
+    // root node
+    DataTableNode <T> * m_root;
+
+  public:
+
+    // constructor
+    DataTable ()
+    {
+      init ();
+    }
+      
+    // destructor
+    ~ DataTable ()
+    {
+      delete m_root;
+    }
+
+    // init table
+    void init ()
+    {
+      m_root = new DataTableNode <T> (0, 0xFFFFFFFF, T ());
+      m_root->left = m_root;
+      m_root->right = m_root;
+    }
+
+    // clear
+    void clear ()
+    {
+      delete m_root;
+      init ();
+    }
+
+    // find data
+    DataTableFindResult <T> findData (size_t handle) const
+    {
+      DataTableNode <T> * n;
+      size_t bit_mask;
+      // find closest match
+      n = m_root;
+      do
+      {
+        bit_mask = n->bit_mask;
+        if (handle & bit_mask)
+        {
+          n = n->right;
+        }
+        else
+        {
+          n = n->left;
+        }
+      }
+      while (bit_mask < n->bit_mask);
+      // is equal
+      if (handle == n->handle)
+      {
+        return DataTableFindResult <T> (n->data);
+      }
+      else
+      {
+        size_t i = 1;
+        for (int k = handle ^ n->handle; ! (k & i); i <<= 1);
+        return DataTableFindResult <T> (handle, i);
+      }
+    }
+
+    // add data with handle
+    inline void addData (size_t handle, T const & data)
+    {
+      DataTableFindResult <T> find_result = findData (handle);
+      assert (! find_result.hasData ());
+      addData (find_result, data);
+    }
+
+    // add data after unsuccessful find with find result (faster)
+    void addData (const DataTableFindResult <T> & find_result, T const & data)
+    {
+      DataTableNode <T> * n, * m, ** p;
+      size_t dif_bit_mask, bit_mask;
+      size_t handle;
+      // get difference bit and handle from find result
+      dif_bit_mask = find_result.getDifBitMask ();
+      handle = find_result.getHandle ();
+      // where to insert it?
+      p = & m_root;
+      for (bit_mask = 0; dif_bit_mask > (n = * p)->bit_mask && bit_mask < n->bit_mask;)
+      {
+        bit_mask = n->bit_mask;
+        if (handle & bit_mask)
+        {
+          p = & n->right;
+        }
+        else
+        {
+          p = & n->left;
+        }
+      }
+      // create a new node
+      m = new DataTableNode <T> (handle, dif_bit_mask, data);
+      // add left and right nodes
+      if (handle & dif_bit_mask)
+      {
+        m->right = m;
+        m->left = n;
+      }
+      else
+      {
+        m->left = m;
+        m->right = n;
+      }
+      * p = m;
+    }
+
+    // remove data
+    void removeData (size_t handle)
+    {
+      DataTableNode <T> * n, * m, ** p, ** q;
+      // find node
+      p = & m_root;
+      while (handle != (n = * p)->handle)
+      {
+        if (handle & n->bit_mask)
+        {
+          p = & n->right;
+        }
+        else
+        {
+          p = & n->left;
+        }
+      }
+      // find node pointing to node
+      q = p;
+      while (n != (m = * q)->left && n != m->right)
+      {
+        if (handle & m->bit_mask)
+        {
+          q = & m->right;
+        }
+        else
+        {
+          q = & m->left;
+        }
+      }
+      // replace n with m (ok if n == m)
+      * p = m;
+      if (n == m->right)
+      {
+        * q = m->left;
+      }
+      else
+      {
+        * q = m->right;
+      }
+      m->left = n->left;
+      m->right = n->right;
+      m->bit_mask = n->bit_mask;
+      // make children of n point to n so deletion doesn't kill any other nodes
+      n->left = n;
+      n->right = n;
+      delete n;
+    }
+
+    // get elements
+    DataTableIter <T> getElements () const
+    {
+      return DataTableIter <T> (m_root);
+    }
+
+    // get root node
+    const DataTableNode <T> * getRoot () const
+    {
+      return m_root;
+    }
+
+    // no copying
+  private:
+    // copy constructor
+    DataTable (DataTable <T> const & data_table);
+  }
+}

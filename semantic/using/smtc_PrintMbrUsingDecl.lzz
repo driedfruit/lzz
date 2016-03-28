@@ -1,0 +1,23 @@
+// smtc_PrintMbrUsingDecl.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_UsingDeclPtr.h"
+#include "smtc_FilePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_PrintUsingDecl.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // print mbr using decl
+  void printMbrUsingDecl (FilePtr const & file, UsingDeclPtr const & using_decl)
+  {
+    printUsingDecl (file, DECLARATION_SECTION, using_decl);
+  }
+}

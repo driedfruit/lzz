@@ -1,0 +1,57 @@
+// smtc_PrintTdef.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FilePtr.h"
+#include "smtc_NamePtr.h"
+#include "smtc_NsPtr.h"
+#include "smtc_TdefPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_GetNameLoc.h"
+#include "smtc_NameToString.h"
+#include "smtc_PrintCode.h"
+#include "smtc_PrintNsClose.h"
+#include "smtc_PrintNsOpen.h"
+#include "smtc_Tdef.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // using util
+  using namespace util;
+
+  // print tdef in ns
+  void printTdef (FilePtr const & file, TdefPtr const & tdef, NsPtr const & ns)
+  {
+    int ns_depth = printNsOpen (file, DECLARATION_SECTION, ns);
+    printTdef (file, tdef);
+    printNsClose (file, DECLARATION_SECTION, ns_depth);
+  }
+
+  // print tdef
+  void printTdef (FilePtr const & file, TdefPtr const & tdef)
+  {
+    String str;
+    // typedefs can have linkage
+    Linkage const & linkage = tdef->getLinkage ();
+    if (linkage.isSet ())
+    {
+      appendWithSpace (str, "extern");
+      appendWithSpace (str, linkage.getLanguage ().c_str ());
+    }
+    appendWithSpace (str, "typedef");
+    String dcl_str = nameToString (tdef->getName ());
+    appendWithSpace (str, tdef->getCvType ().toString (dcl_str));
+    str += ';';
+    Loc loc = getNameLoc (tdef->getName ());
+    printLine (file, DECLARATION_SECTION, loc, str);
+  }
+}

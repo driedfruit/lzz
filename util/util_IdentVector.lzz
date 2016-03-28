@@ -1,0 +1,17 @@
+// util_IdentVector.lzz
+//
+
+$header
+#include <vector>
+#include "util_Ident.h"
+$end
+
+//
+// util
+//
+namespace util
+{
+  typedef std::vector <Ident> IdentVector;
+  typedef std::vector <Ident>::iterator IdentVectorIter;
+  typedef std::vector <Ident>::const_iterator IdentVectorConstIter;
+}

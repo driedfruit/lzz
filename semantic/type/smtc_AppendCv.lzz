@@ -1,0 +1,38 @@
+// smtc_AppendCv.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Cv.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // append cv to string
+  void appendCv (util::String & str, bool c, bool v)
+  {
+    if (c)
+    {
+      util::appendWithSpace (str, "const");
+    }
+    if (v)
+    {
+      util::appendWithSpace (str, "volatile");
+    }
+  }
+
+  // append cv to string
+  void appendCv (util::String & str, Cv const & cv)
+  {
+    appendCv (str, cv.isConst (), cv.isVolatile ());
+  }
+}

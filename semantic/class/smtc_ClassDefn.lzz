@@ -1,0 +1,106 @@
+// smtc_ClassDefn.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_BaseSpecPtrVector.h"
+#include "smtc_ClassDecl.h"
+#include "smtc_EntityPtrDeque.h"
+
+// util
+#include "util_IdentSet.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // ClassDefn
+  class ClassDefn : public ClassDecl
+  {
+    // base spec set
+    BaseSpecPtrVector m_base_spec_set;
+
+    // entity set
+    EntityPtrDeque m_entity_set;
+
+    // types in scope (used for qualifing function return types)
+    util::IdentSet m_type_name_set;
+
+    // true if class definition is dependent (ie: a template class definition), if true
+    // return types are pefixed with 'typename' in definition
+    bool m_dpdt; 
+
+    // qualified class name relative to enclosing ns
+    NamePtr m_qual_name;
+
+  public:
+    // constructor
+    ClassDefn (ClassKey key, NamePtr const & name, bool is_dll_api, BaseSpecPtrVector const & base_spec_set)
+      : ClassDecl (key, name, is_dll_api), m_base_spec_set (base_spec_set), m_dpdt (false)
+    {
+    }
+
+    // destructor
+    ~ ClassDefn ()
+    {
+    }
+
+    // get base spec set
+    inline BaseSpecPtrVector const & getBaseSpecSet () const
+    {
+      return m_base_spec_set;
+    }
+
+    // get entity set
+    inline EntityPtrDeque const & getEntitySet () const
+    {
+      return m_entity_set;
+    }
+
+    // add entity
+    void addEntity (EntityPtr const & entity)
+    {
+      m_entity_set.push_back (entity);
+    }
+
+
+    // add type name
+    void addTypeName (util::Ident const & type_name)
+    {
+      m_type_name_set.insert (type_name);
+    }
+
+    // get type name set
+    util::IdentSet const & getTypeNameSet () const
+    {
+      return m_type_name_set;
+    }
+
+    // set dependent
+    void setDependent ()
+    {
+      m_dpdt = true;
+    }
+
+    // true if dependent
+    bool isDependent () const
+    {
+      return m_dpdt;
+    }
+
+    // set qualified name
+    void setQualName (NamePtr const & qual_name)
+    {
+      m_qual_name = qual_name;
+    }
+
+    // get qual name
+    NamePtr const & getQualName () const
+    {
+      return m_qual_name;
+    }
+  }
+}

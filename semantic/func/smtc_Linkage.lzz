@@ -1,0 +1,46 @@
+// smtc_Linkage.lzz
+//
+
+#hdr
+// util
+#include "util_Ident.h"
+#end
+
+#src
+// semantic
+#end
+
+// semantic
+namespace smtc
+{
+  // Linkage
+  class Linkage
+  {
+    // language
+    util::Ident m_lang;
+
+  public:
+    // default constructor
+    Linkage ()
+    {
+    }
+
+    // constructor
+    explicit inline Linkage (util::Ident const & lang)
+      : m_lang (lang)
+    {
+    }
+
+    // true if set
+    inline bool isSet () const
+    {
+      return m_lang.isSet ();
+    }
+
+    // get lang
+    inline util::Ident const & getLanguage () const
+    {
+      return m_lang;
+    }
+  }
+}

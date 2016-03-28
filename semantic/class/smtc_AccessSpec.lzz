@@ -1,0 +1,51 @@
+// smtc_AccessSpec.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Access.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // AccessSpec
+  class AccessSpec
+  {
+    // loc
+    util::Loc m_loc;
+
+    // access
+    Access m_access;
+
+  public:
+    // constructor
+    inline AccessSpec (util::Loc const & loc, Access access)
+      : m_loc (loc), m_access (access)
+    {
+    }
+
+    // destructor
+    ~ AccessSpec ()
+    {
+    }
+
+    // get loc
+    inline util::Loc const & getLoc () const
+    {
+      return m_loc;
+    }
+
+    // get access
+    inline Access getAccess () const
+    {
+      return m_access;
+    }
+  }
+}

@@ -1,0 +1,37 @@
+// smtc_BaseSpecSetToString.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_BaseSpecPtrVector.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// semantic
+#include "smtc_BaseSpecToString.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // using util
+  using namespace util;
+
+  // base spec set to string
+  util::String baseSpecSetToString (BaseSpecPtrVector const & base_spec_set)
+  {
+    String str;
+    for (BaseSpecPtrVectorConstIter i = base_spec_set.begin (); i != base_spec_set.end (); ++ i)
+    {
+      str += baseSpecToString (* i);
+      if (i + 1 != base_spec_set.end ())
+      {
+        str += ", ";
+      }
+    }
+    return str;
+  }
+}

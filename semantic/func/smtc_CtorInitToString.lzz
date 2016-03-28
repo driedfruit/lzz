@@ -1,0 +1,34 @@
+// smtc_CtorInitToString.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CtorInitPtr.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// semantic
+#include "smtc_CtorInit.h"
+#include "smtc_MbrInitSetToString.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // using util
+  using namespace util;
+
+  // ctor init to string
+  util::String ctorInitToString (CtorInitPtr const & ctor_init)
+  {
+    String str = ":";
+    appendWithSpace (str, mbrInitSetToString (ctor_init->getMbrInitSet ()));
+    return str;
+  }
+}

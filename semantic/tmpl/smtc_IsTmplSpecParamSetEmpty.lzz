@@ -1,0 +1,25 @@
+// smtc_IsTmplSpecParamSetEmpty.lzz
+//
+
+$hdr
+// std lib
+#include <functional>
+
+// semantic
+#include "smtc_TmplSpecPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_TmplSpec.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // true if tmpl spec param set is empty
+  bool IsTmplSpecParamSetEmpty (; TmplSpecPtr const & tmpl_spec) const : std::unary_function <TmplSpecPtr, bool>
+  {
+    return tmpl_spec->getParamSet ().empty ();
+  }
+}

@@ -1,0 +1,27 @@
+// util_CharPtrDataTable.lzz
+//
+
+$hdr
+// lib
+#include <stddef.h>
+
+// util
+#include "util_DataTable.h"
+$end
+
+$src
+// util
+#include "util_DataTable.tpl"
+$end
+
+// util
+namespace util
+{
+  // CharPtrDataTable, CharPtrDataTableFindResult
+  typedef DataTable <char const *> CharPtrDataTable;
+  typedef DataTableFindResult <char const *> CharPtrDataTableFindResult;
+  template class DataTable <char const *>;
+  template class DataTableNode <char const *>;
+  template class DataTableIter <char const *>;
+  template class DataTableFindResult <char const *>;
+}

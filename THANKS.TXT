@@ -1,0 +1,8 @@
+Most of the good ideas in Lazy C++ came from 
+
+  Sven Rosvall
+  Richard Corden
+  Liam Fitzpatrick
+  Dan Clarke
+
+Thanks!!

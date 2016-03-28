@@ -1,0 +1,83 @@
+// smtc_TmplParam.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Param.h"
+#include "smtc_ParamPtrVector.h"
+$end
+
+$src
+// semantic
+#include "smtc_NameToString.h"
+#include "smtc_ParamSetToString.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // type param decl
+  class TmplParam : public Param
+  {
+    // param set
+    ParamPtrVector m_param_set;
+
+    // default template name (may be null)
+    NamePtr m_def_name;
+
+  public:
+    // constructor
+    TmplParam (NamePtr const & name, ParamPtrVector const & param_set, NamePtr const & def_name)
+      : Param (name), m_param_set (param_set), m_def_name (def_name)
+    {
+    }
+
+    // destructor
+    ~ TmplParam ()
+    {
+    }
+
+    // get param set
+    inline ParamPtrVector const & getParamSet () const
+    {
+      return m_param_set;
+    }
+
+    // true if has default name
+    inline bool hasDefaultName () const
+    {
+      return m_def_name.isSet ();
+    }
+
+    // get default name
+    inline NamePtr const & getDefaultName () const
+    {
+      return m_def_name;
+    }
+
+    // to string
+    util::String toString (bool is_decl) const
+    {
+      using namespace util;
+      String str = "template";
+      appendWithSpace (str, '<');
+      str += paramSetToString (m_param_set, is_decl);
+      if (str [str.length () - 1] == '>')
+      {
+        str += ' ';
+      }
+      str += '>';
+      appendWithSpace (str, "class");
+      appendWithSpace (str, nameToString (getName ()));
+      if (is_decl && m_def_name.isSet ())
+      {
+        appendWithSpace (str, '=');
+        appendWithSpace (str, nameToString (m_def_name));
+      }
+      return str;
+    }
+  }
+}

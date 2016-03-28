@@ -1,0 +1,66 @@
+// gram_GetNodeFuncParamBody.lzz
+//
+
+$hdr
+// basil
+#include "basl_Nonterm.h"
+
+// semantic
+#include "smtc_ParamPtrVector.h"
+$end
+
+$src
+// gram
+#include "gram_GetNodeDcl.h"
+#include "gram_GetNodeFuncParamSet.h"
+#include "gram_Nonterm.h"
+#include "gram_Visitor.h"
+$end
+
+// private namespace
+namespace
+{
+  // using gram
+  using namespace gram;
+
+  // GetNodeFuncParamBody
+  struct GetNodeFuncParamBody (smtc::ParamPtrVector & param_set, bool & vararg)
+    : Visitor ()
+  {
+    // param-decl-1-body -> param-decl-1-list ellipse-opt
+    void visit (ParamDeclBody1Node & node) const
+    {
+      getNodeFuncParamSet (node.getParamDecl1List (), param_set);
+      vararg = node.getEllipseOpt ().isSet ();
+    }
+
+    // param-decl-1-body -> param-decl-1-list COMMA ELLIPSE
+    void visit (ParamDeclBody2Node & node) const
+    {
+      getNodeFuncParamSet (node.getParamDecl1List (), param_set);
+      vararg = true;
+    }
+
+    // param-decl-1-body -> LPAREN ellipse-opt
+    void visit (ParamDeclBody3Node & node) const
+    {
+      vararg = node.getEllipseOpt ().isSet ();
+    }
+
+    // param-decl-1-body -> LPAREN VOID
+    void visit (ParamDeclBody4Node & node) const
+    {
+      // nothing to do 
+    }
+  }
+}
+
+// gram
+namespace gram
+{
+  // get node func param body
+  void getNodeFuncParamBody (basl::Nonterm & nonterm, smtc::ParamPtrVector & param_set, bool & vararg)
+  {
+    nonterm.accept (GetNodeFuncParamBody (param_set, vararg));
+  }
+}

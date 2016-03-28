@@ -1,0 +1,128 @@
+// gram_FileStat.lzz
+//
+
+namespace gram
+{
+  // NOTE (9/28/2008): added dtor to IfStat and FileStat as we've had
+  // problems building optimized version on Max OS X.  The dtor in
+  // FileStat seemed to fix the unresolved external.
+
+  // IfStat
+  struct IfStat
+  {
+    // location of #if, #ifdef or #ifndef
+    util::Loc loc;
+
+    // read stat
+    int rs;
+
+    // syntax stat
+    int ss;
+
+    // true if guard
+    bool guard;
+
+    // constructor
+    IfStat (util::Loc const & loc, int rs, int ss, bool guard)
+      : loc (loc), rs (rs), ss (ss), guard (guard)
+    {
+    }
+
+    // destructor
+    ~ IfStat ()
+    {
+    }
+  }
+
+  // FileStat
+  struct FileStat
+  {
+    // realname (needed for '#pragma once' and for checking include guard)
+    char const * realname;
+
+    // lexer
+    Lexer lexer;
+
+    // if stat stack
+    std::vector <IfStat> is_stack;
+
+    // macro in include guard
+    util::Ident guard_macro;
+
+    // file status
+    int status;
+
+    // true if #insert'ing file
+    bool insert;
+
+    // constructor
+    FileStat (util::Filename const & filename, bool insert)
+      : lexer (filename), realname (filename.getRealName ()), insert (insert), status (FILE_START)
+    {
+      // OK to use null location (only used if missing #endif, so in that case we'll always have pushed a location)
+      is_stack.push_back (IfStat (util::Loc (), ON_RS, NONE_SS, false));
+    }
+
+    // constructor with string and location instead of filename (for nested parsers)
+    FileStat (util::String const & str, util::Loc const & loc, bool insert)
+      : lexer (str, loc), realname (loc.getFilename ().getRealName ()), insert (insert), status (FILE_START)
+    {
+      // OK to use null location (only used if missing #endif, so in that case we'll always have pushed a location)
+      is_stack.push_back (IfStat (util::Loc (), ON_RS, NONE_SS, false));
+    }
+
+    // destructor
+    ~ FileStat ()
+    {
+    }
+  }
+
+  // file status constants
+  enum 
+  {
+    // start of file, no previous directives, no previous code
+    FILE_START,
+
+    // file body, somewhere in body of code
+    FILE_BODY,
+
+    // after end of guard macro, no code or directives after (FILE_END seems to be a macro in mingw g++ ...)
+    FILE_ENDX
+  }
+
+  // flags
+  enum
+  {
+    // read flags
+
+    // on 
+    ON_RS   = 1 << 0,
+
+    // off
+    OFF_RS  = 1 << 1,
+
+    // waiting
+    WAIT_RS = 1 << 2,
+
+    // syntax flags
+
+    // outside if
+    NONE_SS = 1 << 3,
+
+    // if part, may be followed by else
+    IF_SS   = 1 << 4, 
+
+    // else part, only endif may follow
+    ELSE_SS = 1 << 5 
+  }
+}
+
+#hdr
+#include "gram_Lexer.h"
+#include "util_Filename.h"
+#include "util_Ident.h"
+#include <vector>
+#end
+
+#src
+#end

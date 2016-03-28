@@ -1,0 +1,64 @@
+// smtc_FuncDefn.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CtorInitPtr.h"
+#include "smtc_FuncDecl.h"
+#include "smtc_TryBlockPtr.h"
+
+// gram
+#include "gram_Block.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // FuncDefn
+  class FuncDefn : public FuncDecl
+  {
+    // mbr init set
+    CtorInitPtr m_ctor_init;
+
+    // body
+    gram::Block m_body;
+
+    // try block (no try block if not set)
+    TryBlockPtr m_try_block;
+
+  public:
+    // constructor
+    inline FuncDefn (Linkage const & linkage, int flags, CvType const & ret_type, NamePtr const & name,
+        ParamPtrVector const & param_set, bool vararg, Cv const & cv, ThrowSpecPtr const & throw_spec,
+        CtorInitPtr const & ctor_init, gram::Block const & body, TryBlockPtr const & try_block)
+      : FuncDecl (linkage, flags, ret_type, name, param_set, vararg, cv, throw_spec), m_ctor_init (ctor_init), m_body (body), m_try_block (try_block)
+    {
+    }
+
+    // destructor
+    ~ FuncDefn ()
+    {
+    }
+
+    // get mbr init
+    inline CtorInitPtr const & getCtorInit () const
+    {
+      return m_ctor_init;
+    }
+
+    // get body
+    inline gram::Block const & getBody () const
+    {
+      return m_body;
+    }
+
+    // get try block
+    inline TryBlockPtr const & getTryBlock () const
+    {
+      return m_try_block;
+    }
+  }
+}

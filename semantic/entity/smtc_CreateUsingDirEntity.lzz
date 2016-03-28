@@ -1,0 +1,23 @@
+// smtc_CreateUsingDirEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EntityPtr.h"
+#include "smtc_UsingDirPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_UsingDirEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create using dir entity
+  EntityPtr createUsingDirEntity (UsingDirPtr const & using_dir)
+  {
+    return new UsingDirEntity (using_dir);
+  }
+}

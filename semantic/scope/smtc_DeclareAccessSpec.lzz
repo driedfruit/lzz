@@ -1,0 +1,52 @@
+// smtc_DeclareAccessSpec.lzz
+//
+// declare access spec
+//
+
+$hdr
+// semantic
+#include "smtc_Access.h"
+#include "smtc_ScopePtr.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+// semantic
+#include "smtc_ClassDefn.h"
+#include "smtc_ClassScope.h"
+#include "smtc_CreateAccessSpec.h"
+#include "smtc_CreateAccessSpecEntity.h"
+#include "smtc_ScopeVisitor.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // declare typdef
+  struct DeclareAccessSpec (util::Loc const & loc, Access access)
+    : ScopeVisitor
+  {
+    // class scope
+    void visit (ClassScope const & scope) const
+    {
+      // create acces spec and add to class
+      AccessSpecPtr access_spec = createAccessSpec (loc, access);
+      scope.getClassDefn ()->addEntity (createAccessSpecEntity (access_spec));
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // declare access spec
+  void declareAccessSpec (ScopePtr const & scope, util::Loc const & loc, Access access)
+  {
+    scope->accept (DeclareAccessSpec (loc, access));
+  }
+}

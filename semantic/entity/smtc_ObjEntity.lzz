@@ -1,0 +1,48 @@
+// smtc_ObjEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Entity.h"
+#include "smtc_ObjPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_EntityVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // ObjEntity
+  class ObjEntity : public Entity
+  {
+    // obj decl
+    ObjPtr m_obj;
+
+  public:
+    // constructor
+    ObjEntity (ObjPtr const & obj)
+      : m_obj (obj)
+    {
+    }
+
+    // destructor
+    ~ ObjEntity ()
+    {
+    }
+
+    // accept visitor
+    void accept (EntityVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get obj decl
+    inline ObjPtr const & getObj () const
+    {
+      return m_obj;
+    }
+  }
+}

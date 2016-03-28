@@ -1,0 +1,66 @@
+// smtc_CopyInit.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Init.h"
+
+// gram
+#include "gram_Block.h"
+$end
+
+$src
+// semantic
+#include "smtc_File.h"
+#include "smtc_PrintCode.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // CopyInit
+  class CopyInit : public Init
+  {
+    // init block
+    gram::Block m_block;
+
+  public:
+    // constructor
+    inline CopyInit (util::Loc const & loc, gram::Block const & block)
+      : Init (loc), m_block (block)
+    {
+    }
+
+    // destructor
+    ~ CopyInit ()
+    {
+    }
+
+    // true if copy init
+    bool isCopy () const
+    {
+      return true;
+    }
+
+    // get block
+    inline gram::Block const & getBlock () const
+    {
+      return m_block;
+    }
+
+    // to string (for lazy class init)
+    util::String toString () const
+    {
+      // a bit of a hack: block is used as a member init so OK to trim
+      m_block.trim ();
+      return m_block.toString ();
+    }
+
+    // print to file
+    void print (FilePtr const & file, SectionKind skind) const
+    {
+      file->getStream (skind) << '=';
+      printBlockAtLoc (file, skind, m_block);
+    }
+  }
+}

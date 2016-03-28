@@ -1,0 +1,23 @@
+// smtc_CreateObjEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EntityPtr.h"
+#include "smtc_ObjPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_ObjEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create obj entity
+  EntityPtr createObjEntity (ObjPtr const & obj)
+  {
+    return new ObjEntity (obj);
+  }
+}

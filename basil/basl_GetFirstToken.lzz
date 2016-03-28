@@ -1,0 +1,66 @@
+// basl_GetFirstToken.lzz
+//
+// get nonterminal first token and location of first token
+//
+
+$hdr
+// basil
+#include "basl_Nonterm.h"
+$end
+
+$src
+// std lib
+#include <algorithm>
+#include <deque>
+
+// basil
+#include "basl_Node.h"
+$end
+
+// basil
+namespace basl
+{
+  // get first token from nonterminal 
+  Token getFirstToken (Nonterm const & nonterm)
+  {
+    Token first_token;
+    typedef std::pair <Nonterm const *, int> ChildIter;
+    std::deque <ChildIter> stack;
+    stack.push_back (ChildIter (& nonterm, 1));
+    for (;;)
+    {
+      ChildIter & iter = stack.back ();
+      Nonterm const & nonterm = * iter.first;
+      if (iter.second > nonterm.getNumChild ())
+      {
+        stack.pop_back ();
+        if (stack.empty ())
+        {
+          break;
+        }
+      }
+      else
+      {
+        Node & node = nonterm.getChild (iter.second ++);
+        Token const & token = node.getToken ();
+        if (token.isSet ())
+        {
+          first_token = token;
+          break;
+        }
+        Nonterm const & nonterm = node.getNonterm ();
+        if (nonterm.isSet ())
+        {
+          stack.push_back (ChildIter (& nonterm, 1));
+        }
+      }
+    }
+    return first_token;
+  }
+
+  // get location of first token from nonterminal
+  inline util::Loc getFirstLoc (Nonterm const & nonterm)
+  {
+    return getFirstToken (nonterm).getLoc ();
+  }
+}

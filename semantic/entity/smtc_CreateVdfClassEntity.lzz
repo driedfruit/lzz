@@ -1,0 +1,23 @@
+// smtc_CreateVdfClassEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ClassDefnPtr.h"
+#include "smtc_EntityPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_VdfClassEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create nav class entity
+  EntityPtr createVdfClassEntity (ClassDefnPtr const & class_defn)
+  {
+    return new VdfClassEntity (class_defn);
+  }
+}

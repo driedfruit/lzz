@@ -1,0 +1,42 @@
+// util_GetTempDir.lzz
+//
+// return a temporary directory
+//
+
+#hdr
+// util
+#include "util_String.h"
+#end
+
+#src
+// std lib
+#include <assert.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#end
+
+// util
+namespace util
+{
+  // xmingw cannot compile this
+#ifndef WIN32
+  // get temp filename with prefix
+  // return true if successful
+  bool getTempDir (char const * prefix, util::String & dir)
+  {
+    enum { MAXLEN = 128 };
+    assert (strlen (prefix) < MAXLEN - 7);
+    char filename [MAXLEN];
+    sprintf (filename, "%sXXXXXX", prefix);
+
+    bool result = false;
+    if (mkdtemp (filename) != NULL)
+    {
+      dir = filename;
+      result = true;
+    }
+    return result;
+  }
+#endif
+}

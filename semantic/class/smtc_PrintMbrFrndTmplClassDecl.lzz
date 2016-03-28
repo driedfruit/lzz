@@ -1,0 +1,25 @@
+// smtc_PrintMbrFrndTmplClassDecl.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FilePtr.h"
+#include "smtc_TmplClassDeclPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_PrintTmplClassDecl.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // print mbr friend tmpl class decl
+  void printMbrFrndTmplClassDecl (FilePtr const & file, TmplClassDeclPtr const & tmpl_class_decl)
+  {
+    PrintTmplClassDecl printer;
+    printer.is_frnd = true;
+    printer.print (file, tmpl_class_decl);
+  }
+}

@@ -1,0 +1,24 @@
+// smtc_HandlerPtrVector.lzz
+//
+
+$hdr
+// std lib
+#include <vector>
+
+// semantic
+#include "smtc_HandlerPtr.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // HandlerPtrVector
+  typedef std::vector <HandlerPtr> HandlerPtrVector;
+  typedef std::vector <HandlerPtr>::iterator HandlerPtrVectorIter;
+  typedef std::vector <HandlerPtr>::const_iterator HandlerPtrVectorConstIter;
+  typedef std::vector <HandlerPtr>::reverse_iterator HandlerPtrVectorRevIter;
+  typedef std::vector <HandlerPtr>::const_reverse_iterator HandlerPtrVectorConstRevIter;
+}

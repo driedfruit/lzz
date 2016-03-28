@@ -1,0 +1,204 @@
+// gram_LineReader.lzz
+//
+
+$hdr
+// gram
+#include "gram_CharReader.h"
+$end
+
+$src
+// gram
+$end
+
+// gram
+namespace gram
+{
+  // using util
+  using namespace util;
+
+  // LineReader
+  class LineReader
+  {
+    // Char
+    struct Char
+    {
+      // char
+      char c;
+
+      // lines
+      int lines;
+
+      // columns
+      int cols;
+
+      // constructor
+      inline Char () {}
+
+      // constructor
+      inline Char (char c, int lines, int cols) : c (c), lines (lines), cols (cols) {}
+    }
+
+    // max peek
+    enum { MAX_PEEK = 16 }
+
+    // char reader
+    CharReader m_char_reader;
+
+    // peek buffer
+    Char m_peek_buf [MAX_PEEK];
+
+    // peek begin
+    int m_peek_beg;
+
+    // peek end
+    int m_peek_end;
+
+    // filename
+    util::Filename m_filename;
+
+    // next line
+    int m_line;
+
+    // next column
+    int m_column;
+
+    // true if last char read from char reader was newline
+    bool m_newline;
+
+  public:
+    // constructor
+    LineReader (util::Filename const & filename)
+      : m_char_reader (filename), m_peek_beg (0), m_peek_end (0),
+        m_filename (filename), m_line (1), m_column (1), m_newline (true)
+    {
+    }
+
+    // constructor
+    LineReader (util::String const & str, util::Loc const & loc)
+      : m_char_reader (str, loc), m_peek_beg (0), m_peek_end (0),
+        m_filename (loc.getFilename ()), m_line (loc.getLine ()), m_column (loc.getColumn ()), m_newline (true)
+    {
+    }
+
+    // peek n chars, return true if successful
+    bool peekChar (char & c, int n = 0)
+    {
+      int i = (m_peek_beg + n) % MAX_PEEK;
+      if (i == m_peek_end)
+      {
+        if (! readDirectChar (m_peek_buf [m_peek_end]))
+        {
+          return false;
+        }
+        m_peek_end = (m_peek_end + 1) % MAX_PEEK;
+      }
+      c = m_peek_buf [i].c; 
+      return true;
+    }
+
+    // read char, return true if successful
+    bool readChar (char & c)
+    {
+      // check in peek buffer first
+      Char ch;
+      if (m_peek_beg == m_peek_end)
+      {
+        if (! readDirectChar (ch))
+        {
+          return false;
+        }
+      }
+      else
+      {
+        ch = m_peek_buf [m_peek_beg];
+        m_peek_beg = (m_peek_beg + 1) % MAX_PEEK;
+      }
+      c = ch.c;
+      if (ch.lines > 0)
+      {
+        m_line += ch.lines;
+        m_column = 1;
+      }
+      else
+      {
+        m_column += ch.cols;
+      }
+      return true;
+    }
+
+    // get location of next character
+    util::Loc getLocation () const
+    {
+      return Loc (m_filename, m_line, m_column);
+    }
+
+    // get filename
+    inline util::Filename const & getFilename () const
+    {
+      return m_filename;
+    }
+
+    // set line
+    inline void setLine (int line)
+    {
+      m_line = line;
+    }
+
+    // set line and filename
+    inline void setLine (int line, util::Filename const & filename)
+    {
+      m_line = line;
+      m_filename = filename;
+    }
+
+    // pause
+    inline void pause ()
+    {
+      m_char_reader.pause ();
+    }
+
+  private:
+    // read direct char, return true if successful
+    bool readDirectChar (Char & ch)
+    {
+      char c;
+      int cols;
+      int lines = 0;
+      for (;;)
+      {
+        if (! m_char_reader.readChar (c, cols))
+        {
+          // want newline before end of file
+          if (m_newline)
+          {
+            return false;
+          }
+          c = '\n';
+        }
+        else
+        {
+          // check if backslash followed by newline
+          char c1;
+          if (c == '\\' && m_char_reader.peekChar (c1, 0) && c1 == '\n')
+          {
+            m_char_reader.readChar (c, cols);
+            ++ lines;
+            continue;
+          }
+        }
+        break;
+      }
+      if (c == '\n')
+      {
+        ++ lines;
+        m_newline = true;
+      }
+      else
+      {
+        m_newline = false;
+      }
+      ch = Char (c, lines, cols);
+      return true;
+    }
+  }
+}

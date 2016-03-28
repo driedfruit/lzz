@@ -1,0 +1,23 @@
+// smtc_CreateClassScope.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ClassDefnPtr.h"
+#include "smtc_ScopePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_ClassScope.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create class scope
+  ScopePtr createClassScope (ClassDefnPtr const & class_defn)
+  {
+    return new ClassScope (class_defn);
+  }
+}

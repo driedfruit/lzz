@@ -1,0 +1,59 @@
+// smtc_Init.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FilePtr.h"
+#include "smtc_SectionKind.h"
+
+// util
+#include "util_Loc.h"
+#include "util_String.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // Init
+  class Init
+  {
+    // loc
+    util::Loc m_loc;
+
+  public:
+    // constructor
+    inline Init (util::Loc const & loc)
+      : m_loc (loc)
+    {
+    }
+
+    // destructor
+    virtual ~ Init ()
+    {
+    }
+
+    // get loc
+    inline util::Loc const & getLoc () const
+    {
+      return m_loc;
+    }
+
+    // true if copy init
+    virtual bool isCopy () const = 0;
+
+    // true if direct
+    inline bool isDirect () const
+    {
+      return ! isCopy ();
+    }
+
+    // to string (for lazy class init)
+    virtual util::String toString () const = 0;
+
+    // print to file
+    virtual void print (FilePtr const & file, SectionKind skind) const = 0;
+  }
+}

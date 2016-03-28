@@ -1,0 +1,30 @@
+// smtc_PrintMbrObjDecl.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FilePtr.h"
+#include "smtc_ObjPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_IsObjStaticConstIntegral.h"
+#include "smtc_PrintObjDecl.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // print mbr obj decl
+  void printMbrObjDecl (FilePtr const & file, ObjPtr const & obj)
+  {
+    PrintObjDecl printer;
+    // print initializer if static const integral obj
+    if (isObjStaticConstIntegral (obj))
+    {
+      printer.with_init = true;
+    }
+    printer.print (file, DECLARATION_SECTION, obj);
+  }
+}

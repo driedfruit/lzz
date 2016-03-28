@@ -1,0 +1,38 @@
+// smtc_VdfClassEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ClassDefnEntity.h"
+$end
+
+$src
+// semantic
+#include "smtc_EntityVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // VdfClassEntity
+  class VdfClassEntity : public ClassDefnEntity
+  {
+  public:
+    // constructor
+    inline VdfClassEntity (ClassDefnPtr const & class_defn)
+      : ClassDefnEntity (class_defn)
+    {
+    }
+
+    // destructor
+    ~ VdfClassEntity ()
+    {
+    }
+
+    // accept visitor
+    void accept (EntityVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+  }
+}

@@ -1,0 +1,33 @@
+// smtc_Name.lzz
+//
+
+$hdr
+$end
+
+$src
+$end
+
+// smtc
+namespace smtc
+{
+  // types
+  class NameVisitor;
+
+  // Name
+  class Name
+  {
+  public:
+    // constructor
+    Name ()
+    {
+    }
+
+    // destructor
+    virtual ~ Name ()
+    {
+    }
+
+    // accept visitor
+    virtual void accept (NameVisitor const & visitor) const = 0;
+  }
+}

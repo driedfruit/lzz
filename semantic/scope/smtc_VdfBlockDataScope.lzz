@@ -1,0 +1,49 @@
+// smtc_VdfBlockDataScope.lzz
+//
+
+#hdr
+// semantic
+#include "smtc_Scope.h"
+#include "smtc_VdfDataFuncDefnPtr.h"
+
+#end
+
+#src
+// semantic
+#include "smtc_ScopeVisitor.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // VdfBlockDataScope
+  class VdfBlockDataScope : public Scope
+  {
+    // vdf data func defn
+    VdfDataFuncDefnPtr m_vdf_data_func_defn;
+
+  public:
+    // constructor
+    VdfBlockDataScope (VdfDataFuncDefnPtr const & vdf_data_func_defn)
+      : m_vdf_data_func_defn (vdf_data_func_defn)
+    {
+    }
+
+    // destructor
+    ~ VdfBlockDataScope ()
+    {
+    }
+
+    // accept visitor
+    void accept (ScopeVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get vdf data func defn
+    inline VdfDataFuncDefnPtr const & getVdfDataFuncDefn () const
+    {
+      return m_vdf_data_func_defn;
+    }
+  }
+}

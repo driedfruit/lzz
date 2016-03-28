@@ -1,0 +1,109 @@
+// smtc_DefineNs.lzz
+//
+// define namespace
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+#include "smtc_ScopePtr.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+// semantic
+#include "smtc_BaseName.h"
+#include "smtc_CreateNamedNs.h"
+#include "smtc_CreateNsEntity.h"
+#include "smtc_CreateNsScope.h"
+#include "smtc_CreateUnnamedNs.h"
+#include "smtc_GetNameLoc.h"
+#include "smtc_Message.h"
+#include "smtc_NameVisitor.h"
+#include "smtc_Ns.h"
+#include "smtc_NsScope.h"
+#include "smtc_QualName.h"
+#include "smtc_ScopeVisitor.h"
+#include "smtc_TmplName.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // check ns name
+  struct CheckNsName ()
+    : NameVisitor
+  {
+    // qual name
+    void visit (QualName const & name) const
+    {
+      NamePtr const & qual_name = name.getQualName ();
+      NamePtr const & unql_name = name.getUnqlName ();
+      if (! qual_name.isSet ())
+      {
+        msg::fileQualNs (getNameLoc (unql_name));
+      }
+      else
+      {
+        qual_name->accept (* this);
+      }
+      unql_name->accept (* this);
+    }
+
+    // tmpl name
+    void visit (TmplName const & name) const
+    {
+      msg::templateNs (name.getBaseName ()->getLoc ());
+    }
+  }
+
+  // define scope namespace
+  struct DefineNs (util::Loc const & loc, NamePtr const & name, ScopePtr & res_scope)
+    : ScopeVisitor 
+  {
+    // namespace scope
+    void visit (NsScope const & scope) const
+    {
+      NsPtr ns;
+      NsPtr const & encl_ns = scope.getNs ();
+      // check name
+      if (name.isSet ())
+      {
+        name->accept (CheckNsName ());
+        ns = createNamedNs (encl_ns.unref (), loc, name);
+      }
+      else
+      {
+        ns = createUnnamedNs (encl_ns.unref (), loc);
+      }
+      // create nested namespace and add to enclosing ns
+      encl_ns->addEntity (createNsEntity (ns));
+
+      // create ns scope
+      res_scope = createNsScope (ns);
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // define namespace in scope, return ns scope
+  ScopePtr defineNs (ScopePtr const & scope, util::Loc const & loc, NamePtr const & name)
+  {
+    ScopePtr res_scope;
+    scope->accept (DefineNs (loc, name, res_scope));
+    return res_scope;
+  }
+
+  // define unnamed namespace, return ns scope
+  ScopePtr defineUnnamedNs (ScopePtr const & scope, util::Loc const & loc)
+  {
+    return defineNs (scope, loc, NamePtr ());
+  }
+}

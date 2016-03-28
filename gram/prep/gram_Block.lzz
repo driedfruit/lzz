@@ -1,0 +1,110 @@
+// gram_Block.lzz
+//
+
+#hdr
+// gram
+#include "gram_BlockImplPtr.h"
+
+// util
+#include "util_String.h"
+#end
+
+#inl
+#include "gram_BlockImpl.h"
+#end
+
+#src
+#end
+
+namespace util
+{
+  // types
+  class Loc;
+}
+
+namespace gram
+{
+  // Block
+  class Block
+  {
+    BlockImplPtr impl;
+
+  public:
+    // default constructor
+    Block ()
+    {
+    }
+
+    // constructor
+    Block (BlockImplPtr const & impl)
+      : impl (impl)
+    {
+    }
+
+    // destructor
+    ~ Block ()
+    {
+    }
+
+    // true if set
+    inline bool isSet () const
+    {
+      return impl.isSet ();
+    }
+
+    // true if chararacter block
+    inline bool isCharBlock () const
+    {
+      return impl->isCharBlock ();
+    }
+
+    // true if token block
+    inline bool isTokenBlock () const
+    {
+      return impl->isTokenBlock ();
+    }
+
+    // set location (used to set location of left brace for correct indentation)
+    void setLoc (util::Loc const & loc)
+    {
+      impl->setLoc (loc);
+    }
+
+    // get location
+    inline util::Loc const & getLoc () const
+    {
+      return impl->getLoc ();
+    }
+
+    // trim string, if applicable
+    inline void trim () const
+    {
+      impl->trim ();
+    }
+
+    // true if empty (has only white space characters, if any)
+    inline bool isEmpty () const
+    {
+      return impl->isEmpty ();
+    }
+
+    // to string
+    inline util::String toString () const
+    {
+      return impl->toString ();
+    }
+
+  protected:
+    // get impl
+    BlockImplPtr const & getImpl () const
+    {
+      return impl;
+    }
+  }
+
+  // TrimBlock
+  inline void TrimBlock (; Block const & block) const
+  {
+    block.trim ();
+  }
+}

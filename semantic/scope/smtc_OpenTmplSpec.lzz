@@ -1,0 +1,28 @@
+// smtc_OpenTmplSpec.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ScopePtr.h"
+#include "smtc_ParamPtrVector.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+// semantic
+#include "smtc_CreateTmplSpec.h"
+#include "smtc_CreateTmplSpecScope.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // open template spec, return new scope
+  ScopePtr openTmplSpec (ScopePtr const & scope, util::Loc const & loc, ParamPtrVector const & param_set)
+  {
+    TmplSpecPtr tmpl_spec = createTmplSpec (loc, param_set);
+    return createTmplSpecScope (scope.unref (), tmpl_spec);
+  }
+}

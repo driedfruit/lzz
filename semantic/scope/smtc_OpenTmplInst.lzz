@@ -1,0 +1,22 @@
+// smtc_OpenTmplInst.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ScopePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_CreateTmplInstScope.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // open template spec, return new scope
+  ScopePtr openTmplInst (ScopePtr const & scope)
+  {
+    return createTmplInstScope (scope.unref ());
+  }
+}

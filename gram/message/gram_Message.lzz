@@ -1,0 +1,727 @@
+// gram_Message.lzz
+//
+
+#hdr
+// util
+#include "util_Ident.h"
+#include "util_Loc.h"
+#include "util_String.h"
+#end
+
+#src
+// message
+#include "msg_Message.h"
+#include "msg_Output.h"
+#end
+
+// gram
+namespace gram::msg
+{
+  // using ::msg
+  using namespace ::msg;
+
+  // -r syntax error in option
+  void recoverOptSyntaxError ()
+  {
+    static char const str [] = "Syntax error in -r option.";
+    print (Message (ERROR_MSG, str));
+  }
+
+  // -r not a token
+  void recoverOptNotAToken (util::String const & name)
+  {
+    static char const str [] = "'%1' is not a token in -r option.";
+    print (Message (ERROR_MSG, str) << name);
+  }
+
+  // -r not a command
+  void recoverOptNotACmd (util::String const & name)
+  {
+    static char const str [] = "'%1' is not a recover command in -r option.";
+    print (Message (ERROR_MSG, str) << name);
+  }
+
+  //
+  // file reader
+  //
+
+  // file open error
+  void fileOpenError (util::Loc const & loc, char const * filename)
+  {
+    static char const str [] = "Unable to open file '%1'.";
+    Message m (ERROR_MSG, str);
+    m << filename;
+    print (loc, m);
+  }
+
+  // file access error
+  void fileAccessError (util::Loc const & loc, char const * filename)
+  {
+    static char const str [] = "Error accessing file '%1'.";
+    Message m (ERROR_MSG, str);
+    m << filename;
+    print (loc, m);
+  }
+
+  //
+  // char reader
+  //
+  
+  // invalid universal char
+  void invalidUniversalChar (util::Loc const & loc)
+  {
+    static char const str [] = "Ill-formed universal character.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  //
+  // lexer
+  //
+
+  // invalid character
+  void invalidChar (util::Loc const & loc)
+  {
+    static char const str [] = "Invalid character.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // empty literal char
+  void emptyLiteralChar (util::Loc const & loc)
+  {
+    static char const str [] = "Literal character is empty.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // end of file in c comment
+  void eofInCComment (util::Loc const & loc)
+  {
+    static char const str [] = "Unexpected end of file inside c-style comment."; 
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+  
+  // missing exponent after 'e' or 'E'
+  void missingExponentInFloatingLiteral (util::Loc const & loc)
+  {
+    static char const str [] = "Missing exponent after 'e' or 'E' in floating literal; inserting '0'.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // missing hex digit after '0x'
+  void missingHexDigitsInIntLiteral (util::Loc const & loc)
+  {
+    static char const str [] = "Missing hex digits after '0x' in integer literal; inserting '0'.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // invalid int literal suffix, discarding characters
+  void invalidIntLiteralSuffix (util::Loc const & loc, char const * suffix, util::Ident const & lexeme)
+  {
+    static char const str [] = "Discarding invalid suffix '%1' after integer literal '%2'.";
+    Message m (ERROR_MSG, str);
+    print (loc, m << suffix << lexeme);
+  }
+
+  // unexpected characters after floating literal
+  void invalidFloatingLiteralSuffix (util::Loc const & loc, char const * suffix, util::Ident const & lexeme)
+  {
+    static char const str [] = "Discarding invalid suffix '%1' after floating literal '%2'.";
+    Message m (ERROR_MSG, str);
+    print (loc, m << suffix << lexeme);
+  }
+
+  // missing hex digit after '\x' in character escape
+  void missingHexDigitsInCharLiteral (util::Loc const & loc)
+  {
+    static char const str [] = "Missing hex digits after '\\x' in character literal.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // newline in literal char
+  void newlineInLiteralChar (util::Loc const & loc)
+  {
+    static char const str [] = "Newline in character literal.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // newline in literal string
+  void newlineInLiteralString (util::Loc const & loc)
+  {
+    static char const str [] = "Newline in string literal.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // end of file in block
+  void eofInCodeBlock (util::Loc const & loc)
+  {
+    static char const str [] = "Unexpected end of file inside code block.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // invalid escape sequence in literal char
+  void invalidEscInLiteralChar (util::Loc const & loc)
+  {
+    static char const str [] = "Invalid escape sequence.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // octal literal has digits beyond radix
+  void octalHasDigitsBeyondRadix (util::Loc const & loc, util::Ident const & lexeme)
+  {
+    static char const str [] = "Octal literal '%1' has digits beyond radix.";
+    Message m (ERROR_MSG, str);
+    m << lexeme;
+    print (loc, m);
+  }
+
+
+  //
+  // macro subsitution
+  //
+  
+  // '##' first or last token in macro replacement list
+  void dblHashFirstOrLastToken (util::Loc const & loc)
+  {
+    static char const str [] = "'##' is not between two tokens.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // '#' not preceding parameter
+  void hashNotPrecedingParam (util::Loc const & loc)
+  {
+    static char const str [] = "'#' does not precede a macro parameter.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+  
+  // incorrect number of args provided to function macro
+  void badMacroNumArg (util::Loc const & loc, util::Ident const & name, int num_provided, int num_required)
+  {
+    static char const str [] = "%2 argument(s) provided to function macro '%1', %3 required.";
+    Message m (ERROR_MSG, str);
+    m << name;
+    m << num_provided;
+    m << num_required;
+    print (loc, m);
+  }
+
+  // incorrect number of args provided to variadic function macro
+  void badVarMacroNumArg (util::Loc const & loc, util::Ident const & name, int num_provided, int num_required)
+  {
+    static char const str [] = "%2 argument(s) provided to variadic function macro '%1', at least %3 required.";
+    Message m (ERROR_MSG, str);
+    m << name;
+    m << num_provided;
+    m << num_required;
+    print (loc, m);
+  }
+
+  // cannot concat tokens
+  void cannotConcatTokens (util::Loc const & loc, util::Ident const & lexeme1, util::Ident const & lexeme2, util::Loc const & prev_loc)
+  {
+    {
+      static char const str [] = "Tokens '%1' and '%2' do not form a valid token when concatenated.";
+      Message m (WARNING_MSG, str);
+      m << lexeme1;
+      m << lexeme2;
+      print (loc, m);
+    }
+    {
+      static char const str [] = "Concatenation performed here.";
+      Message m (WARNING_MSG, str);
+      print (prev_loc, m);
+    }
+  }
+
+  // function macro arg empty
+  void funcMacroArgEmpty (util::Loc const & loc)
+  {
+    static char const str [] = "Function macro argument is empty.";
+    Message m (WARNING_MSG, str);
+    print (loc, m);
+  }
+
+  // 'defined' generated in #if macro subsitution
+  void definedInIfMacro (util::Loc const & sub_loc, util::Loc const & def_loc)
+  {
+    {
+      static char const str [] = "'defined' generated during macro substitution of #if line.";
+      Message m (WARNING_MSG, str);
+      print (sub_loc, m);
+    }
+    {
+      static char const str [] = "'defined' token is here.";
+      Message m (WARNING_MSG, str);
+      print (def_loc, m);
+    }
+  }
+
+  // end of file macro arg list
+  void eofInMacroArgList (util::Loc const & loc)
+  {
+    static char const str [] = "Unexpected end of file inside function macro argument list.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  //
+  // #if constant expression
+  //
+
+  // divide by zero in #if or #elif
+  void hashIfDivideByZero (util::Loc const & loc, util::Ident const & dir_name)
+  {
+    static char const str [] = "0 divisor in #%1 expression.";
+    Message m (ERROR_MSG, str);
+    m << dir_name;
+    print (loc, m);
+  }
+
+  // missing right paren following 'defined (<ident>' (in #if)
+  void missingHashIfDefinedRightParen (util::Loc const & loc, util::Ident const & dir_name)
+  {
+    static char const str [] = "Missing ')' after 'defined (IDENT' in #%1 expression.";
+    Message m (WARNING_MSG, str);
+    m << dir_name;
+    print (loc, m);
+  }
+
+  // missing identifier following 'defined' (in #if)
+  void missingHashIfDefinedIdent (util::Loc const & loc, util::Ident const & dir_name)
+  {
+    static char const str [] = "Missing 'defined' identifier in #%1 expression.";
+    Message m (ERROR_MSG, str);
+    m << dir_name;
+    print (loc, m);
+  }
+
+  // syntax error in #if or #elif
+  void hashIfSyntaxErrorBeforeToken (util::Loc const & loc, util::Ident const & dir_name, util::Ident const & lexeme)
+  {
+    static char const str [] = "Syntax error before '%2' in #%1 expression.";
+    Message m (ERROR_MSG, str);
+    m << dir_name;
+    m << lexeme;
+    print (loc, m);
+  }
+
+  // syntax error in #if or #elif at end of line
+  void hashIfSyntaxErrorAtEol (util::Loc const & loc, util::Ident const & dir_name)
+  {
+    static char const str [] = "Syntax error at end of line in #%1 expression.";
+    Message m (ERROR_MSG, str);
+    m << dir_name;
+    print (loc, m);
+  }
+
+  //
+  // #define line
+  //
+  
+  // syntax error in macro param list
+  void macroParamListSyntaxErrorBeforeToken (util::Loc const & loc, util::Ident const & lexeme)
+  {
+    static char const str [] = "Syntax error before '%1' in macro parameter list.";
+    Message m (ERROR_MSG, str);
+    m << lexeme;
+    print (loc, m);
+  }
+
+  // syntax error in macro param list
+  void macroParamListSyntaxErrorAtEol (util::Loc const & loc)
+  {
+    static char const str [] = "Syntax error at end of line in macro parameter list.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // duplicate macro param
+  void duplicateMacroParam (util::Loc const & loc, util::Ident const & name)
+  {
+    static char const str [] = "'%1' is already used as a macro parameter name.";
+    print (loc, Message (ERROR_MSG, str) << name);
+  }
+
+  // explicit use of __VA_ARGS__ in macro param list
+  void explicitVaArgsMacroParam (util::Loc const & loc)
+  {
+    static char const str [] = "'__VA_ARGS__' cannot be an explicit function macro parameter name.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // __VA_ARGS__ used in replacement set of macro with named var arg param
+  void vaArgsUsedWithNamedVarArg (util::Loc const & loc)
+  {
+    static char const str [] = "'__VA_ARGS__' used in replacement set of function macro with named variable parameter.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // __VA_ARGS__ used in replacement set of non variadic function macro
+  void vaArgsUsedInNonVarMacro (util::Loc const & loc)
+  {
+    static char const str [] = "'__VA_ARGS__' used in replacement set of non-variadic function macro.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  //
+  // preprocessor
+  //
+
+  // #elif without preceding #if
+  void elifWithoutIf (util::Loc const & loc)
+  {
+    static char const str [] = "#elif directive without preceding #if.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // #else without preceding #if
+  void elseWithoutIf (util::Loc const & loc)
+  {
+    static char const str [] = "#else directive without preceding #if.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // #endif without preceding #if
+  void endifWithoutIf (util::Loc const & loc)
+  {
+    static char const str [] = "#endif directive without preceding #if.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // missing #include or #insert filename
+  void missingHashIncludeFilename (util::Loc const & loc, util::Ident const & dir_name)
+  {
+    static char const str [] = "Missing filename after #%1 directive.";
+    Message m (ERROR_MSG, str);
+    m << dir_name;
+    print (loc, m);
+  }
+
+  // missing #include or #insert filename after macro substitution 
+  void missingHashIncludeFilenameAfterMacroSub (util::Loc const & loc, util::Ident const & dir_name)
+  {
+    static char const str [] = "No filename remains following macro substitution after #%1 directive.";
+    Message m (ERROR_MSG, str);
+    m << dir_name;
+    print (loc, m);
+  }
+
+  // invalid #include (or #insert) filename
+  void invalidIncludeFilenameAfterMacroSub (util::Loc const & loc, util::Ident const & dir_name)
+  {
+    static char const str [] = "Invalid filename remains following macro substitution after #%1 directive.";
+    Message m (ERROR_MSG, str);
+    m << dir_name;
+    print (loc, m);
+  }
+
+  // extra tokens following directive
+  void extraTokensFollowingDir (util::Loc const & loc, util::Ident const & dir_name)
+  {
+    static char const str [] = "Extra tokens following #%1 directive.";
+    Message m (WARNING_MSG, str);
+    m << dir_name;
+    print (loc, m);
+  }
+
+  // missing #if or #elif tokens (before macro substitution)
+  void missingHashIfTokens (util::Loc const & loc, util::Ident const & dir_name)
+  {
+    static char const str [] = "Missing expression after #%1 directive";
+    Message m (ERROR_MSG, str);
+    m << dir_name;
+    print (loc, m);
+  }
+  
+  // missing #if or #elif tokens after macro substitution
+  void missingHashIfTokensAfterMacroSub (util::Loc const & loc, util::Ident const & dir_name)
+  {
+    static char const str [] = "No expression remains following macro substitution after #%1 directive";
+    Message m (ERROR_MSG, str);
+    m << dir_name;
+    print (loc, m);
+  }
+
+  // missing macro name after #define, #undef or #ifdef 
+  void missingMacroIdent (util::Loc const & loc, util::Ident const & dir_name)
+  {
+    static char const str [] = "Missing identifier after #%1 directive";
+    Message m (ERROR_MSG, str);
+    m << dir_name;
+    print (loc, m);
+  }
+
+  // invalid macro name after #define, #undef or #ifdef 
+  void invalidMacroIdent (util::Loc const & loc, util::Ident const & dir_name)
+  {
+    static char const str [] = "Invalid macro name after #%1 directive";
+    Message m (ERROR_MSG, str);
+    m << dir_name;
+    print (loc, m);
+  }
+
+  // missing #line tokens (before macro substitution)
+  void missingHashLineTokens (util::Loc const & loc)
+  {
+    static char const str [] = "Missing tokens after #line directive";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+  
+  // missing #line tokens after macro substitution
+  void missingHashLineTokensAfterMacroSub (util::Loc const & loc)
+  {
+    static char const str [] = "No tokens remain following macro substitution after #line directive";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // invalid #line 
+  void invalidHashLine (util::Loc const & loc)
+  {
+    static char const str [] = "Expecting line number and optionally filename following macro substitution after #line directive";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // end of file in file block (#<ext> ... #end)
+  void eofInFileBlock (util::Loc const & loc)
+  {
+    static char const str [] = "Missing #end in file block.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // missing #endif
+  void missingEndif (util::Loc const & loc)
+  {
+    static char const str [] = "Missing #endif.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // invalid directive
+  void invalidDir (util::Loc const & loc)
+  {
+    static char const str [] = "Directive is not an identifier.";
+    Message m (ERROR_MSG, str);
+    print (loc, m);
+  }
+
+  // unknown directive
+  void unknownDir (util::Loc const & loc, util::Ident const & dir_name)
+  {
+    static char const str [] = "'%1' is not a legal directive.";
+    Message m (ERROR_MSG, str);
+    m << dir_name;
+    print (loc, m);
+  }
+
+  // directive not valid in this context (in real mode)
+  void dirInInvalidContext (util::Loc const & loc, util::Ident const & dir_name)
+  {
+    static char const str [] = "'#%1' is not valid in this context.";
+    Message m (ERROR_MSG, str);
+    m << dir_name;
+    print (loc, m);
+  }
+
+  // macro redefined
+  void macroRedefined (util::Loc const & loc, util::Ident const & dir_name, util::Loc const & prev_loc)
+  {
+    {
+      static char const str [] = "Macro '%1' is redefined.";
+      Message m (WARNING_MSG, str);
+      m << dir_name;
+      print (loc, m);
+    }
+    {
+      static char const str [] = "'%1' was previously defined here.";
+      Message m (WARNING_MSG, str);
+      m << dir_name;
+      print (prev_loc, m);
+    }
+  }
+
+  // #include or #insert file not found 
+  void hashIncludeFileNotFound (util::Loc const & loc, util::Ident const & dir_name, util::String const & name, bool is_sys = false)
+  {
+    static char const usr_str [] = "#%1 file \"%2\" not found.";
+    static char const sys_str [] = "#%1 file <%2> not found.";
+    if (is_sys)
+    {
+      print (loc, Message (ERROR_MSG, sys_str) << dir_name << name); 
+    }
+    else
+    {
+      print (loc, Message (ERROR_MSG, usr_str) << dir_name << name); 
+    }
+  }
+
+  // #error line
+  void hashError (util::Loc const & loc, util::String const & error_str)
+  {
+    static char const str [] = "#error: %1";
+    Message m (ERROR_MSG, str);
+    m << error_str;
+    print (loc, m);
+  }
+
+  // #warning line
+  void hashWarning (util::Loc const & loc, util::String const & warning_str)
+  {
+    static char const str [] = "#warning: %1";
+    Message m (WARNING_MSG, str);
+    m << warning_str;
+    print (loc, m);
+  }
+
+  // #include (and #insert) disabled in cgi version
+  void hashIncludeDisabled (util::Loc const & loc)
+  {
+    static char const str [] = "#include and #insert directives are disabled.";
+    Message m (WARNING_MSG, str);
+    print (loc, m);
+  }
+
+  // pragma
+
+  // invalid pragma inl (or tnl or tpl) flag
+  void invalidPragmaInlFlag (util::Loc const & loc, util::Ident const & file_dir, util::Ident const & flag)
+  {
+    static char const str [] = "'%1' is not a valid flag for '%2' #pragma.  Expecting 'on' or 'off' (or 'yes' or 'no').";
+    print (loc, Message (ERROR_MSG, str) << flag << file_dir);
+  }
+
+  // invalid pragma
+  void invalidPragma (util::Loc const & loc, util::Ident const & name)
+  {
+    static char const str [] = "'%1' is not a valid lzz #pragma.";
+    print (loc, Message (ERROR_MSG, str) << name);
+  }
+
+  // missing pragma name
+  void missingPragmaName (util::Loc const & loc)
+  {
+    static char const str [] = "Missing name after lzz #pragma.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // invalid pragma flag
+  void invalidPragmaFlag (util::Loc const & loc)
+  {
+    static char const str [] = "Expecting 'on' or 'off' (or 'yes' or 'no').";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  //
+  // parser
+  //
+
+  // enum declaration
+  void enumDecl (util::Loc const & loc)
+  {
+    static char const str [] = "An enum must be defined at its declaration.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // typename declaration
+  void typenameDecl (util::Loc const & loc)
+  {
+    static char const str [] = "'typename' can not be used to declare a type.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // friend enum declaration
+  void friendEnumDecl (util::Loc const & loc)
+  {
+    static char const str [] = "An enum cannot be declared as a friend.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // friend typename declaration
+  void friendTypenameDecl (util::Loc const & loc)
+  {
+    static char const str [] = "'typename' can not be used to declare a friend type.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+  
+  // missing try
+  void missingTry (util::Loc const & loc)
+  {
+    static char const str [] = "Missing 'try' before function definition.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+  
+  // missing handler seq
+  void missingHandlerSeq (util::Loc const & loc)
+  {
+    static char const str [] = "Missing try block handler sequence after function definition.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // typedef function definition
+  void typedefFuncDefn (util::Loc const & loc)
+  {
+    static char const str [] = "'typedef' cannot be used with a function definition.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // duplicate specifier
+  void duplicateSpecifier (util::Loc const & loc, char const * spec)
+  {
+    static char const str [] = "Duplicate declaration specifier: '%1'.";
+    print (loc, Message (ERROR_MSG, str) << spec);
+  }
+
+  // conflicting specifier
+  void conflictingSpecifier (util::Loc const & loc, char const * spec1, char const * spec2)
+  {
+    static char const str [] = "Conflicting declaration specifiers: '%1' and '%2'.";
+    print (loc, Message (ERROR_MSG, str) << spec1 << spec2);
+  }
+
+  // qualified bitfield
+  void qualBitfield (util::Loc const & loc)
+  {
+    static char const str [] = "A bitfield name cannot be qualified.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // bitfield typedef
+  void bitfieldTdef (util::Loc const & loc)
+  {
+    static char const str [] = "A bitfield name cannot be a typedef.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // prl extensions
+
+  // vdf typedef
+  void vdfTypedef (util::Loc const & loc)
+  {
+    static char const str [] = "'typedef' ignored in VDF definition.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+
+  // vdf friend
+  void vdfFriend (util::Loc const & loc)
+  {
+    static char const str [] = "'friend' ignored in VDF definition.";
+    print (loc, Message (ERROR_MSG, str));
+  }
+}

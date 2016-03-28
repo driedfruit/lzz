@@ -1,0 +1,69 @@
+// smtc_Handler.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ParamPtr.h"
+
+// gram
+#include "gram_Block.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // Handler
+  class Handler
+  {
+    // loc
+    util::Loc m_loc;
+
+    // catch decl, ellipse if not set
+    ParamPtr m_catch_decl;
+
+    // body
+    gram::Block m_body;
+
+  public:
+    // constructor
+    Handler (util::Loc const & loc, ParamPtr const & catch_decl, gram::Block const & body)
+      : m_loc (loc), m_catch_decl (catch_decl), m_body (body)
+    {
+    }
+
+    //
+    ~ Handler ()
+    {
+    }
+
+    // get loc
+    inline util::Loc const & getLoc () const
+    {
+      return m_loc;
+    }
+
+    // true if has catch decl (otherwise ellipse)
+    inline bool hasCatchParam () const
+    {
+      return m_catch_decl.isSet ();
+    }
+
+    // get catch decl
+    inline ParamPtr const & getCatchParam () const
+    {
+      return m_catch_decl;
+    }
+
+    // get body
+    inline gram::Block const & getBody () const
+    {
+      return m_body;
+    }
+  }
+}

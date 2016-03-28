@@ -1,0 +1,93 @@
+// gram_GetIdent.lzz
+//
+// get unique identifier
+//
+
+$hdr
+// util
+#include "util_Ident.h"
+#include "util_String.h"
+$end
+
+$inl
+// gram
+#include "util_GetIdent.h"
+$end
+
+$src
+// gram
+#include "util_GetIdent.h"
+$end
+
+// gram
+namespace gram
+{
+  // get ident
+  inline util::Ident getIdent (char const * str)
+  {
+    return util::getIdent (str);
+  }
+
+  // get ident from string
+  inline util::Ident getIdent (util::String const & str)
+  {
+    return util::getIdent (str.c_str ());
+  }
+
+  // get single letter ident
+  inline util::Ident getIdent (char ch)
+  {
+    return util::getIdent (ch);
+  }
+
+  // grammar global identifiers
+
+  // defined
+  extern util::Ident const defined_ident = util::getIdent ("defined");
+
+  // preprocessor directives
+  extern util::Ident const define_ident = util::getIdent ("define");
+  extern util::Ident const include_ident = util::getIdent ("include");
+  extern util::Ident const insert_ident = util::getIdent ("insert");
+  extern util::Ident const if_ident = util::getIdent ("if");
+  extern util::Ident const ifdef_ident = util::getIdent ("ifdef");
+  extern util::Ident const ifndef_ident = util::getIdent ("ifndef");
+  extern util::Ident const elif_ident = util::getIdent ("elif");
+  extern util::Ident const else_ident = util::getIdent ("else");
+  extern util::Ident const endif_ident = util::getIdent ("endif");
+  extern util::Ident const line_ident = util::getIdent ("line");
+  extern util::Ident const undef_ident = util::getIdent ("undef");
+  extern util::Ident const error_ident = util::getIdent ("error");
+  extern util::Ident const pragma_ident = util::getIdent ("pragma");
+
+  // hdr, inl ..
+  extern util::Ident const hdr_ident = util::getIdent ("hdr");
+  extern util::Ident const src_ident = util::getIdent ("src");
+  extern util::Ident const inl_ident = util::getIdent ("inl");
+  extern util::Ident const tpl_ident = util::getIdent ("tpl");
+  extern util::Ident const tnl_ident = util::getIdent ("tnl");
+  extern util::Ident const header_ident = util::getIdent ("header");
+  extern util::Ident const source_ident = util::getIdent ("source");
+  extern util::Ident const inline_ident = util::getIdent ("inline");
+  extern util::Ident const template_ident = util::getIdent ("template");
+  extern util::Ident const template_inline_ident = util::getIdent ("template_inline");
+  // old pragma directives
+  extern util::Ident const use_ident = util::getIdent ("use");
+
+  // for #if expr
+  extern util::Ident const true_ident = util::getIdent ("true");
+  extern util::Ident const end_of_line_ident = util::getIdent ("<end of line>");
+
+  // for pragma
+  extern util::Ident const lzz_ident = util::getIdent ("lzz");
+  extern util::Ident const yes_ident = util::getIdent ("yes");
+  extern util::Ident const no_ident = util::getIdent ("no");
+  extern util::Ident const on_ident = util::getIdent ("on");
+  extern util::Ident const off_ident = util::getIdent ("off");
+  extern util::Ident const once_ident = util::getIdent ("once");
+  extern util::Ident const tplsrc_ident = util::getIdent ("tplsrc");
+  extern util::Ident const prep_block_ident = util::getIdent ("preprocess_block");
+
+  // __VA_ARGS__
+  extern util::Ident const va_args_ident = util::getIdent ("__VA_ARGS__");
+}

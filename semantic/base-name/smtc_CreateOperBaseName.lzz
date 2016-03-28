@@ -1,0 +1,33 @@
+// smtc_CreateOperBaseName.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_BaseNamePtr.h"
+#include "smtc_OperKind.h"
+
+// util
+#include "util_Loc.h"
+#include "util_Ident.h"
+$end
+
+$src
+// semantic
+#include "smtc_OperBaseName.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create oper base name
+  BaseNamePtr createOperBaseName (util::Loc const & loc, OperKind oper_kind)
+  {
+    return createOperBaseName (loc, util::Ident (), oper_kind); 
+  }
+
+  // create oper base name
+  BaseNamePtr createOperBaseName (util::Loc const & loc, util::Ident const & macro, OperKind oper_kind)
+  {
+    return new OperBaseName (loc, macro, oper_kind);
+  }
+}

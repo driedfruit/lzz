@@ -1,0 +1,28 @@
+// basl_TokenFlags.lzz
+//
+
+$hdr
+$end
+
+$src
+$end
+
+// basl
+namespace basl
+{
+  // token flags
+  enum
+  {
+    // token is set
+    IS_SET_TOKEN = 1 << 0,
+
+    // token (identifer) is a recursivly substituted macro
+    REC_SUB_MACRO_TOKEN = 1 << 1,
+
+    // space before macro
+    SPACE_BEFORE_TOKEN = 1 << 2,
+
+    // token is from macro
+    FROM_MACRO_TOKEN = 1 << 3,
+  }
+}

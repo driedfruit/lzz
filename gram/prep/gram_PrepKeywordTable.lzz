@@ -1,0 +1,88 @@
+// gram_PrepKeywordTable.lzz
+//
+
+$hdr
+// util
+#include "util_Ident.h"
+$end
+
+$src
+// gram
+#include "gram_TokenNumber.h"
+
+// util
+#include "util_GetIdent.h"
+#include "util_IntDataTable.h"
+$end
+
+// private namespace
+namespace
+{
+  // using gram
+  using namespace gram;
+
+  // PrepKeywordTable
+  struct PrepKeywordTable
+  {
+    // data table
+    util::IntDataTable data_table;
+    
+    // constructor
+    PrepKeywordTable ()
+    {
+      // populate database
+      struct
+      {
+        char const * name;
+        int kind;
+      }
+      database [] =
+      {
+        // allow new and delete to be used as identifiers  
+        /*
+        { "new",              NEW },
+        { "delete",           DELETE },
+        */
+        { "and",              AND_TOKEN },
+        { "bitor",            BITOR_TOKEN },
+        { "or",               OR_TOKEN },
+        { "xor",              XOR_TOKEN },
+        { "compl",            BITNOT_TOKEN },
+        { "bitand",           BITAND_TOKEN },
+        { "not",              NOT_TOKEN },
+        { "not_eq",           NOTEQ_TOKEN },
+        { "and_eq",           BITAND_ASSIGN_TOKEN },
+        { "or_eq",            BITOR_ASSIGN_TOKEN },
+        { "xor_eq",           XOR_ASSIGN_TOKEN },
+      };
+      for (int i = 0; i < sizeof (database) / sizeof (database [0]); ++ i)
+      {
+        data_table.addData (util::getIdent (database [i].name).getHandle (), database [i].kind);
+      }
+    }
+
+    // true if name is keyword
+    bool isKeyword (util::Ident const & name, int & kind)
+    {
+      bool result = false;
+      util::IntDataTableFindResult find_result = data_table.findData (name.getHandle ());
+      if (find_result.hasData ())
+      {
+        kind = find_result.getData ();
+        result = true;
+      }
+      return result;
+    }
+  }
+}
+
+// gram
+namespace gram
+{
+  // true if prep keyword
+  bool isPrepKeyword (util::Ident const & name, int & kind)
+  {
+    static PrepKeywordTable table;
+    return table.isKeyword (name, kind);
+  }
+}

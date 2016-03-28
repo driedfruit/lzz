@@ -1,0 +1,29 @@
+// smtc_GetTypeParam.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CvType.h"
+#include "smtc_NamePtr.h"
+#include "smtc_ParamPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_CheckParamName.h"
+#include "smtc_CreateTypeParam.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // get type param
+  ParamPtr getTypeParam (NamePtr const & name, CvType const & def_type)
+  {
+    // check name
+    checkParamName (name);
+    
+    // create type param
+    return createTypeParam (name, def_type);
+  }
+}

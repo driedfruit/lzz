@@ -1,0 +1,37 @@
+// util_GetIdent.lzz
+//
+// get unique identifier from char const *
+//
+
+$hdr
+#include "util_Ident.h"
+#include "util_String.h"
+$end
+
+$src
+#include "util_GetIdentTable.h"
+$end
+
+// util
+namespace util
+{
+  // get ident
+  util::Ident getIdent (char const * str)
+  {
+    return getIdentTable ().getIdent (str);
+  }
+
+  // get ident from string
+  inline util::Ident getIdent (util::String const & str)
+  {
+    return getIdent (str.c_str ());
+  }
+
+  // get single letter ident
+  util::Ident getIdent (char ch)
+  {
+    IdentTable & ident_table = getIdentTable ();
+    ident_table.push (ch);
+    return ident_table.getIdent ();
+  }
+}

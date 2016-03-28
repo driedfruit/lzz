@@ -1,0 +1,39 @@
+// smtc_TmplClassDefn.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ClassDefnPtr.h"
+#include "smtc_TmplClassDecl.h"
+#include "smtc_TmplSpecPtrVector.h"
+$end
+
+$src
+// semantic
+$end
+
+// semantic
+namespace smtc
+{
+  // TmplClassDefn
+  class TmplClassDefn : public TmplClassDecl
+  {
+  public:
+    // constructor
+    inline TmplClassDefn (TmplSpecPtrVector const & tmpl_spec_set, ClassDefnPtr const & class_defn)
+      : TmplClassDecl (tmpl_spec_set, class_defn)
+    {
+    }
+
+    // destructor
+    ~ TmplClassDefn ()
+    {
+    }
+
+    // get class defn
+    inline ClassDefnPtr getClassDefn () const
+    {
+      return getClassDecl ();
+    }
+  }
+}

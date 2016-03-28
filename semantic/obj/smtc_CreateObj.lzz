@@ -1,0 +1,34 @@
+// smtc_CreateObj.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_InitPtr.h"
+#include "smtc_NamePtr.h"
+#include "smtc_ObjPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_Obj.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class Linkage;
+  class CvType;
+
+  // create obj
+  ObjPtr createObj (int flags, CvType const & cv_type, NamePtr const & name, InitPtr const & init)
+  {
+    return new Obj (Linkage (), flags, cv_type, name, init);
+  }
+
+  // create obj with linkage
+  ObjPtr createObj (Linkage const & linkage, int flags, CvType const & cv_type, NamePtr const & name, InitPtr const & init)
+  {
+    return new Obj (linkage, flags, cv_type, name, init);
+  }
+}

@@ -1,0 +1,67 @@
+// gram_FuncMacro.lzz
+//
+// function macro
+//
+
+$hdr
+// gram
+#include "gram_RepMacro.h"
+
+// util
+#include "util_IdentVector.h"
+$end
+
+$src
+// gram
+$end
+
+// gram
+namespace gram
+{
+  // FuncMacro
+  class FuncMacro : public RepMacro
+  {
+    // param set
+    util::IdentVector m_param_set;
+
+    // true if macro can take variable number of args
+    bool m_var;
+
+  public:
+    // constructor
+    FuncMacro (util::Loc const & loc, util::Ident const & name, util::IdentVector const & param_set, bool var,
+        basl::TokenVector const & rep_set)
+      : RepMacro (loc, name, rep_set), m_param_set (param_set), m_var (var)
+    {
+    }
+
+    // destructor
+    ~ FuncMacro ()
+    {
+    }
+
+    // get kind
+    MacroKind getKind () const
+    {
+      return FUNC_MACRO;
+    }
+
+    // true if can take var args
+    inline bool hasVarArgs () const
+    {
+      return m_var;
+    }
+
+    // get number of params
+    inline int getNumParams () const
+    {
+      return m_param_set.size ();
+    }
+
+    // get param set
+    inline util::IdentVector const & getParamSet () const
+    {
+      return m_param_set;
+    }
+  }
+}

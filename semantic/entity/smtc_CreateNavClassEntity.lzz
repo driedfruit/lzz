@@ -1,0 +1,23 @@
+// smtc_CreateNavClassEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EntityPtr.h"
+#include "smtc_NavClassPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_NavClassEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create nav class entity
+  EntityPtr createNavClassEntity (NavClassPtr const & nav_class)
+  {
+    return new NavClassEntity (nav_class);
+  }
+}

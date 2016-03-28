@@ -1,0 +1,65 @@
+// smtc_NsVisitor.lzz
+//
+
+#hdr
+#end
+
+#src
+// semantic
+#include "smtc_LinkageNs.h"
+#include "smtc_NamedNs.h"
+#include "smtc_UnnamedNs.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // types
+  class GlobalNs;
+  class LinkageNs;
+  class NamedNs;
+  class NestedNs;
+  class UnnamedNs;
+
+  // NsVisitor
+  struct NsVisitor
+  {
+    // constructor
+    inline NsVisitor ()
+    {
+    }
+
+    // destructor
+    inline ~ NsVisitor ()
+    {
+    }
+
+    // global
+    virtual void visit (GlobalNs const & ns) const
+    {
+    }
+
+    // nested
+    virtual void visit (NestedNs const & ns) const
+    {
+    }
+
+    // named
+    virtual void visit (NamedNs const & ns) const
+    {
+      visit (static_cast <NestedNs const &> (ns));
+    }
+
+    // unnamed
+    virtual void visit (UnnamedNs const & ns) const
+    {
+      visit (static_cast <NestedNs const &> (ns));
+    }
+
+    // linkage
+    virtual void visit (LinkageNs const & ns) const
+    {
+      visit (static_cast <NestedNs const &> (ns));
+    }
+  }
+}

@@ -1,0 +1,47 @@
+// smtc_UnqlName.lzz
+//
+
+$hdr
+#include "smtc_BaseNamePtr.h"
+#include "smtc_Name.h"
+#include "util_Loc.h"
+$end
+
+$src
+#include "smtc_BaseName.h"
+$end
+
+// smtc
+namespace smtc
+{
+  // UnqlName
+  class UnqlName : public Name
+  {
+    // base name
+    BaseNamePtr m_base_name;
+
+  public:
+    // constructor
+    UnqlName (BaseNamePtr const & base_name)
+      : m_base_name (base_name)
+    {
+    }
+
+    // destructor
+    ~ UnqlName ()
+    {
+    }
+
+    // get loc
+    util::Loc const & getLoc () const
+    {
+      return m_base_name->getLoc ();
+    }
+
+    // get base name
+    inline BaseNamePtr const & getBaseName () const
+    {
+      return m_base_name;
+    }
+  }
+}

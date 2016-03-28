@@ -1,0 +1,65 @@
+// smtc_Tdef.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CvType.h"
+#include "smtc_Linkage.h"
+#include "smtc_NamePtr.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // Tdef
+  class Tdef
+  {
+    // linkage (possible only for ns declarations)
+    Linkage m_linkage;
+
+    // type
+    CvType m_cv_type;
+
+    // name
+    NamePtr m_name;
+
+  public:
+    // constructor
+    Tdef (Linkage const & linkage, CvType const & cv_type, NamePtr const & name)
+      : m_linkage (linkage), m_cv_type (cv_type), m_name (name)
+    {
+    }
+
+    // destructor
+    ~ Tdef ()
+    {
+    }
+
+    // true if has linkage
+    inline bool hasLinkage () const
+    {
+      return m_linkage.isSet ();
+    }
+
+    // get linkage
+    inline Linkage const & getLinkage () const
+    {
+      return m_linkage;
+    }
+
+    // get cv type
+    inline CvType const & getCvType () const
+    {
+      return m_cv_type;
+    }
+
+    // get name
+    inline NamePtr const & getName () const
+    {
+      return m_name;
+    }
+  }
+}

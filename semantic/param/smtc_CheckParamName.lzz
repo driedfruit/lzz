@@ -1,0 +1,29 @@
+// smtc_CheckParamName.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_GetNameLoc.h"
+#include "smtc_IsNameQual.h"
+#include "smtc_Message.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // check param name
+  void checkParamName (NamePtr const & name)
+  {
+    // name cannot be qualified
+    if (isNameQual (name))
+    {
+      msg::qualParamName (getNameLoc (name));
+    }
+  }
+}
+  

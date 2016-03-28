@@ -1,0 +1,119 @@
+// smtc_DeclareClass.lzz
+//
+// declare class and template class
+//
+
+namespace smtc
+{
+  // declare class
+  void declareClass (ScopePtr const & scope, ClassKey key, NamePtr const & name, bool is_dll_api)
+  {
+    TmplSpecPtrVector tmpl_spec_set;
+    scope->accept (DeclareClass (false, tmpl_spec_set, false, key, name, is_dll_api));
+  }
+
+  // declare friend class
+  void declareFrndClass (ScopePtr const & scope, ClassKey key, NamePtr const & name)
+  {
+    TmplSpecPtrVector tmpl_spec_set;
+    bool is_dll_api = false;
+    scope->accept (DeclareClass (false, tmpl_spec_set, true, key, name, is_dll_api));
+  }
+}
+
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // declare class
+  struct DeclareClass (bool is_tmpl, TmplSpecPtrVector & tmpl_spec_set, bool is_frnd, ClassKey key,
+      NamePtr const & name, bool is_dll_api)
+    : ScopeVisitor
+  {
+    // ns scope
+    void visit (NsScope const & scope) const
+    {
+      // TBD: check name
+      // ... 
+
+      // create class decl and add to namespace
+      scope.getNs ()->addEntity (buildEntity ());
+    }
+
+    // class scope 
+    void visit (ClassScope const & scope) const
+    {
+      // TBD: check name
+      // ...
+
+      // store type name in scope if not tmpl
+      ClassDefnPtr const & class_defn = scope.getClassDefn ();
+      util::Ident ident = getNameIfIdent (name);
+      if (ident.isSet ())
+      {
+        class_defn->addTypeName (ident);
+      }
+
+      // create class decl and add to class defn
+      scope.getClassDefn ()->addEntity (buildEntity ());
+    }
+
+    // tmpl spec scope
+    void visit (TmplSpecScope const & scope) const
+    {
+      // declare template class
+      tmpl_spec_set.push_back (scope.getTmplSpec ());
+      scope.getParent ()->accept (DeclareClass (true, tmpl_spec_set, is_frnd, key, name, is_dll_api));
+    }
+
+    // tmpl inst scope
+    void visit (TmplInstScope const & scope) const
+    {
+      instantiateClass (scope.getParent (), key, name, is_dll_api);
+    }
+
+    // build entity
+    EntityPtr buildEntity () const
+    {
+      EntityPtr entity;
+      if (is_tmpl)
+      {
+        TmplClassDeclPtr tmpl_class_decl = createTmplClassDecl (tmpl_spec_set, key, name);
+        entity = is_frnd ? createFrndTmplClassDeclEntity (tmpl_class_decl) : createTmplClassDeclEntity (tmpl_class_decl);
+      }
+      else
+      {
+        ClassDeclPtr class_decl = createClassDecl (key, name, is_dll_api);
+        entity = is_frnd ? createFrndClassDeclEntity (class_decl) : createClassDeclEntity (class_decl);
+      }
+      return entity;
+    }
+  }
+}
+
+#hdr
+#include "smtc_ClassKey.h"
+#include "smtc_NamePtr.h"
+#include "smtc_ScopePtr.h"
+#end
+
+#src
+#include "smtc_ClassDefn.h"
+#include "smtc_ClassScope.h"
+#include "smtc_CreateClassDecl.h"
+#include "smtc_CreateClassDeclEntity.h"
+#include "smtc_CreateFrndClassDeclEntity.h"
+#include "smtc_CreateFrndTmplClassDeclEntity.h"
+#include "smtc_CreateTmplClassDecl.h"
+#include "smtc_CreateTmplClassDeclEntity.h"
+#include "smtc_GetNameIfIdent.h"
+#include "smtc_InstantiateClass.h"
+#include "smtc_Message.h"
+#include "smtc_Ns.h"
+#include "smtc_NsScope.h"
+#include "smtc_ScopeVisitor.h"
+#include "smtc_TmplInstScope.h"
+#include "smtc_TmplSpec.h"
+#include "smtc_TmplSpecScope.h"
+#end

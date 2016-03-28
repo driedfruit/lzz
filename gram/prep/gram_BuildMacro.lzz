@@ -1,0 +1,43 @@
+// gram_BuildMacro.lzz
+//
+
+$hdr
+// gram
+#include "gram_MacroKind.h"
+#include "gram_MacroPtr.h"
+
+// basil
+#include "basl_TokenVector.h"
+
+// util
+#include "util_IdentVector.h"
+#include "util_Loc.h"
+$end
+
+$src
+// gram
+#include "gram_CreateFuncMacro.h"
+#include "gram_CreateObjMacro.h"
+#include "gram_GetIdent.h"
+#include "gram_TokenNumber.h"
+$end
+
+// gram
+namespace gram
+{
+  // build macro, return true if 
+  MacroPtr buildMacro (util::Loc const & loc, util::Ident const & name, bool is_func, util::IdentVector const & param_set,
+      bool var, basl::TokenVector const & rep_set)
+  {
+    MacroPtr macro;
+    if (is_func)
+    {
+      macro = createFuncMacro (loc, name, param_set, var, rep_set);
+    }
+    else
+    {
+      macro = createObjMacro (loc, name, rep_set);
+    }
+    return macro;
+  }
+}

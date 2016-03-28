@@ -1,0 +1,21 @@
+// util_GetSpaces.lzz
+//
+// get n number of spaces
+//
+
+$hdr
+$end
+
+$src
+$end
+
+// util
+namespace util
+{
+  // return n number of space characters, terminated with '\0' 
+  const char * getSpaces (int n)
+  {
+    static const char spaces [] = "                                                                                               ";
+    return spaces + sizeof (spaces) - 1 - n % (sizeof (spaces) - 1);
+  }
+}

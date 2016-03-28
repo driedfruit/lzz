@@ -1,0 +1,95 @@
+// smtc_NavClass.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CvType.h"
+#include "smtc_LazyClass.h"
+#include "smtc_ObjPtrVector.h"
+
+// gram
+#include "gram_Block.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // NavClass
+  class NavClass : public LazyClass
+  {
+    // return type
+    CvType m_ret_type;
+
+    // node type
+    CvType m_node_type;
+
+    // submit param set
+    ParamPtrVector m_submit_param_set;
+
+    // objects defined in submit function
+    ObjPtrVector m_submit_obj_set;
+
+    // return stmt (not set if no return stmt)
+    gram::Block m_return_stmt;
+
+  public:
+    // constructor
+    NavClass (int flags, NamePtr const & name, ParamPtrVector const & ctor_param_set, BaseSpecPtrVector const & base_spec_set,
+        CvType const & ret_type, CvType const & node_type, ParamPtrVector const & submit_param_set)
+      : LazyClass (flags, STRUCT_KEY, name, false, ctor_param_set, false, base_spec_set), m_ret_type (ret_type),
+        m_node_type (node_type), m_submit_param_set (submit_param_set)
+    {
+    }
+
+    // get submit function return type
+    inline CvType const & getReturnType () const
+    {
+      return m_ret_type;
+    }
+
+    // get submit param set
+    inline ParamPtrVector const & getSubmitParamSet () const
+    {
+      return m_submit_param_set;
+    }
+
+    // get node type
+    inline CvType const & getNodeType () const
+    {
+      return m_node_type;
+    }
+
+    // add submit obj
+    void addSubmitObj (ObjPtr const & obj)
+    {
+      m_submit_obj_set.push_back (obj);
+    }
+
+    // get obj set
+    inline ObjPtrVector const & getSubmitObjSet () const
+    {
+      return m_submit_obj_set;
+    }
+
+    // true if has return stmt
+    bool hasReturnStmt () const
+    {
+      return m_return_stmt.isSet ();
+    }
+
+    // set return stmt
+    void setReturnStmt (gram::Block const & stmt)
+    {
+      m_return_stmt = stmt;
+    }
+
+    // get return stmt
+    gram::Block const & getReturnStmt () const
+    {
+      return m_return_stmt;
+    }
+  }
+}

@@ -1,0 +1,24 @@
+// smtc_CreateVdfBlockDataScope.lzz
+//
+
+#hdr
+// semantic
+#include "smtc_ScopePtr.h"
+#include "smtc_VdfDataFuncDefnPtr.h"
+
+#end
+
+#src
+// semantic
+#include "smtc_VdfBlockDataScope.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // create vdf block data scope
+  ScopePtr createVdfBlockDataScope (VdfDataFuncDefnPtr const & vdf_data_func_defn)
+  {
+    return new VdfBlockDataScope (vdf_data_func_defn);
+  }
+}

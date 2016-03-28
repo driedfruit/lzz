@@ -1,0 +1,52 @@
+// smtc_CtorInit.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_MbrInitPtrVector.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+// semantic
+$end
+
+// semantic
+namespace smtc
+{
+  // CtorInit
+  class CtorInit
+  {
+    // loc
+    util::Loc m_loc;
+
+    // mbr init set
+    MbrInitPtrVector m_mbr_init_set;
+
+  public:
+    // constructor
+    CtorInit (util::Loc const & loc, MbrInitPtrVector const & mbr_init_set)
+      : m_loc (loc), m_mbr_init_set (mbr_init_set)
+    {
+    }
+
+    // destructor
+    ~ CtorInit ()
+    {
+    }
+
+    // get loc
+    util::Loc const & getLoc () const
+    {
+      return m_loc;
+    }
+
+    // get mbr init
+    inline MbrInitPtrVector const & getMbrInitSet () const
+    {
+      return m_mbr_init_set;
+    }
+  }
+}

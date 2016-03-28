@@ -1,0 +1,33 @@
+// smtc_ClassKey.lzz
+//
+
+$hdr
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // class key
+  enum ClassKey
+  {
+    // class
+    CLASS_KEY,
+
+    // struct
+    STRUCT_KEY,
+
+    // union
+    UNION_KEY,
+
+    // keys below for elaborated type only
+
+    // enum
+    ENUM_KEY,
+
+    // typename
+    TYPENAME_KEY,
+  }
+}

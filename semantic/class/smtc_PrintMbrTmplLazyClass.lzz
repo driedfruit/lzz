@@ -1,0 +1,26 @@
+// smtc_PrintMbrTmplLazyClass.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FilePtr.h"
+#include "smtc_TmplLazyClassPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_CompleteLazyClass.h"
+#include "smtc_PrintMbrTmplClassDefn.h"
+#include "smtc_TmplLazyClass.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // print member tmpl lazy class
+  void printMbrTmplLazyClass (FilePtr const & file, TmplLazyClassPtr const & tmpl_lazy_class)
+  {
+    completeLazyClass (tmpl_lazy_class->getLazyClass ());
+    printMbrTmplClassDefn (file, tmpl_lazy_class);
+  }
+}

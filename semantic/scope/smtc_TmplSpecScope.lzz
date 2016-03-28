@@ -1,0 +1,58 @@
+// smtc_TmplSpecScope.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Scope.h"
+#include "smtc_ScopePtr.h"
+#include "smtc_TmplSpecPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_ScopeVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // TmplSpecScope
+  class TmplSpecScope : public Scope
+  {
+    // parent scope
+    ScopePtr m_parent;
+
+    // tmpl spec
+    TmplSpecPtr m_tmpl_spec;
+
+  public:
+    // constructor
+    TmplSpecScope (ScopePtr const & parent, TmplSpecPtr const & tmpl_spec)
+      : m_parent (parent), m_tmpl_spec (tmpl_spec)
+    {
+    }
+
+    // destructor
+    ~ TmplSpecScope ()
+    {
+    }
+
+    // accept visitor
+    void accept (ScopeVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get parent
+    ScopePtr const & getParent () const
+    {
+      return m_parent;
+    }
+
+    // get tmpl spec
+    TmplSpecPtr const & getTmplSpec () const
+    {
+      return m_tmpl_spec;
+    }
+  }
+}

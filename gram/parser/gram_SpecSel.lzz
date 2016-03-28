@@ -1,0 +1,99 @@
+// gram_SpecSel.lzz
+//
+// declaration specifier selection
+//
+
+$hdr
+// std lib
+#include <algorithm>
+#include <deque>
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+// util
+#include "util_BitOp.h"
+#include <assert.h>
+$end
+
+// private namespace
+namespace
+{
+  // using gram
+  using namespace gram;
+
+  // true if decl spec flag
+  inline bool IsSpecFlag (int flag; SpecLocPair const & spec) const
+  {
+    return spec.first == flag;
+  }
+}
+
+// gram
+namespace gram
+{
+  // SpecLocPair
+  typedef std::pair <int, util::Loc> SpecLocPair;
+
+  // SpecSel
+  class SpecSel
+  {
+    // flags
+    int m_flags;
+
+    // spec locations
+    std::deque <SpecLocPair> m_spec_loc_set;
+
+  public:
+    // constructor
+    inline SpecSel ()
+      : m_flags (0)
+    {
+    }
+
+    // add spec
+    void addSpec (int flag, util::Loc const & loc)
+    {
+      m_flags |= flag;
+      m_spec_loc_set.push_back (SpecLocPair (flag, loc));
+    }
+
+    // remove spec if present
+    void remSpec (int flag)
+    {
+      std::deque <SpecLocPair>::iterator i = std::find_if (m_spec_loc_set.begin (), m_spec_loc_set.end (), IsSpecFlag (flag));
+      if (i != m_spec_loc_set.end ())
+      {
+        m_spec_loc_set.erase (i);
+      }
+    }
+
+    // has spec
+    bool hasSpec (int flag) const
+    {
+      return util::hasFlag (m_flags, flag);
+    }
+
+    // true if any set
+    inline bool anySet () const
+    {
+      return m_flags != 0;
+    }
+
+    // get flags
+    inline int getFlags () const
+    {
+      return m_flags;
+    }
+
+    // get spec loc
+    util::Loc const & getSpecLoc (int flag) const
+    {
+      std::deque <SpecLocPair>::const_iterator i = std::find_if (m_spec_loc_set.begin (), m_spec_loc_set.end (), IsSpecFlag (flag));
+      assert (i != m_spec_loc_set.end ());
+      return i->second;
+    }
+  }
+}

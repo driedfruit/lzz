@@ -1,0 +1,70 @@
+// smtc_CheckSpecFlags.lzz
+//
+
+$hdr
+// gram
+#include "gram_SpecSel.h"
+$end
+
+$src
+// semantic
+#include "smtc_SpecToString.h"
+$end
+
+// smtc
+namespace smtc
+{
+  // message
+  typedef void (* InvalidMsg) (util::Loc const & loc, char const * spec);
+  typedef void (* ConflictingMsg) (util::Loc const & loc, char const * spec1, char const * spec2);
+
+  // warn on any flags in flags
+  void checkInvalidSpecFlags (gram::SpecSel const & spec_sel, int flags, InvalidMsg msg)
+  {
+    flags &= spec_sel.getFlags ();
+    for (int i = 1; i <= flags; i <<= 1)
+    {
+      if (i & flags)
+      {
+        msg (spec_sel.getSpecLoc (i), specToString (i));
+      }
+    }
+  }
+
+  // warn on all flags other than flags
+  inline void checkValidSpecFlags (gram::SpecSel const & spec_sel, int flags, InvalidMsg msg)
+  {
+    checkInvalidSpecFlags (spec_sel, ~ flags, msg);
+  }
+
+  // check conflicting spec flags
+  // warn if any two flags in a_flags are set
+  // warn if any flag a_flag is set and any flag in b_flag is set
+  void checkConflictingSpecFlags (gram::SpecSel const & spec_sel, int a_flags, int b_flags, ConflictingMsg msg)
+  {
+    int flags = spec_sel.getFlags ();
+    a_flags &= flags;
+    b_flags &= flags;
+    for (int i = 1; i <= a_flags; i <<= 1)
+    {
+      if (i & a_flags)
+      {
+        for (int j = i << 1; j <= a_flags; j <<= 1)
+        {
+          if (j & a_flags)
+          {
+            msg (spec_sel.getSpecLoc (j), specToString (j), specToString (i));
+            a_flags &= ~ j;
+          }
+        }
+        for (int k = 1; k <= b_flags; k <<= 1)
+        {
+          if (k & b_flags)
+          {
+            msg (spec_sel.getSpecLoc (k), specToString (k), specToString (i));
+          }
+        }
+      }
+    }
+  }
+}

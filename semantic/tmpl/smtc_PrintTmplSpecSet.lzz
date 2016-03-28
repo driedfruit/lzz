@@ -1,0 +1,28 @@
+// smtc_PrintTmplSpecSet.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FilePtr.h"
+#include "smtc_SectionKind.h"
+#include "smtc_TmplSpecPtrVector.h"
+$end
+
+$src
+// std lib
+#include <algorithm>
+
+// semantic
+#include "smtc_PrintTmplSpec.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // print tmpl spec set
+  void printTmplSpecSet (FilePtr const & file, SectionKind skind, TmplSpecPtrVector const & tmpl_spec_set, bool is_decl)
+  {
+    // first tmpl spec set is the closest to decl so print in reverse 
+    std::for_each (tmpl_spec_set.rbegin (), tmpl_spec_set.rend (), PrintTmplSpec (file, skind, is_decl));
+  }
+}

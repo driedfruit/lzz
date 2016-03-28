@@ -1,0 +1,27 @@
+// smtc_PrintMbrTmplFuncDecl.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_TmplFuncDeclPtr.h"
+#include "smtc_FilePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_PrintTmplFuncDecl.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // print mbr tmpl func decl
+  void printMbrTmplFuncDecl (FilePtr const & file, TmplFuncDeclPtr const & tmpl_func_decl)
+  {
+    PrintTmplFuncDecl printer;
+    printer.is_decl = true;
+    printer.not_inline = true;
+    // always output to declaration section
+    printer.print (file, DECLARATION_SECTION, tmpl_func_decl);
+  }
+}

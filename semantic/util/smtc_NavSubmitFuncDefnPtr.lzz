@@ -1,0 +1,24 @@
+// smtc_NavSubmitFuncDefnPtr.lzz
+//
+
+$hdr
+// util
+#include "util_DPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_NavSubmitFuncDefn.h"
+
+// util
+#include "util_DPtr.tpl"
+$end
+
+// semantic
+namespace smtc
+{
+  class FuncDecl;
+  class NavSubmitFuncDefn;
+  typedef util::DPtr <NavSubmitFuncDefn, FuncDecl> NavSubmitFuncDefnPtr;
+}
+template class util::DPtr <smtc::NavSubmitFuncDefn, smtc::FuncDecl>;

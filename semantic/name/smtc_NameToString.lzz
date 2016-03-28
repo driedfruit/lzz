@@ -1,0 +1,99 @@
+// smtc_NameToString.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// semantic
+#include "smtc_BaseNameToString.h"
+#include "smtc_BitfName.h"
+#include "smtc_NameVisitor.h"
+#include "smtc_NonTmplName.h"
+#include "smtc_QualName.h"
+#include "smtc_TmplName.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // NameToString
+  struct NameToString (util::String & str) : NameVisitor
+  {
+    // qual name
+    void visit (QualName const & name) const
+    {
+      NamePtr const & qual_name = name.getQualName ();
+      if (qual_name.isSet ())
+      {
+        str = nameToString (qual_name);
+      }
+      str += "::";
+      str += nameToString (name.getUnqlName ());
+    }
+
+    // tmpl name
+    void visit (TmplName const & name) const
+    {
+      if (name.hasTemplateKeyword ())
+      {
+        str = "template";
+      }
+      util::appendWithSpace (str, baseNameToString (name.getBaseName ()));
+      util::appendWithSpace (str, '<');
+      util::String const & args = name.getArgs ();
+      // watch out for diagraph '<:'  
+      if (! args.empty () && args [0] == ':')
+      {
+        str += ' ';
+      }
+      str += args;
+      // watch out for nested template args
+      if (str [str.length () - 1] == '>')
+      {
+        str += ' ';
+      }
+      str += '>';
+    }
+
+    // non tmpl name
+    void visit (NonTmplName const & name) const
+    {
+      str = baseNameToString (name.getBaseName ());
+    }
+
+    // bitf name
+    void visit (BitfName const & name) const
+    {
+      if (name.hasIdent ())
+      {
+        str = name.getIdent ().c_str ();
+      }
+      util::appendWithSpace (str, ':');
+      util::appendWithSpace (str, name.getSize ());
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // name to string
+  util::String nameToString (NamePtr const & name)
+  {
+    util::String str;
+    name->accept (NameToString (str));
+    return str;
+  }
+}

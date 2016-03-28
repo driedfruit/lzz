@@ -1,0 +1,64 @@
+// smtc_SetReturnStmt.lzz
+//
+
+#hdr
+// semantic
+#include "smtc_ScopePtr.h"
+
+// gram
+#include "gram_Block.h"
+#end
+
+#src
+// semantic
+#include "smtc_Message.h"
+#include "smtc_NavClass.h"
+#include "smtc_NavClassScope.h"
+#include "smtc_ScopeVisitor.h"
+#include "smtc_VdfBlockDataScope.h"
+#include "smtc_VdfDataFuncDefn.h"
+
+#end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // set return stmt
+  struct SetReturnStmt (gram::Block const & stmt)
+    : ScopeVisitor
+  {
+    // nav class
+    void visit (NavClassScope const & scope) const
+    {
+      NavClassPtr const & nav_class = scope.getNavClass ();
+      if (nav_class->hasReturnStmt ())
+      {
+        msg::navAlreadyHasReturn (stmt.getLoc ());
+      }
+      else
+      {
+        nav_class->setReturnStmt (stmt);
+      }
+    }
+
+    // vdf block data
+    void visit (VdfBlockDataScope const & scope) const
+    {
+      VdfDataFuncDefnPtr const & func_defn = scope.getVdfDataFuncDefn ();
+      func_defn->setReturnStmt (stmt);
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // set return stmt
+  void setReturnStmt (ScopePtr const & cs, gram::Block const & stmt)
+  {
+    cs->accept (SetReturnStmt (stmt));
+  }
+}

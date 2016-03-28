@@ -1,0 +1,21 @@
+// smtc_FileKind.lzz
+//
+
+#hdr
+#end
+
+#src
+#end
+
+namespace smtc
+{
+  // FileKind
+  enum FileKind
+  {
+    HEADER_FILE,
+    SOURCE_FILE,
+    INLINE_FILE,
+    TEMPLATE_FILE,
+    TEMPLATE_INLINE_FILE,
+  }
+}

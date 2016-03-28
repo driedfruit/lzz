@@ -1,0 +1,52 @@
+// smtc_LazyBaseSpec.lzz
+//
+// lazy base spec
+//
+
+$hdr
+// semantic
+#include "smtc_BaseSpec.h"
+
+// gram
+#include "gram_BlockVector.h"
+$end
+
+$src
+// semantic
+#include "smtc_BaseSpec.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // LazyBaseSpec
+  class LazyBaseSpec : public BaseSpec
+  {
+    // arg set
+    gram::BlockVector m_arg_set;
+
+  public:
+    // contructor
+    LazyBaseSpec (Access access, bool is_virtual, NamePtr const & base_name, gram::BlockVector const & arg_set)
+      : BaseSpec (access, is_virtual, base_name), m_arg_set (arg_set)
+    {
+    }
+
+    // destructor
+    ~ LazyBaseSpec ()
+    {
+    }
+
+    // get arg set
+    inline gram::BlockVector const & getArgSet () const
+    {
+      return m_arg_set;
+    }
+
+    // true if lazy base spec (has initializer)
+    bool isLazy () const
+    {
+      return true;
+    }
+  }
+}

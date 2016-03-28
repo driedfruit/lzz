@@ -1,0 +1,24 @@
+// util_IntToString.lzz
+//
+
+$hdr
+// util
+#include "util_String.h"
+$end
+
+$src
+// lib
+#include <stdio.h>
+$end
+
+// util
+namespace util
+{
+  // int to string
+  util::String intToString (int n)
+  {
+    char buf [64];
+    sprintf (buf, "%d", n);
+    return buf;
+  }
+}

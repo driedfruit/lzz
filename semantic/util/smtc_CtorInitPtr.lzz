@@ -1,0 +1,19 @@
+// smtc_CtorInitPtr.lzz
+//
+
+$hdr
+#include "util_BPtr.h"
+$end
+
+$src
+#include "smtc_CtorInit.h"
+#include "util_BPtr.tpl"
+$end
+
+// semantic
+namespace smtc
+{
+  class CtorInit;
+  typedef util::BPtr <CtorInit> CtorInitPtr;
+}
+template class util::BPtr <smtc::CtorInit>;

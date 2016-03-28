@@ -1,0 +1,46 @@
+// smtc_DtorBaseName.lzz
+//
+
+$hdr
+#include "smtc_BaseName.h"
+#include "util_Ident.h"
+$end
+
+$src
+#include "smtc_BaseNameVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // ident base name
+  class DtorBaseName : public BaseName
+  {
+    // ident
+    util::Ident m_ident;
+
+  public:
+    // constructor
+    DtorBaseName (util::Loc const & loc, util::Ident const & macro, util::Ident const & ident)
+      : BaseName (loc, macro), m_ident (ident)
+    {
+    }
+
+    // destructor
+    ~ DtorBaseName ()
+    {
+    }
+
+    // accept visitor
+    void accept (BaseNameVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get ident
+    inline util::Ident const & getIdent () const
+    {
+      return m_ident;
+    }
+  }
+}

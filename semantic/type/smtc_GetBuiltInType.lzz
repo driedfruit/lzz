@@ -1,0 +1,133 @@
+// smtc_GetBuiltInType.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_TypePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_BuiltInType.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // get built-in type
+  template <class T>
+  TypePtr getBuiltInType ()
+  {
+    static BuiltInType <T> type;
+    return TypePtr::unref (& type);
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // get bool type
+  TypePtr getBoolType ()
+  {
+    return getBuiltInType <Bool> ();
+  }
+
+  // get char type
+  TypePtr getCharType ()
+  {
+    return getBuiltInType <Char> ();
+  }
+
+  // get signed char type
+  TypePtr getSignedCharType ()
+  {
+    return getBuiltInType <SignedChar> ();
+  }
+  
+  // get unsigned char type
+  TypePtr getUnsignedCharType ()
+  {
+    return getBuiltInType <UnsignedChar> ();
+  }
+
+  // get wide char type
+  TypePtr getWideCharType ()
+  {
+    return getBuiltInType <WideChar> ();
+  }
+
+  // get short int type
+  TypePtr getShortIntType ()
+  {
+    return getBuiltInType <ShortInt> ();
+  }
+
+  // get unsigned short int type
+  TypePtr getUnsignedShortIntType ()
+  {
+    return getBuiltInType <UnsignedShortInt> ();
+  }
+
+  // get int type
+  TypePtr getIntType ()
+  {
+    return getBuiltInType <Int> ();
+  }
+
+  // get unsigned int type
+  TypePtr getUnsignedIntType ()
+  {
+    return getBuiltInType <UnsignedInt> ();
+  }
+
+  // get long int type
+  TypePtr getLongIntType ()
+  {
+    return getBuiltInType <LongInt> ();
+  }
+
+  // get unsigned long int type
+  TypePtr getUnsignedLongIntType ()
+  {
+    return getBuiltInType <UnsignedLongInt> ();
+  }
+
+  // get long long int type
+  TypePtr getLongLongIntType ()
+  {
+    return getBuiltInType <LongLongInt> ();
+  }
+
+  // get unsigned long long int type
+  TypePtr getUnsignedLongLongIntType ()
+  {
+    return getBuiltInType <UnsignedLongLongInt> ();
+  }
+
+  // get float type
+  TypePtr getFloatType ()
+  {
+    return getBuiltInType <Float> ();
+  }
+
+  // get double type
+  TypePtr getDoubleType ()
+  {
+    return getBuiltInType <Double> ();
+  }
+
+  // get long double type
+  TypePtr getLongDoubleType ()
+  {
+    return getBuiltInType <LongDouble> ();
+  }
+  
+  // get void type
+  TypePtr getVoidType ()
+  {
+    return getBuiltInType <Void> ();
+  }
+}

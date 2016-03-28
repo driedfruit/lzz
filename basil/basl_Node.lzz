@@ -1,0 +1,89 @@
+// basl_Node.lzz
+//
+// Copyright (C) 2002, Michael Spencer
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, subject to the following
+// restrictions:
+// 
+//   1. The origin of this software must not be misrepresented; you must
+//      not claim that you wrote the original software. If you use this
+//      software in a product, an acknowledgment in the product
+//      documentation would be appreciated but is not required.
+// 
+//   2. Altered source versions must be plainly marked as such, and must
+//      not be misrepresented as being the original software.
+// 
+// Basil documentation, as well as the latest version, is available at
+// http://www.lazycplusplus.com/basil.
+//
+// Send comments and bug reports to michael_spencer@lazycplusplus.com.
+// 
+
+$hdr
+// basil
+#include "basl_Nonterm.h"
+#include "basl_Token.h"
+$end
+
+$src
+$end
+
+// basil
+namespace basl
+{
+  // Node
+  class Node
+  {
+    // nonterm
+    Nonterm nonterm;
+
+    // token
+    Token token;
+
+    // prev
+    Node * prev;
+
+    // number of references
+    int num_ref;
+
+    // friends
+    friend class NodePool;
+    friend void addNodeRef (Node * node); 
+    friend void remNodeRef (Node * node); 
+
+  public:
+    // constructor
+    inline Node ()
+    {
+    }
+
+    // destructor
+    ~ Node ()
+    {
+    }
+
+    // get token
+    inline Token & getToken ()
+    {
+      return token;
+    }
+
+    // get nonterm
+    inline Nonterm & getNonterm ()
+    {
+      return nonterm;
+    }
+
+    // get nth previous node
+    Node * getPrev (int n)
+    {
+      Node * node = this;
+      for (; n > 0; -- n)
+      {
+        node = node->prev;
+      }
+      return node;
+    }
+  }
+}

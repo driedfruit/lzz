@@ -1,0 +1,64 @@
+// smtc_DeclareUsing.lzz
+//
+// declare using (using declaration)
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+#include "smtc_ScopePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_ClassDefn.h"
+#include "smtc_ClassScope.h"
+#include "smtc_CreateUsingDecl.h"
+#include "smtc_CreateUsingDeclEntity.h"
+#include "smtc_Ns.h"
+#include "smtc_NsScope.h"
+#include "smtc_ScopeVisitor.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // DeclareUsing
+  struct DeclareUsing (NamePtr const & name)
+    : ScopeVisitor
+  {
+    // ns scope
+    void visit (NsScope const & scope) const
+    {
+      // add entity to ns
+      scope.getNs ()->addEntity (buildEntity ());
+    }
+
+    // class scope
+    void visit (ClassScope const & scope) const
+    {
+      // add entity to class
+      scope.getClassDefn ()->addEntity (buildEntity ());
+    }
+
+    // build entity
+    EntityPtr buildEntity () const
+    {
+      UsingDeclPtr using_decl = createUsingDecl (name);
+      return createUsingDeclEntity (using_decl);
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // declare using
+  void declareUsing (ScopePtr const & scope, NamePtr const & name)
+  {
+    scope->accept (DeclareUsing (name));
+  }
+}

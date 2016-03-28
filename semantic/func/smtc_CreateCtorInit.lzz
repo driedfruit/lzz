@@ -1,0 +1,26 @@
+// smtc_CreateCtorInit.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CtorInitPtr.h"
+#include "smtc_MbrInitPtrVector.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+// semantic
+#include "smtc_CtorInit.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create ctor init
+  CtorInitPtr createCtorInit (util::Loc const & loc, MbrInitPtrVector const & mbr_init_set)
+  {
+    return new CtorInit (loc, mbr_init_set);
+  }
+}

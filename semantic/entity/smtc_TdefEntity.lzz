@@ -1,0 +1,48 @@
+// smtc_TdefEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Entity.h"
+#include "smtc_TdefPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_EntityVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // TdefEntity
+  class TdefEntity : public Entity
+  {
+    // typedef
+    TdefPtr m_tdef;
+
+  public:
+    // constructor
+    TdefEntity (TdefPtr const & tdef)
+      : m_tdef (tdef)
+    {
+    }
+
+    // destructor
+    ~ TdefEntity ()
+    {
+    }
+
+    // accept visitor
+    void accept (EntityVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get typedef
+    inline TdefPtr const & getTdef () const
+    {
+      return m_tdef;
+    }
+  }
+}

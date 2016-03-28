@@ -1,0 +1,79 @@
+// smtc_ArrayType.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CvType.h" 
+#include "smtc_Type.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// semantic
+#include "smtc_AppendCv.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // ArrayType
+  class ArrayType : public Type
+  {
+    // element type
+    CvType m_elem_cv_type;
+
+    // size
+    util::String m_size;
+
+  public:
+    // constructor
+    ArrayType (CvType const & elem_cv_type, util::String const & size)
+      : m_elem_cv_type (elem_cv_type), m_size (size)
+    {
+    }
+
+    // destructor
+    ~ ArrayType ()
+    {
+    }
+
+    // get kind
+    TypeKind getKind () const
+    {
+      return ARRAY_TYPE;
+    }
+
+    // to string
+    util::String toString (util::String const & dcl, bool c, bool v) const
+    {
+      util::String str;
+      if (! dcl.empty ())
+      {
+        str += '(';
+        str += dcl;
+        str += ')';
+      }
+      util::appendWithSpace (str, '[');
+      str += m_size;
+      str += ']';
+      return m_elem_cv_type.toString (str);
+    }
+
+    // get element type
+    inline CvType const & getElementCvType () const
+    {
+      return m_elem_cv_type;
+    }
+
+    // get size
+    inline util::String const & getSize () const
+    {
+      return m_size;
+    }
+  }
+}

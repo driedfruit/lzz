@@ -1,0 +1,45 @@
+// smtc_VdfDataFuncDefnEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FuncDeclEntity.h"
+#include "smtc_VdfDataFuncDefnPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_EntityVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // VdfDataFuncDefnEntity
+  class VdfDataFuncDefnEntity : public FuncDeclEntity
+  {
+  public:
+    // constructor
+    VdfDataFuncDefnEntity (VdfDataFuncDefnPtr const & vdf_data_func_defn)
+      : FuncDeclEntity (vdf_data_func_defn)
+    {
+    }
+
+    // destructor
+    ~ VdfDataFuncDefnEntity ()
+    {
+    }
+
+    // accept visitor
+    void accept (EntityVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get vdf data func defn
+    inline VdfDataFuncDefnPtr getVdfDataFuncDefn () const
+    {
+      return getFuncDecl ();
+    }
+  }
+}

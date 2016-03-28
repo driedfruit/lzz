@@ -1,0 +1,23 @@
+// smtc_CreateNavClassScope.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NavClassPtr.h"
+#include "smtc_ScopePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_NavClassScope.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create class scope
+  ScopePtr createNavClassScope (NavClassPtr const & nav_class)
+  {
+    return new NavClassScope (nav_class);
+  }
+}

@@ -1,0 +1,133 @@
+// smtc_BuiltIn.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_TypeKind.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // Bool
+  struct Bool
+  {
+    static char const * NAME = "bool";
+    static TypeKind const KIND = BOOL_TYPE;
+  }
+  
+  // Char
+  struct Char
+  {
+    static char const * NAME = "char";
+    static TypeKind const KIND = CHAR_TYPE;
+  }
+
+  // SignedChar
+  struct SignedChar
+  {
+    static char const * NAME = "signed char";
+    static TypeKind const KIND = SIGNED_CHAR_TYPE;
+  }
+
+  // UnsignedChar
+  struct UnsignedChar
+  {
+    static char const * NAME = "unsigned char";
+    static TypeKind const KIND = UNSIGNED_CHAR_TYPE;
+  }
+  
+  // WideChar
+  struct WideChar
+  {
+    static char const * NAME = "wchar_t";
+    static TypeKind const KIND = WIDE_CHAR_TYPE;
+  }
+
+  // ShortInt
+  struct ShortInt
+  {
+    static char const * NAME = "short int";
+    static TypeKind const KIND = SHORT_INT_TYPE;
+  }
+
+  // UnsignedShortInt
+  struct UnsignedShortInt
+  {
+    static char const * NAME = "unsigned short int";
+    static TypeKind const KIND = UNSIGNED_SHORT_INT;
+  }
+
+  // Int
+  struct Int
+  {
+    static char const * NAME = "int";
+    static TypeKind const KIND = INT_TYPE;
+  }
+
+  // UnsignedInt
+  struct UnsignedInt
+  {
+    static char const * NAME = "unsigned int";
+    static TypeKind const KIND = UNSIGNED_INT_TYPE;
+  }
+
+  // LongInt
+  struct LongInt
+  {
+    static char const * NAME = "long int";
+    static TypeKind const KIND = LONG_INT_TYPE;
+  }
+
+  // UnsignedLongInt
+  struct UnsignedLongInt
+  {
+    static char const * NAME = "unsigned long int";
+    static TypeKind const KIND = UNSIGNED_LONG_INT_TYPE;
+  }
+
+  // LongLongInt
+  struct LongLongInt
+  {
+    static char const * NAME = "long long int";
+    static TypeKind const KIND = LONG_LONG_INT_TYPE;
+  }
+
+  // UnsignedLongLongInt
+  struct UnsignedLongLongInt
+  {
+    static char const * NAME = "unsigned long long int";
+    static TypeKind const KIND = UNSIGNED_LONG_LONG_INT_TYPE;
+  }
+
+  // Float
+  struct Float
+  {
+    static char const * NAME = "float";
+    static TypeKind const KIND = FLOAT_TYPE;
+  }
+
+  // Double
+  struct Double
+  {
+    static char const * NAME = "double";
+    static TypeKind const KIND = DOUBLE_TYPE;
+  }
+
+  // LongDouble
+  struct LongDouble
+  {
+    static char const * NAME = "long double";
+    static TypeKind const KIND = LONG_DOUBLE_TYPE;
+  }
+
+  // Void
+  struct Void
+  {
+    static char const * NAME = "void";
+    static TypeKind const KIND = VOID_TYPE;
+  }
+}

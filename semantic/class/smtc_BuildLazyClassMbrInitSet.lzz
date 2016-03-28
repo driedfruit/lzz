@@ -1,0 +1,46 @@
+// smtc_BuildLazyClassMbrInitSet.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_BaseSpecPtrVector.h"
+#include "smtc_MbrInitPtrVector.h"
+$end
+
+$src
+// std lib
+#include <algorithm>
+
+// semantic
+#include "smtc_CreateMbrInit.h"
+#include "smtc_LazyBaseSpec.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // build mbr init if lazy base spec, append mbr init to mbr_init_set
+  void BuildMbrInitIfLazy (MbrInitPtrVector & mbr_init_set; BaseSpecPtr const & base_spec) const
+  {
+    if (base_spec->isLazy ())
+    {
+      LazyBaseSpec const & lazy_base_spec = static_cast <LazyBaseSpec const &> (* base_spec);
+      MbrInitPtr mbr_init = createMbrInit (lazy_base_spec.getBaseName (), lazy_base_spec.getArgSet ());
+      mbr_init_set.push_back (mbr_init);
+    }
+  }
+
+}
+
+// semantic
+namespace smtc
+{
+  // build lazy class mbr init set
+  void buildLazyClassMbrInitSet (BaseSpecPtrVector const & base_spec_set, MbrInitPtrVector & mbr_init_set)
+  {
+    std::for_each (base_spec_set.begin (), base_spec_set.end (), BuildMbrInitIfLazy (mbr_init_set));
+  }
+}

@@ -1,0 +1,48 @@
+// smtc_TmplFuncDeclEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Entity.h"
+#include "smtc_TmplFuncDeclPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_EntityVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // TmplFuncDeclEntity
+  class TmplFuncDeclEntity : public Entity
+  {
+    // tmpl func decl
+    TmplFuncDeclPtr m_tmpl_func_decl;
+
+  public:
+    // constructor
+    TmplFuncDeclEntity (TmplFuncDeclPtr const & tmpl_func_decl)
+      : m_tmpl_func_decl (tmpl_func_decl)
+    {
+    }
+
+    // destructor
+    ~ TmplFuncDeclEntity ()
+    {
+    }
+
+    // accept visitor
+    void accept (EntityVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get tmpl func decl
+    inline TmplFuncDeclPtr const & getTmplFuncDecl () const
+    {
+      return m_tmpl_func_decl;
+    }
+  }
+}

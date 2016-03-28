@@ -1,0 +1,19 @@
+// smtc_MbrInitPtr.lzz
+//
+
+$hdr
+#include "util_BPtr.h"
+$end
+
+$src
+#include "smtc_MbrInit.h"
+#include "util_BPtr.tpl"
+$end
+
+// semantic
+namespace smtc
+{
+  class MbrInit;
+  typedef util::BPtr <MbrInit> MbrInitPtr;
+}
+template class util::BPtr <smtc::MbrInit>;

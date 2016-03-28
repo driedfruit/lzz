@@ -1,0 +1,72 @@
+// smtc_MbrPtrType.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CvType.h"
+#include "smtc_NamePtr.h"
+#include "smtc_Type.h"
+$end
+
+$src
+// semantic
+#include "smtc_AppendCv.h"
+#include "smtc_NameToString.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // MbrPtrType
+  class MbrPtrType : public Type
+  {
+    // mbr name
+    NamePtr m_mbr_name;
+
+    // to type
+    CvType m_to_cv_type;
+
+  public:
+    // constructor
+    MbrPtrType (NamePtr const & mbr_name, CvType const & to_cv_type)
+      : m_mbr_name (mbr_name), m_to_cv_type (to_cv_type)
+    {
+    }
+
+    // destructor
+    ~ MbrPtrType ()
+    {
+    }
+
+    // get kind
+    TypeKind getKind () const
+    {
+      return MBR_PTR_TYPE;
+    }
+
+    // to string
+    util::String toString (util::String const & dcl, bool c, bool v) const
+    {
+      util::String str = nameToString (m_mbr_name);
+      str += "::*";
+      appendCv (str, c, v);
+      util::appendWithSpace (str, dcl);
+      return m_to_cv_type.toString (str);
+    }
+
+    // get mbr name
+    inline NamePtr const & getMbrName () const
+    {
+      return m_mbr_name;
+    }
+
+    // get to cv type
+    inline CvType const & getToCvType () const
+    {
+      return m_to_cv_type;
+    }
+  }
+}

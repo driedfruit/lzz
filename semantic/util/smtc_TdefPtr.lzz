@@ -1,0 +1,19 @@
+// smtc_TdefPtr.lzz
+//
+
+$hdr
+#include "util_BPtr.h"
+$end
+
+$src
+#include "smtc_Tdef.h"
+#include "util_BPtr.tpl"
+$end
+
+// semantic
+namespace smtc
+{
+  class Tdef;
+  typedef util::BPtr <Tdef> TdefPtr;
+}
+template class util::BPtr <smtc::Tdef>;

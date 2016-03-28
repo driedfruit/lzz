@@ -1,0 +1,45 @@
+// smtc_LazyClassEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ClassDefnEntity.h"
+#include "smtc_LazyClassPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_EntityVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // LazyClassEntity
+  class LazyClassEntity : public ClassDefnEntity
+  {
+  public:
+    // constructor
+    inline LazyClassEntity (LazyClassPtr const & lazy_ctor)
+      : ClassDefnEntity (lazy_ctor)
+    {
+    }
+
+    // destructor
+    ~ LazyClassEntity ()
+    {
+    }
+
+    // accept visitor
+    void accept (EntityVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get class decl
+    LazyClassPtr getLazyClass () const
+    {
+      return getClassDecl ();
+    }
+  }
+}

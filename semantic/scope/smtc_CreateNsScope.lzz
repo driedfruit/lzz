@@ -1,0 +1,23 @@
+// smtc_CreateNsScope.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NsPtr.h"
+#include "smtc_ScopePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_NsScope.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create ns scope
+  ScopePtr createNsScope (NsPtr const & ns)
+  {
+    return new NsScope (ns);
+  }
+}

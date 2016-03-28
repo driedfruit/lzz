@@ -1,0 +1,133 @@
+// smtc_PrintTmplMbrDefn.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ClassDefnPtr.h"
+#include "smtc_NamePtr.h"
+#include "smtc_NsPtr.h"
+#include "smtc_TmplClassDefnPtr.h"
+#include "smtc_TmplSpecPtrVector.h"
+$end
+
+$src
+// std lib
+#include <algorithm>
+ 
+// semantic
+#include "smtc_AcceptEntityVisitor.h"
+#include "smtc_ClassDefn.h"
+#include "smtc_CreateQualName.h"
+#include "smtc_EntityVisitor.h"
+#include "smtc_IsExplicitTmplSpec.h"
+#include "smtc_FormTmplName.h"
+#include "smtc_PrintMbrTmplFuncDefn.h"
+#include "smtc_PrintMbrTmplObjDefn.h"
+#include "smtc_TmplClassDefn.h"
+#include "smtc_TmplSpecToArgString.h"
+#include "smtc_PrintMbrDefn.h"
+
+// entities
+#include "smtc_ClassDefnEntity.h"
+#include "smtc_FuncDefnEntity.h"
+#include "smtc_LazyClassEntity.h"
+#include "smtc_ObjEntity.h"
+#include "smtc_TmplClassDefnEntity.h"
+#include "smtc_TmplFuncDefnEntity.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic
+  using namespace smtc;
+
+  // PrintTmplMbrDefn
+  struct PrintTmplMbrDefn (Output & out, TmplSpecPtrVector const & tmpl_spec_set, NsPtr const & ns, NamePtr const & qual_name)
+    : EntityVisitor
+  {
+    // obj
+    void visit (ObjEntity const & entity) const
+    {
+      printMbrTmplObjDefn (out, entity.getObj (), tmpl_spec_set, ns, qual_name);
+    }
+
+    // func defn
+    void visit (FuncDefnEntity const & entity) const
+    {
+      printMbrTmplFuncDefn (out, entity.getFuncDefn (), tmpl_spec_set, ns, qual_name);
+    }
+
+    // tmpl func defn
+    void visit (TmplFuncDefnEntity const & entity) const
+    {
+      printMbrTmplFuncDefn (out, entity.getTmplFuncDefn (), tmpl_spec_set, ns, qual_name);
+    }
+
+    // class defn
+    void visit (ClassDefnEntity const & entity) const
+    {
+      printTmplMbrDefn (out, entity.getClassDefn (), tmpl_spec_set, ns);
+    }
+
+    // tmpl class defn
+    void visit (TmplClassDefnEntity const & entity) const
+    {
+      printTmplMbrDefn (out, entity.getTmplClassDefn (), tmpl_spec_set, ns);
+    }
+
+    // lazy class
+    void visit (LazyClassEntity const & entity) const
+    {
+      printTmplMbrDefn (out, entity.getLazyClass (), tmpl_spec_set, ns);
+    }
+
+    // visit entity set
+    static void visitEntitySet (EntityPtrDeque const & entity_set, Output & out, TmplSpecPtrVector const & tmpl_spec_set,
+        NsPtr const & ns, NamePtr const & qual_name)
+    {
+      std::for_each (entity_set.begin (), entity_set.end (), AcceptEntityVisitor (PrintTmplMbrDefn (out, tmpl_spec_set, ns, qual_name)));
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // types
+  class Output;
+
+  // print tmpl member defn
+  void printTmplMbrDefn (Output & out, TmplClassDefnPtr const & tmpl_class_defn, NsPtr const & ns)
+  {
+    ClassDefnPtr class_defn = tmpl_class_defn->getClassDefn ();
+    EntityPtrDeque const & entity_set = class_defn->getEntitySet ();
+    TmplSpecPtrVector const & tmpl_spec_set = tmpl_class_defn->getTmplSpecSet ();
+    if (isExplicitTmplSpec (tmpl_spec_set))
+    {
+      printMbrDefn (out, tmpl_class_defn->getClassDefn (), ns);
+    }
+    else
+    {
+      // precede defintions with tmpl spec set
+      PrintTmplMbrDefn::visitEntitySet (entity_set, out, tmpl_spec_set, ns, class_defn->getQualName ());
+    }
+  }
+
+  // print tmpl member defn with qual name with outer tmpl spec set
+  void printTmplMbrDefn (Output & out, TmplClassDefnPtr const & tmpl_class_defn, TmplSpecPtrVector const & tmpl_spec_set, NsPtr const & ns)
+  {
+    ClassDefnPtr class_defn = tmpl_class_defn->getClassDefn ();
+    EntityPtrDeque const & entity_set = class_defn->getEntitySet ();
+    TmplSpecPtrVector full_tmpl_spec_set (tmpl_class_defn->getTmplSpecSet ());
+    full_tmpl_spec_set.insert (full_tmpl_spec_set.end (), tmpl_spec_set.begin (), tmpl_spec_set.end ());
+    PrintTmplMbrDefn::visitEntitySet (entity_set, out, full_tmpl_spec_set, ns, class_defn->getQualName ());
+  }
+
+  // print tmpl member defn
+  void printTmplMbrDefn (Output & out, ClassDefnPtr const & class_defn, TmplSpecPtrVector const & tmpl_spec_set, NsPtr const & ns)
+  {
+    EntityPtrDeque const & entity_set = class_defn->getEntitySet ();
+    PrintTmplMbrDefn::visitEntitySet (entity_set, out, tmpl_spec_set, ns, class_defn->getQualName ());
+  }
+}

@@ -1,0 +1,20 @@
+// smtc_CreateQualName.lzz
+//
+
+$hdr
+#include "smtc_NamePtr.h"
+$end
+
+$src
+#include "smtc_QualName.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create qual name
+  NamePtr createQualName (NamePtr const & qual_name, NamePtr const & unql_name)
+  {
+    return new QualName (qual_name, unql_name);
+  }
+}

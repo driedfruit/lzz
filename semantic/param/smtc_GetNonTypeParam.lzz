@@ -1,0 +1,39 @@
+// smtc_GetNonTypeParam.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CvType.h"
+#include "smtc_NamePtr.h"
+#include "smtc_ParamPtr.h"
+
+// gram
+#include "gram_Block.h"
+#include "gram_SpecSel.h"
+$end
+
+$src
+// semantic
+#include "smtc_CheckParamName.h"
+#include "smtc_CheckSpecFlags.h"
+#include "smtc_CreateNonTypeParam.h"
+#include "smtc_Message.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // get (template) non-type param
+  ParamPtr getNonTypeParam (gram::SpecSel const & spec_sel, CvType const & cv_type, NamePtr const & name,
+      gram::Block const & def_arg)
+  {
+    // no specifiers valid
+    checkValidSpecFlags (spec_sel, 0, msg::invalidNonTypeParamSpec);
+
+    // check name
+    checkParamName (name);
+
+    // return non-type param
+    return createNonTypeParam (0, cv_type, name, def_arg);
+  }
+}

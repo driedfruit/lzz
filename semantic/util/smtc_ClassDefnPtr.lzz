@@ -1,0 +1,24 @@
+// smtc_ClassDefnPtr.lzz
+//
+
+$hdr
+// util
+#include "util_DPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_ClassDefn.h"
+
+// util
+#include "util_DPtr.tpl"
+$end
+
+// semantic
+namespace smtc
+{
+  class ClassDecl;
+  class ClassDefn;
+  typedef util::DPtr <ClassDefn, ClassDecl> ClassDefnPtr;
+}
+template class util::DPtr <smtc::ClassDefn, smtc::ClassDecl>;

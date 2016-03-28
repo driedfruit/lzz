@@ -1,0 +1,45 @@
+// smtc_AccessToString.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Access.h"
+$end
+
+$src
+// semantic
+$end
+
+// semantic
+namespace smtc
+{
+  // access to string
+  char const * accessToString (Access access)
+  {
+    char const * s;
+    switch (access)
+    {
+      case DEFAULT_ACCESS:
+      {
+        s = "";
+        break;
+      }
+      case PUBLIC_ACCESS:
+      {
+        s = "public";
+        break;
+      }
+      case PRIVATE_ACCESS:
+      {
+        s = "private";
+        break;
+      }
+      case PROTECTED_ACCESS:
+      {
+        s = "protected";
+        break;
+      }
+    }
+    return s;
+  }
+}

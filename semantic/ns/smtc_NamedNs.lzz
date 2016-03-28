@@ -1,0 +1,50 @@
+// smtc_NamedNs.lzz
+//
+// named namespace
+//
+
+#hdr
+// semantic
+#include "smtc_NamePtr.h"
+#include "smtc_NestedNs.h"
+#end
+
+#src
+// semantic
+#include "smtc_NsVisitor.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // NamedNs
+  class NamedNs : public NestedNs
+  {
+    // name
+    NamePtr m_name;
+
+  public:
+    // constructor
+    NamedNs (NsPtr const & encl_ns, util::Loc const & loc, NamePtr const & name)
+      : NestedNs (encl_ns, loc), m_name (name)
+    {
+    }
+
+    // destructor
+    ~ NamedNs ()
+    {
+    }
+
+    // accept visitor
+    void accept (NsVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get name
+    inline NamePtr const & getName () const
+    {
+      return m_name;
+    }
+  }
+}

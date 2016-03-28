@@ -1,0 +1,29 @@
+// smtc_CreateHandler.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_HandlerPtr.h"
+#include "smtc_ParamPtr.h"
+
+// gram
+#include "gram_Block.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+// semantic
+#include "smtc_Handler.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create handler
+  HandlerPtr createHandler (util::Loc const & loc, ParamPtr const & catch_decl, gram::Block const & body)
+  {
+    return new Handler (loc, catch_decl, body);
+  }
+}

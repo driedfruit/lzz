@@ -1,0 +1,39 @@
+// smtc_ThrowSpec.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CvTypeVector.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // ThrowSpec
+  class ThrowSpec
+  {
+    // type set
+    CvTypeVector m_cv_type_set;
+
+  public:
+    // constructor
+    ThrowSpec (CvTypeVector const & cv_type_set)
+      : m_cv_type_set (cv_type_set)
+    {
+    }
+
+    // destructor
+    ~ ThrowSpec ()
+    {
+    }
+
+    // get cv type set
+    CvTypeVector const & getCvTypeSet () const
+    {
+      return m_cv_type_set;
+    }
+  }
+}

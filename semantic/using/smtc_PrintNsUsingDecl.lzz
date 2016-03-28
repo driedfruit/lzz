@@ -1,0 +1,28 @@
+// smtc_PrintNsUsingDecl.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_UsingDeclPtr.h"
+#include "smtc_NsPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_Output.h"
+#include "smtc_PrintUsingDecl.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class Output;
+
+  // print ns using decl
+  void printNsUsingDecl (Output & out, UsingDeclPtr const & using_decl, NsPtr const & ns)
+  {
+    // always print in source file (similar to an extern declaration)
+    printUsingDecl (out.getSrcFile (), DECLARATION_SECTION, using_decl, ns);
+  }
+}

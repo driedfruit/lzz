@@ -1,0 +1,19 @@
+// smtc_LazyBaseSpecPtr.lzz
+//
+
+$hdr
+#include "util_BPtr.h"
+$end
+
+$src
+#include "smtc_LazyBaseSpec.h"
+#include "util_BPtr.tpl"
+$end
+
+// semantic
+namespace smtc
+{
+  class LazyBaseSpec;
+  typedef util::BPtr <LazyBaseSpec> LazyBaseSpecPtr;
+}
+template class util::BPtr <smtc::LazyBaseSpec>;

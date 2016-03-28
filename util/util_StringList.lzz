@@ -1,0 +1,17 @@
+// util_StringList.c++
+//
+
+$hdr
+#include <list>
+#include "util_String.h"
+$end
+
+//
+// util
+//
+namespace util
+{
+  typedef std::list <String> StringList;
+  typedef std::list <String>::iterator StringListIter;
+  typedef std::list <String>::const_iterator StringListConstIter;
+}

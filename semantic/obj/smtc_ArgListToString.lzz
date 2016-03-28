@@ -1,0 +1,51 @@
+// smtc_ArgListToString.lzz
+//
+// argument list (comma delimited exprs) to string
+//
+
+$hdr
+// gram
+#include "gram_BlockVector.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // using util
+  using namespace util;
+
+  // arg list to string
+  util::String argListToString (gram::BlockVector const & arg_list, int & num_lines)
+  {
+    String str;
+    for (gram::BlockVectorConstIter beg = arg_list.begin (), end = arg_list.end (); beg != end; ++ beg)
+    {
+      gram::Block const & block = * beg;
+      appendWithSpace (str, block.toString ());
+      // do we need this?
+      /*
+      num_lines += block.getNumLines ();
+      */
+      if (beg + 1 != arg_list.end ())
+      {
+        str += ',';
+      }
+    }
+    return str;
+  }
+
+  // arg list to string without line count
+  inline util::String argListToString (gram::BlockVector const & arg_list)
+  {
+    int num_lines = 0;
+    return argListToString (arg_list, num_lines);
+  }
+}

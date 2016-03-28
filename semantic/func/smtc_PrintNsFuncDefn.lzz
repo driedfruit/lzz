@@ -1,0 +1,94 @@
+// smtc_PrintNsFuncDefn.lzz
+//
+
+#hdr
+// semantic
+#include "smtc_FilePtr.h"
+#include "smtc_FuncDeclPtr.h"
+#include "smtc_FuncDefnPtr.h"
+#include "smtc_NsPtr.h"
+#end
+
+#src
+// semantic
+#include "smtc_FuncDefn.h"
+#include "smtc_IsNameQual.h"
+#include "smtc_IsNsEnclUnmd.h"
+#include "smtc_Output.h"
+#include "smtc_PrintFuncDefn.h"
+
+// config
+#include "conf_Config.h"
+#end
+
+namespace
+{
+  using namespace smtc;
+
+  struct Printer (FuncDefnPtr const & func_defn, NsPtr const & ns)
+  {
+    bool is_decl = true;
+    void printDecl (FilePtr const & file)
+    {
+      PrintFuncDecl printer;
+      printer.is_decl = is_decl;
+      printer.not_inline = true;
+      printer.print (file, DECLARATION_SECTION, func_defn, ns);
+      is_decl = false;
+    }
+    void printDefn (FilePtr const & file, SectionKind skind = BODY_SECTION)
+    {
+      PrintFuncDefn printer;
+      printer.is_decl = is_decl;
+      printer.print (file, skind, func_defn, ns);
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  class Output;
+
+  // print namespace function definition
+  void printNsFuncDefn (Output & out, FuncDefnPtr const & func_defn, NsPtr const & ns)
+  {
+    Printer printer (func_defn, ns);
+    bool is_qual = isNameQual (func_defn->getName ());
+    if (func_defn->isStatic () || isNsEnclUnmd (ns))
+    {
+      if (! is_qual)
+      {
+        printer.printDecl (out.getSrcFile ());
+      }
+      printer.printDefn (out.getSrcFile ());
+    }
+    else
+    {
+      if (! is_qual)
+      {
+        printer.printDecl (out.getHdrFile ());
+      }
+      if (func_defn->isInline ())
+      {
+        if (conf::getOptionValue (conf::opt_inl_inl))
+        {
+          printer.printDefn (out.getHdrFile (), INLINE_BODY_SECTION);
+          printer.printDefn (out.getSrcFile (), INLINE_BODY_SECTION);
+        }
+        else if (conf::getOptionValue (conf::opt_inl))
+        {
+          printer.printDefn (out.getInlFile ());
+        }
+        else
+        {
+          printer.printDefn (out.getHdrFile ());
+        }
+      }
+      else
+      {
+        printer.printDefn (out.getSrcFile ());
+      }
+    }
+  }
+}

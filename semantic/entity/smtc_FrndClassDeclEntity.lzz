@@ -1,0 +1,48 @@
+// smtc_FrndClassDeclEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_ClassDeclPtr.h"
+#include "smtc_Entity.h"
+$end
+
+$src
+// semantic
+#include "smtc_EntityVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // FrndClassDeclEntity
+  class FrndClassDeclEntity : public Entity
+  {
+    // class decl
+    ClassDeclPtr m_class_decl;
+
+  public:
+    // constructor
+    FrndClassDeclEntity (ClassDeclPtr const & class_decl)
+      : m_class_decl (class_decl)
+    {
+    }
+
+    // destructor
+    ~ FrndClassDeclEntity ()
+    {
+    }
+
+    // accept visitor
+    void accept (EntityVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get class decl
+    inline ClassDeclPtr const & getClassDecl () const
+    {
+      return m_class_decl;
+    }
+  }
+}

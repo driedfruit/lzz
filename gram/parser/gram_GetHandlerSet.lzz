@@ -1,0 +1,71 @@
+// gram_GetHandlerSet.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_HandlerPtrVector.h"
+
+// basil
+#include "basl_Nonterm.h"
+$end
+
+$src
+// gram
+#include "gram_BlockTable.h"
+#include "gram_CharBlock.h"
+#include "gram_GetNodeDcl.h"
+#include "gram_Nonterm.h"
+#include "gram_Visitor.h"
+
+// semantic
+#include "smtc_CreateHandler.h"
+#include "smtc_GetCatchParam.h"
+$end
+
+// private namespace
+namespace
+{
+  // using gram
+  using namespace gram;
+
+  // get handler set
+  struct GetHandlerSet (smtc::HandlerPtrVector & handler_set)
+    : Visitor
+  {
+    // handler * -> CATCH LPAREN catch-decl RPAREN LBRACE block-opt 7 RBRACE
+    void visit (HandlerNode & node) const
+    {
+      SpecSel dcl_spec_sel;
+      smtc::CvType cv_type;
+      smtc::NamePtr name;
+      getNodeParamDcl (node.getCatchDecl (), dcl_spec_sel, cv_type, name);
+      smtc::ParamPtr catch_decl;
+      if (name.isSet ())
+      {
+        catch_decl = smtc::getCatchParam (dcl_spec_sel, cv_type, name);
+      }
+      Block body;
+      basl::Token block_token = node.getBlockOpt ();
+      if (block_token.isSet ())
+      {
+        body = getBlock (block_token.getLexeme ());
+      }
+      else
+      {
+        body = CharBlock (util::Loc ());
+      }
+      body.setLoc (node.getLBRACE_TOKEN ().getLoc ());
+      handler_set.push_back (smtc::createHandler (node.getCATCH_TOKEN ().getLoc (), catch_decl, body));
+    }
+  }
+}
+
+// gram
+namespace gram
+{
+  // get handler set
+  void getHandlerSet (basl::Nonterm & nonterm, smtc::HandlerPtrVector & handler_set)
+  {
+    nonterm.accept (GetHandlerSet (handler_set));
+  }
+}

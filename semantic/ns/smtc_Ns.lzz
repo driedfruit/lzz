@@ -1,0 +1,52 @@
+// smtc_Ns.lzz
+//
+// an extern "C" block is a "linkage namespace" in lzz, as it has ns semantics
+//
+
+#hdr
+// semantic
+#include "smtc_EntityPtrDeque.h"
+#end
+
+#src
+#end
+
+// semantic
+namespace smtc
+{
+  // types
+  struct NsVisitor;
+
+  // Ns
+  class Ns
+  {
+    // entity set
+    EntityPtrDeque m_entity_set;
+
+  public:
+    // constructor
+    Ns ()
+    {
+    }
+
+    // destructor
+    virtual ~ Ns ()
+    {
+    }
+
+    // accept visitor
+    virtual void accept (NsVisitor const & visitor) const = 0;
+    
+    // add entity
+    void addEntity (EntityPtr const & entity)
+    {
+      m_entity_set.push_back (entity);
+    }
+
+    // get entity set
+    inline EntityPtrDeque const & getEntitySet () const
+    {
+      return m_entity_set;
+    }
+  }
+}

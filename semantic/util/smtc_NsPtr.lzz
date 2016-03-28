@@ -1,0 +1,19 @@
+// smtc_NsPtr.lzz
+//
+
+$hdr
+#include "util_BPtr.h"
+$end
+
+$src
+#include "smtc_Ns.h"
+#include "util_BPtr.tpl"
+$end
+
+// semantic
+namespace smtc
+{
+  class Ns;
+  typedef util::BPtr <Ns> NsPtr;
+}
+template class util::BPtr <smtc::Ns>;

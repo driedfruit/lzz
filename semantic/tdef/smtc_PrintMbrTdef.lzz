@@ -1,0 +1,27 @@
+// smtc_PrintMbrTdef.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FilePtr.h"
+#include "smtc_NsPtr.h"
+#include "smtc_TdefPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_PrintTdef.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class Output;
+
+  // print mbr tdef
+  void printMbrTdef (FilePtr const & file, TdefPtr const & tdef)
+  {
+    printTdef (file, tdef);
+  }
+}

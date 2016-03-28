@@ -1,0 +1,19 @@
+// util_FilenameImplPtr.lzz
+//
+
+$hdr
+#include "util_BPtr.h"
+$end
+
+$src
+#include "util_FilenameImpl.h"
+#include "util_BPtr.tpl"
+$end
+
+// util
+namespace util
+{
+  class FilenameImpl;
+  typedef util::BPtr <FilenameImpl> FilenameImplPtr;
+}
+template class util::BPtr <util::FilenameImpl>;

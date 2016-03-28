@@ -1,0 +1,31 @@
+// smtc_CreateNavSubmitFuncDefn.lzz
+//
+
+#hdr
+// semantic
+#include "smtc_CvType.h"
+#include "smtc_FuncDecl.h"
+#include "smtc_NamePtr.h"
+#include "smtc_NavSubmitFuncDefnPtr.h"
+#include "smtc_ObjPtrVector.h"
+#include "smtc_ParamPtrVector.h"
+
+// gram
+#include "gram_Block.h"
+#end
+
+#src
+// semantic
+#include "smtc_NavSubmitFuncDefn.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // create nav submit func denf
+  NavSubmitFuncDefnPtr createNavSubmitFuncDefn (int flags, CvType const & ret_type, NamePtr const & name,
+      ParamPtrVector const & param_set, NamePtr const & nav_name, ObjPtrVector const & obj_set, gram::Block const & ret_stmt)
+  {
+    return new NavSubmitFuncDefn (flags, ret_type, name, param_set, nav_name, obj_set, ret_stmt);
+  }
+}

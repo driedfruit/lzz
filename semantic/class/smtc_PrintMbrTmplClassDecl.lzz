@@ -1,0 +1,24 @@
+// smtc_PrintMbrTmplClassDecl.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_TmplClassDeclPtr.h"
+#include "smtc_FilePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_PrintTmplClassDecl.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // print mbr tmpl class decl
+  void printMbrTmplClassDecl (FilePtr const & file, TmplClassDeclPtr const & tmpl_class_decl)
+  {
+    PrintTmplClassDecl printer;
+    printer.print (file, tmpl_class_decl);
+  }
+}

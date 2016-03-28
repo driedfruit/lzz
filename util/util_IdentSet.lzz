@@ -1,0 +1,17 @@
+// util_IdentSet.lzz
+//
+
+$header
+#include <set>
+#include "util_Ident.h"
+$end
+
+//
+// util
+//
+namespace util
+{
+  typedef std::set <Ident> IdentSet;
+  typedef std::set <Ident>::iterator IdentSetIter;
+  typedef std::set <Ident>::const_iterator IdentSetConstIter;
+}

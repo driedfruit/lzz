@@ -1,0 +1,51 @@
+// smtc_MbrInit.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // MbrInit
+  class MbrInit
+  {
+    // name
+    NamePtr m_name;
+
+    // arg set
+    util::String m_arg_set;
+
+  public:
+    // constructor
+    MbrInit (NamePtr const & name, util::String const & arg_set)
+      : m_name (name), m_arg_set (arg_set)
+    {
+    }
+
+    // destructor
+    ~ MbrInit ()
+    {
+    }
+
+    // get name
+    inline NamePtr const & getName () const
+    {
+      return m_name;
+    }
+
+    // get arg set
+    inline util::String const & getArgSet () const
+    {
+      return m_arg_set;
+    }
+  }
+}

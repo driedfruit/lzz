@@ -1,0 +1,24 @@
+// gram_DiscardRestOfLine.lzz
+//
+
+$hdr
+// gram
+$end
+
+$src
+// gram
+#include "gram_Lexer.h"
+$end
+
+// gram
+namespace gram
+{
+  // types
+  class Lexer;
+
+  // discard rest of line
+  void discardRestOfLine (Lexer & lexer)
+  {
+    lexer.discardRestOfLine ();
+  }
+}

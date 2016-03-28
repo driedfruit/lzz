@@ -1,0 +1,31 @@
+// smtc_CreateNonTypeParam.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CvType.h"
+#include "smtc_NonTypeParamPtr.h"
+#include "smtc_Param.h"
+
+// gram
+#include "gram_Block.h"
+$end
+
+$src
+// semantic
+#include "smtc_NonTypeParam.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create non type param
+  NonTypeParamPtr createNonTypeParam (int flags, CvType const & cv_type, NamePtr const & name, gram::Block const & def_arg)
+  {
+    if (def_arg.isSet ())
+    {
+      def_arg.trim ();
+    }
+    return new NonTypeParam (flags, cv_type, name, def_arg);
+  }
+}

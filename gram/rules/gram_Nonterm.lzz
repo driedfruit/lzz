@@ -1,0 +1,4049 @@
+// gram_Nonterm.lzz
+//
+
+$hdr
+#include "basl_NontermProxy.h"
+$end
+
+$inl
+#include "basl_Node.h"
+$end
+
+$src
+#include "basl_NontermInfo.h"
+#include "gram_Visitor.h"
+$end
+
+// private namespace
+namespace
+{
+  // node accept functions
+  void accept_0 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::SimpleDeclNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_1 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::NestedSimpleDecl1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_2 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::NestedSimpleDecl2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_3 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::NestedSimpleDecl3Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_4 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::NestedDeclNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_5 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::ObjInit1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_6 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::ObjInit2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_7 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::ObjInit3Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_8 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::BlockNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_9 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::NestedName1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_10 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::NestedName2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_11 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::Name1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_12 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::Name2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_13 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::Name3Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_14 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::BaseName1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_15 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::Name4Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_16 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::Name5Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_17 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::BaseName2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_18 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::BaseName3Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_19 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::BaseName4Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_20 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::Oper1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_21 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::Oper2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_22 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::Oper3Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_23 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::Oper4Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_24 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::Oper5Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_25 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::DeclSpecNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_26 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::CVSpecNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_27 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::SeqNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_28 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::FtorSpecNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_29 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::UserTypeNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_30 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::ElabTypeNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_31 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::BuiltInTypeNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_32 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::DclNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_33 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::DirectDcl1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_34 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::DirectDcl2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_35 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::DirectDcl3Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_36 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::PureDclNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_37 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::PureNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_38 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::DirectDcl4Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_39 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::PtrOper1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_40 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::PtrOper2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_41 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::PtrOper3Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_42 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::IdNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_43 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::ParamDeclBody1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_44 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::ParamDeclBody2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_45 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::ParamDeclBody3Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_46 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::ParamDeclBody4Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_47 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::ParamDecl1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_48 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::ParamDecl2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_49 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::Decl2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_50 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::Decl1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_51 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::TypeIdNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_52 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::NamespaceDefNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_53 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::NamespaceHead1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_54 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::NamespaceHead2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_55 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::ClassDefNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_56 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::ClassHeadNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_57 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::BaseSpec1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_58 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::BaseSpec2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_59 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::BaseSpec3Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_60 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::AccessSpecNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_61 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::ClassDeclNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_62 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::FriendClassDeclNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_63 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::FuncDefNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_64 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::MbrInitNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_65 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::HandlerNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_66 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::TmplDeclNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_67 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::TmplSpecNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_68 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::TypeParam1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_69 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::TypeParam2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_70 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::TmplTmplParam1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_71 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::TmplTmplParam2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_72 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::TmplInstNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_73 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::TmplInstBeginNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_74 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::LazyCtorNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_75 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::LazyCtorBegin1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_76 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::LazyCtorBegin2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_77 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::LazyBaseSpec1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_78 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::LazyBaseSpec2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_79 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::LazyBaseSpec3Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_80 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::DirectDcl5Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_81 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::FunctorDefNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_82 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::FunctorDeclTypeNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_83 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::EnumDefNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_84 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::EnumtorDecl1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_85 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::EnumtorDecl2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_86 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::UsingDeclNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_87 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::UsingDirNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_88 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::LinkageSpecNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_89 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::LinkageBlockBeginNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_90 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::LinkageDeclBeginNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_91 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::NavDefNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_92 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::NavHeadNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_93 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::NavDirectDcl1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_94 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::NavVisitFuncDefNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_95 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::ReturnStmtNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_96 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::VdfDefNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_97 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::VdfHeadNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_98 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::VdfFunctorDefNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_99 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::VdfShortData1DefNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_100 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::VdfShortData2DefNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_101 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::VdfDataParamListNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_102 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::ObjInit4Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_103 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::VdfBlockDataDefNode node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_104 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::VdfBlockDataHead1Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_105 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::VdfBlockDataHead2Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+  void accept_106 (basl::Nonterm & nonterm, basl::Visitor const & visitor)
+  {
+    gram::DirectDcl6Node node (nonterm);
+    static_cast <gram::Visitor const &> (visitor).visit (node);
+  }
+}
+
+namespace gram
+{
+  // simple-decl * -> nested-simple-decl SEMI_TOKEN
+  class SimpleDeclNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "SimpleDeclNode", accept_0 };
+
+    // constructor
+    inline SimpleDeclNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get nested-simple-decl
+    inline basl::Nonterm & getNestedSimpleDecl () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get SEMI_TOKEN
+    inline basl::Token & getSEMI_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+  }
+
+  // nested-simple-decl <* -> nested-obj-decl obj-init-opt
+  class NestedSimpleDecl1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "NestedSimpleDecl1Node", accept_1 };
+
+    // constructor
+    inline NestedSimpleDecl1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get nested-obj-decl
+    inline basl::Nonterm & getNestedObjDecl () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get obj-init-opt
+    inline basl::Nonterm & getObjInitOpt () const
+    {
+      return getChild (2).getNonterm ();
+    }
+  }
+
+  // nested-simple-decl <* -> nested-func-decl
+  class NestedSimpleDecl2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "NestedSimpleDecl2Node", accept_2 };
+
+    // constructor
+    inline NestedSimpleDecl2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get nested-func-decl
+    inline basl::Nonterm & getNestedFuncDecl () const
+    {
+      return getChild (1).getNonterm ();
+    }
+  }
+
+  // nested-simple-decl <* -> nested-bitf-decl
+  class NestedSimpleDecl3Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "NestedSimpleDecl3Node", accept_3 };
+
+    // constructor
+    inline NestedSimpleDecl3Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get nested-bitf-decl
+    inline basl::Nonterm & getNestedBitfDecl () const
+    {
+      return getChild (1).getNonterm ();
+    }
+  }
+
+  // nested-obj-decl -> nested-simple-decl COMMA_TOKEN obj-dcl
+  class NestedDeclNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "NestedDeclNode", accept_4 };
+
+    // constructor
+    inline NestedDeclNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get nested-simple-decl
+    inline basl::Nonterm & getNestedSimpleDecl () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get COMMA_TOKEN
+    inline basl::Token & getCOMMA_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get obj-dcl
+    inline basl::Nonterm & getObjDcl () const
+    {
+      return getChild (3).getNonterm ();
+    }
+  }
+
+  // obj-init -> ASSIGN_TOKEN BLOCK_TOKEN 3
+  class ObjInit1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "ObjInit1Node", accept_5 };
+
+    // constructor
+    inline ObjInit1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get ASSIGN_TOKEN
+    inline basl::Token & getASSIGN_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get BLOCK_TOKEN
+    inline basl::Token & getBLOCK_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+  }
+
+  // obj-init -> DINIT_TOKEN LPAREN_TOKEN expr-list RPAREN_TOKEN
+  class ObjInit2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "ObjInit2Node", accept_6 };
+
+    // constructor
+    inline ObjInit2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get DINIT_TOKEN
+    inline basl::Token & getDINIT_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get LPAREN_TOKEN
+    inline basl::Token & getLPAREN_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get expr-list
+    inline basl::Nonterm & getExprList () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get RPAREN_TOKEN
+    inline basl::Token & getRPAREN_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+  }
+
+  // obj-init -> direct-expr-list RPAREN_TOKEN
+  class ObjInit3Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "ObjInit3Node", accept_7 };
+
+    // constructor
+    inline ObjInit3Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get direct-expr-list
+    inline basl::Nonterm & getDirectExprList () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get RPAREN_TOKEN
+    inline basl::Token & getRPAREN_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+  }
+
+  // block -> BLOCK_TOKEN
+  class BlockNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "BlockNode", accept_8 };
+
+    // constructor
+    inline BlockNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get BLOCK_TOKEN
+    inline basl::Token & getBLOCK_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+  }
+
+  // nested-name -> DCOLON_TOKEN
+  class NestedName1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "NestedName1Node", accept_9 };
+
+    // constructor
+    inline NestedName1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get DCOLON_TOKEN
+    inline basl::Token & getDCOLON_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+  }
+
+  // nested-name -> obj-name DCOLON_TOKEN >!
+  class NestedName2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "NestedName2Node", accept_10 };
+
+    // constructor
+    inline NestedName2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get DCOLON_TOKEN
+    inline basl::Token & getDCOLON_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+  }
+
+  // obj-name -> nested-name-opt obj-base-name
+  class Name1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "Name1Node", accept_11 };
+
+    // constructor
+    inline Name1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get nested-name-opt
+    inline basl::Nonterm & getNestedNameOpt () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get obj-base-name
+    inline basl::Nonterm & getObjBaseName () const
+    {
+      return getChild (2).getNonterm ();
+    }
+  }
+
+  // obj-name -> nested-name-opt obj-base-name LT_TOKEN >! block-opt 1 GT_TOKEN
+  class Name2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "Name2Node", accept_12 };
+
+    // constructor
+    inline Name2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get nested-name-opt
+    inline basl::Nonterm & getNestedNameOpt () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get obj-base-name
+    inline basl::Nonterm & getObjBaseName () const
+    {
+      return getChild (2).getNonterm ();
+    }
+
+    // get LT_TOKEN
+    inline basl::Token & getLT_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+
+    // get block-opt
+    inline basl::Token & getBlockOpt () const
+    {
+      return getChild (4).getToken ();
+    }
+
+    // get GT_TOKEN
+    inline basl::Token & getGT_TOKEN () const
+    {
+      return getChild (5).getToken ();
+    }
+  }
+
+  // obj-name -> nested-name TEMPLATE_TOKEN obj-base-name LT_TOKEN >! block-opt 1 GT_TOKEN
+  class Name3Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "Name3Node", accept_13 };
+
+    // constructor
+    inline Name3Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get nested-name
+    inline basl::Nonterm & getNestedName () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get TEMPLATE_TOKEN
+    inline basl::Token & getTEMPLATE_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get obj-base-name
+    inline basl::Nonterm & getObjBaseName () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get LT_TOKEN
+    inline basl::Token & getLT_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+
+    // get block-opt
+    inline basl::Token & getBlockOpt () const
+    {
+      return getChild (5).getToken ();
+    }
+
+    // get GT_TOKEN
+    inline basl::Token & getGT_TOKEN () const
+    {
+      return getChild (6).getToken ();
+    }
+  }
+
+  // obj-base-name -> macro-opt IDENT_TOKEN
+  class BaseName1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "BaseName1Node", accept_14 };
+
+    // constructor
+    inline BaseName1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get macro-opt
+    inline basl::Token & getMacroOpt () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get IDENT_TOKEN
+    inline basl::Token & getIDENT_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+  }
+
+  // bitf-name -> nested-name-opt macro-opt IDENT_TOKEN COLON_TOKEN BLOCK_TOKEN 4
+  class Name4Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "Name4Node", accept_15 };
+
+    // constructor
+    inline Name4Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get nested-name-opt
+    inline basl::Nonterm & getNestedNameOpt () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get macro-opt
+    inline basl::Token & getMacroOpt () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get IDENT_TOKEN
+    inline basl::Token & getIDENT_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+
+    // get COLON_TOKEN
+    inline basl::Token & getCOLON_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+
+    // get BLOCK_TOKEN
+    inline basl::Token & getBLOCK_TOKEN () const
+    {
+      return getChild (5).getToken ();
+    }
+  }
+
+  // bitf-name -> COLON_TOKEN BLOCK_TOKEN 4
+  class Name5Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "Name5Node", accept_16 };
+
+    // constructor
+    inline Name5Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get COLON_TOKEN
+    inline basl::Token & getCOLON_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get BLOCK_TOKEN
+    inline basl::Token & getBLOCK_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+  }
+
+  // func-base-name -> macro-opt BITNOT_TOKEN IDENT_TOKEN
+  class BaseName2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "BaseName2Node", accept_17 };
+
+    // constructor
+    inline BaseName2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get macro-opt
+    inline basl::Token & getMacroOpt () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get BITNOT_TOKEN
+    inline basl::Token & getBITNOT_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get IDENT_TOKEN
+    inline basl::Token & getIDENT_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+  }
+
+  // func-base-name -> macro-opt OPERATOR_TOKEN oper
+  class BaseName3Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "BaseName3Node", accept_18 };
+
+    // constructor
+    inline BaseName3Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get macro-opt
+    inline basl::Token & getMacroOpt () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get OPERATOR_TOKEN
+    inline basl::Token & getOPERATOR_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get oper
+    inline basl::Nonterm & getOper () const
+    {
+      return getChild (3).getNonterm ();
+    }
+  }
+
+  // func-base-name -> macro-opt OPERATOR_TOKEN abstract-decl >
+  class BaseName4Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "BaseName4Node", accept_19 };
+
+    // constructor
+    inline BaseName4Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get macro-opt
+    inline basl::Token & getMacroOpt () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get OPERATOR_TOKEN
+    inline basl::Token & getOPERATOR_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get abstract-decl
+    inline basl::Nonterm & getAbstractDecl () const
+    {
+      return getChild (3).getNonterm ();
+    }
+  }
+
+  // oper -> LPAREN_TOKEN RPAREN_TOKEN
+  class Oper1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "Oper1Node", accept_20 };
+
+    // constructor
+    inline Oper1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get LPAREN_TOKEN
+    inline basl::Token & getLPAREN_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get RPAREN_TOKEN
+    inline basl::Token & getRPAREN_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+  }
+
+  // oper -> LBRACK_TOKEN RBRACK_TOKEN
+  class Oper2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "Oper2Node", accept_21 };
+
+    // constructor
+    inline Oper2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get LBRACK_TOKEN
+    inline basl::Token & getLBRACK_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get RBRACK_TOKEN
+    inline basl::Token & getRBRACK_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+  }
+
+  // oper -> NEW_TOKEN LBRACK_TOKEN RBRACK_TOKEN
+  class Oper3Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "Oper3Node", accept_22 };
+
+    // constructor
+    inline Oper3Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get NEW_TOKEN
+    inline basl::Token & getNEW_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get LBRACK_TOKEN
+    inline basl::Token & getLBRACK_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get RBRACK_TOKEN
+    inline basl::Token & getRBRACK_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+  }
+
+  // oper -> DELETE_TOKEN LBRACK_TOKEN RBRACK_TOKEN
+  class Oper4Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "Oper4Node", accept_23 };
+
+    // constructor
+    inline Oper4Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get DELETE_TOKEN
+    inline basl::Token & getDELETE_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get LBRACK_TOKEN
+    inline basl::Token & getLBRACK_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get RBRACK_TOKEN
+    inline basl::Token & getRBRACK_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+  }
+
+  // oper -> single-oper
+  class Oper5Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "Oper5Node", accept_24 };
+
+    // constructor
+    inline Oper5Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get single-oper
+    inline basl::Token & getSingleOper () const
+    {
+      return getChild (1).getToken ();
+    }
+  }
+
+  // typedef-spec -> TYPEDEF_TOKEN
+  class DeclSpecNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "DeclSpecNode", accept_25 };
+
+    // constructor
+    inline DeclSpecNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get TYPEDEF_TOKEN
+    inline basl::Token & getTYPEDEF_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+  }
+
+  // cv-spec -> cv-token
+  class CVSpecNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "CVSpecNode", accept_26 };
+
+    // constructor
+    inline CVSpecNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get cv-token
+    inline basl::Token & getCvToken () const
+    {
+      return getChild (1).getToken ();
+    }
+  }
+
+  // cv-spec-seq -> cv-spec-seq cv-spec
+  class SeqNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "SeqNode", accept_27 };
+
+    // constructor
+    inline SeqNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get cv-spec-seq
+    inline basl::Nonterm & getCvSpecSeq () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get cv-spec
+    inline basl::Nonterm & getCvSpec () const
+    {
+      return getChild (2).getNonterm ();
+    }
+  }
+
+  // ftor-spec -> ftor-token
+  class FtorSpecNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "FtorSpecNode", accept_28 };
+
+    // constructor
+    inline FtorSpecNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get ftor-token
+    inline basl::Token & getFtorToken () const
+    {
+      return getChild (1).getToken ();
+    }
+  }
+
+  // user-type -> obj-name
+  class UserTypeNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "UserTypeNode", accept_29 };
+
+    // constructor
+    inline UserTypeNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (1).getNonterm ();
+    }
+  }
+
+  // elaborated-type -> class-key dll-api-opt obj-name
+  class ElabTypeNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "ElabTypeNode", accept_30 };
+
+    // constructor
+    inline ElabTypeNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get class-key
+    inline basl::Token & getClassKey () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get dll-api-opt
+    inline basl::Token & getDllApiOpt () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (3).getNonterm ();
+    }
+  }
+
+  // built-in-type -> built-in-type-token
+  class BuiltInTypeNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "BuiltInTypeNode", accept_31 };
+
+    // constructor
+    inline BuiltInTypeNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get built-in-type-token
+    inline basl::Token & getBuiltInTypeToken () const
+    {
+      return getChild (1).getToken ();
+    }
+  }
+
+  // obj-a-dcl -> ptr-oper obj-a-dcl
+  class DclNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "DclNode", accept_32 };
+
+    // constructor
+    inline DclNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get ptr-oper
+    inline basl::Nonterm & getPtrOper () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get obj-a-dcl
+    inline basl::Nonterm & getObjADcl () const
+    {
+      return getChild (2).getNonterm ();
+    }
+  }
+
+  // obj-b-direct-dcl -> obj-b-direct-dcl param-decl-1-body > RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+  class DirectDcl1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "DirectDcl1Node", accept_33 };
+
+    // constructor
+    inline DirectDcl1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get obj-b-direct-dcl
+    inline basl::Nonterm & getObjBDirectDcl () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get param-decl-1-body
+    inline basl::Nonterm & getParamDecl1Body () const
+    {
+      return getChild (2).getNonterm ();
+    }
+
+    // get RPAREN_TOKEN
+    inline basl::Token & getRPAREN_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+
+    // get cv-spec-seq-opt
+    inline basl::Nonterm & getCvSpecSeqOpt () const
+    {
+      return getChild (4).getNonterm ();
+    }
+
+    // get throw-spec-opt
+    inline basl::Nonterm & getThrowSpecOpt () const
+    {
+      return getChild (5).getNonterm ();
+    }
+  }
+
+  // obj-b-direct-dcl -> obj-a-direct-dcl LBRACK_TOKEN block-opt 5 RBRACK_TOKEN
+  class DirectDcl2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "DirectDcl2Node", accept_34 };
+
+    // constructor
+    inline DirectDcl2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get obj-a-direct-dcl
+    inline basl::Nonterm & getObjADirectDcl () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get LBRACK_TOKEN
+    inline basl::Token & getLBRACK_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get block-opt
+    inline basl::Token & getBlockOpt () const
+    {
+      return getChild (3).getToken ();
+    }
+
+    // get RBRACK_TOKEN
+    inline basl::Token & getRBRACK_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+  }
+
+  // obj-b-direct-dcl -> LPAREN_TOKEN obj-b-dcl RPAREN_TOKEN
+  class DirectDcl3Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "DirectDcl3Node", accept_35 };
+
+    // constructor
+    inline DirectDcl3Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get LPAREN_TOKEN
+    inline basl::Token & getLPAREN_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get obj-b-dcl
+    inline basl::Nonterm & getObjBDcl () const
+    {
+      return getChild (2).getNonterm ();
+    }
+
+    // get RPAREN_TOKEN
+    inline basl::Token & getRPAREN_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+  }
+
+  // pure-func-dcl -> func-dcl pure-opt
+  class PureDclNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "PureDclNode", accept_36 };
+
+    // constructor
+    inline PureDclNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get func-dcl
+    inline basl::Nonterm & getFuncDcl () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get pure-opt
+    inline basl::Nonterm & getPureOpt () const
+    {
+      return getChild (2).getNonterm ();
+    }
+  }
+
+  // pure -> ASSIGN_TOKEN ZERO_TOKEN
+  class PureNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "PureNode", accept_37 };
+
+    // constructor
+    inline PureNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get ASSIGN_TOKEN
+    inline basl::Token & getASSIGN_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get ZERO_TOKEN
+    inline basl::Token & getZERO_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+  }
+
+  // func-a-direct-dcl -> obj-dcl-id param-decl-1-body > RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+  class DirectDcl4Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "DirectDcl4Node", accept_38 };
+
+    // constructor
+    inline DirectDcl4Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get obj-dcl-id
+    inline basl::Nonterm & getObjDclId () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get param-decl-1-body
+    inline basl::Nonterm & getParamDecl1Body () const
+    {
+      return getChild (2).getNonterm ();
+    }
+
+    // get RPAREN_TOKEN
+    inline basl::Token & getRPAREN_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+
+    // get cv-spec-seq-opt
+    inline basl::Nonterm & getCvSpecSeqOpt () const
+    {
+      return getChild (4).getNonterm ();
+    }
+
+    // get throw-spec-opt
+    inline basl::Nonterm & getThrowSpecOpt () const
+    {
+      return getChild (5).getNonterm ();
+    }
+  }
+
+  // ptr-oper -> TIMES_TOKEN cv-spec-seq-opt
+  class PtrOper1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "PtrOper1Node", accept_39 };
+
+    // constructor
+    inline PtrOper1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get TIMES_TOKEN
+    inline basl::Token & getTIMES_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get cv-spec-seq-opt
+    inline basl::Nonterm & getCvSpecSeqOpt () const
+    {
+      return getChild (2).getNonterm ();
+    }
+  }
+
+  // ptr-oper -> BITAND_TOKEN
+  class PtrOper2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "PtrOper2Node", accept_40 };
+
+    // constructor
+    inline PtrOper2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get BITAND_TOKEN
+    inline basl::Token & getBITAND_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+  }
+
+  // ptr-oper -> obj-name DCOLON_TOKEN TIMES_TOKEN cv-spec-seq-opt
+  class PtrOper3Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "PtrOper3Node", accept_41 };
+
+    // constructor
+    inline PtrOper3Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get DCOLON_TOKEN
+    inline basl::Token & getDCOLON_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get TIMES_TOKEN
+    inline basl::Token & getTIMES_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+
+    // get cv-spec-seq-opt
+    inline basl::Nonterm & getCvSpecSeqOpt () const
+    {
+      return getChild (4).getNonterm ();
+    }
+  }
+
+  // obj-id -> obj-name
+  class IdNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "IdNode", accept_42 };
+
+    // constructor
+    inline IdNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (1).getNonterm ();
+    }
+  }
+
+  // param-decl-1-body -> param-decl-1-list ellipse-opt
+  class ParamDeclBody1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "ParamDeclBody1Node", accept_43 };
+
+    // constructor
+    inline ParamDeclBody1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get param-decl-1-list
+    inline basl::Nonterm & getParamDecl1List () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get ellipse-opt
+    inline basl::Token & getEllipseOpt () const
+    {
+      return getChild (2).getToken ();
+    }
+  }
+
+  // param-decl-1-body -> param-decl-1-list COMMA_TOKEN ELLIPSE_TOKEN
+  class ParamDeclBody2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "ParamDeclBody2Node", accept_44 };
+
+    // constructor
+    inline ParamDeclBody2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get param-decl-1-list
+    inline basl::Nonterm & getParamDecl1List () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get COMMA_TOKEN
+    inline basl::Token & getCOMMA_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get ELLIPSE_TOKEN
+    inline basl::Token & getELLIPSE_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+  }
+
+  // param-decl-1-body -> LPAREN_TOKEN ellipse-opt
+  class ParamDeclBody3Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "ParamDeclBody3Node", accept_45 };
+
+    // constructor
+    inline ParamDeclBody3Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get LPAREN_TOKEN
+    inline basl::Token & getLPAREN_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get ellipse-opt
+    inline basl::Token & getEllipseOpt () const
+    {
+      return getChild (2).getToken ();
+    }
+  }
+
+  // param-decl-1-body -> LPAREN_TOKEN VOID_TOKEN
+  class ParamDeclBody4Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "ParamDeclBody4Node", accept_46 };
+
+    // constructor
+    inline ParamDeclBody4Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get LPAREN_TOKEN
+    inline basl::Token & getLPAREN_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get VOID_TOKEN
+    inline basl::Token & getVOID_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+  }
+
+  // param-init-decl <* -> param-decl
+  class ParamDecl1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "ParamDecl1Node", accept_47 };
+
+    // constructor
+    inline ParamDecl1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get param-decl
+    inline basl::Nonterm & getParamDecl () const
+    {
+      return getChild (1).getNonterm ();
+    }
+  }
+
+  // param-init-decl <* -> param-decl ASSIGN_TOKEN BLOCK_TOKEN 4
+  class ParamDecl2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "ParamDecl2Node", accept_48 };
+
+    // constructor
+    inline ParamDecl2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get param-decl
+    inline basl::Nonterm & getParamDecl () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get ASSIGN_TOKEN
+    inline basl::Token & getASSIGN_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get BLOCK_TOKEN
+    inline basl::Token & getBLOCK_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+  }
+
+  // obj-decl -> xBxx-decl-spec-seq obj-dcl
+  class Decl2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "Decl2Node", accept_49 };
+
+    // constructor
+    inline Decl2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get xBxx-decl-spec-seq
+    inline basl::Nonterm & getXBxxDeclSpecSeq () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get obj-dcl
+    inline basl::Nonterm & getObjDcl () const
+    {
+      return getChild (2).getNonterm ();
+    }
+  }
+
+  // ctor-decl -> pure-ctor-dcl
+  class Decl1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "Decl1Node", accept_50 };
+
+    // constructor
+    inline Decl1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get pure-ctor-dcl
+    inline basl::Nonterm & getPureCtorDcl () const
+    {
+      return getChild (1).getNonterm ();
+    }
+  }
+
+  // type-id -> abstract-decl
+  class TypeIdNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "TypeIdNode", accept_51 };
+
+    // constructor
+    inline TypeIdNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get abstract-decl
+    inline basl::Nonterm & getAbstractDecl () const
+    {
+      return getChild (1).getNonterm ();
+    }
+  }
+
+  // namespace-def * -> namespace-head <* LBRACE_TOKEN decl-seq-opt RBRACE_TOKEN
+  class NamespaceDefNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "NamespaceDefNode", accept_52 };
+
+    // constructor
+    inline NamespaceDefNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get namespace-head
+    inline basl::Nonterm & getNamespaceHead () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get LBRACE_TOKEN
+    inline basl::Token & getLBRACE_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get decl-seq-opt
+    inline basl::Nonterm & getDeclSeqOpt () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get RBRACE_TOKEN
+    inline basl::Token & getRBRACE_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+  }
+
+  // namespace-head -> NAMESPACE_TOKEN obj-name
+  class NamespaceHead1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "NamespaceHead1Node", accept_53 };
+
+    // constructor
+    inline NamespaceHead1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get NAMESPACE_TOKEN
+    inline basl::Token & getNAMESPACE_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (2).getNonterm ();
+    }
+  }
+
+  // namespace-head -> NAMESPACE_TOKEN
+  class NamespaceHead2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "NamespaceHead2Node", accept_54 };
+
+    // constructor
+    inline NamespaceHead2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get NAMESPACE_TOKEN
+    inline basl::Token & getNAMESPACE_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+  }
+
+  // class-def * -> class-head <* LBRACE_TOKEN mbr-decl-seq-opt RBRACE_TOKEN semi-opt
+  class ClassDefNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "ClassDefNode", accept_55 };
+
+    // constructor
+    inline ClassDefNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get class-head
+    inline basl::Nonterm & getClassHead () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get LBRACE_TOKEN
+    inline basl::Token & getLBRACE_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get mbr-decl-seq-opt
+    inline basl::Nonterm & getMbrDeclSeqOpt () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get RBRACE_TOKEN
+    inline basl::Token & getRBRACE_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+
+    // get semi-opt
+    inline basl::Token & getSemiOpt () const
+    {
+      return getChild (5).getToken ();
+    }
+  }
+
+  // class-head -> class-key dll-api-opt obj-name base-clause-opt
+  class ClassHeadNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "ClassHeadNode", accept_56 };
+
+    // constructor
+    inline ClassHeadNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get class-key
+    inline basl::Token & getClassKey () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get dll-api-opt
+    inline basl::Token & getDllApiOpt () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get base-clause-opt
+    inline basl::Nonterm & getBaseClauseOpt () const
+    {
+      return getChild (4).getNonterm ();
+    }
+  }
+
+  // base-spec * -> obj-name
+  class BaseSpec1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "BaseSpec1Node", accept_57 };
+
+    // constructor
+    inline BaseSpec1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (1).getNonterm ();
+    }
+  }
+
+  // base-spec * -> VIRTUAL_TOKEN access-opt obj-name
+  class BaseSpec2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "BaseSpec2Node", accept_58 };
+
+    // constructor
+    inline BaseSpec2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get VIRTUAL_TOKEN
+    inline basl::Token & getVIRTUAL_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get access-opt
+    inline basl::Token & getAccessOpt () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (3).getNonterm ();
+    }
+  }
+
+  // base-spec * -> access virtual-opt obj-name
+  class BaseSpec3Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "BaseSpec3Node", accept_59 };
+
+    // constructor
+    inline BaseSpec3Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get access
+    inline basl::Token & getAccess () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get virtual-opt
+    inline basl::Token & getVirtualOpt () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (3).getNonterm ();
+    }
+  }
+
+  // access-spec * -> access COLON_TOKEN
+  class AccessSpecNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "AccessSpecNode", accept_60 };
+
+    // constructor
+    inline AccessSpecNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get access
+    inline basl::Token & getAccess () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get COLON_TOKEN
+    inline basl::Token & getCOLON_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+  }
+
+  // class-decl -> xExx-decl-spec-seq SEMI_TOKEN
+  class ClassDeclNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "ClassDeclNode", accept_61 };
+
+    // constructor
+    inline ClassDeclNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get xExx-decl-spec-seq
+    inline basl::Nonterm & getXExxDeclSpecSeq () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get SEMI_TOKEN
+    inline basl::Token & getSEMI_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+  }
+
+  // friend-class-decl -> FExx-decl-spec-seq SEMI_TOKEN
+  class FriendClassDeclNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "FriendClassDeclNode", accept_62 };
+
+    // constructor
+    inline FriendClassDeclNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get FExx-decl-spec-seq
+    inline basl::Nonterm & getFExxDeclSpecSeq () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get SEMI_TOKEN
+    inline basl::Token & getSEMI_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+  }
+
+  // func-def * -> func-decl try-opt ctor-init-opt LBRACE_TOKEN block-opt 7 RBRACE_TOKEN handler-seq-opt
+  class FuncDefNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "FuncDefNode", accept_63 };
+
+    // constructor
+    inline FuncDefNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get func-decl
+    inline basl::Nonterm & getFuncDecl () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get try-opt
+    inline basl::Token & getTryOpt () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get ctor-init-opt
+    inline basl::Nonterm & getCtorInitOpt () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get LBRACE_TOKEN
+    inline basl::Token & getLBRACE_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+
+    // get block-opt
+    inline basl::Token & getBlockOpt () const
+    {
+      return getChild (5).getToken ();
+    }
+
+    // get RBRACE_TOKEN
+    inline basl::Token & getRBRACE_TOKEN () const
+    {
+      return getChild (6).getToken ();
+    }
+
+    // get handler-seq-opt
+    inline basl::Nonterm & getHandlerSeqOpt () const
+    {
+      return getChild (7).getNonterm ();
+    }
+  }
+
+  // mbr-init * -> obj-name LPAREN_TOKEN expr-list-opt RPAREN_TOKEN
+  class MbrInitNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "MbrInitNode", accept_64 };
+
+    // constructor
+    inline MbrInitNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get LPAREN_TOKEN
+    inline basl::Token & getLPAREN_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get expr-list-opt
+    inline basl::Nonterm & getExprListOpt () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get RPAREN_TOKEN
+    inline basl::Token & getRPAREN_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+  }
+
+  // handler * -> CATCH_TOKEN LPAREN_TOKEN catch-decl RPAREN_TOKEN LBRACE_TOKEN block-opt 7 RBRACE_TOKEN
+  class HandlerNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "HandlerNode", accept_65 };
+
+    // constructor
+    inline HandlerNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get CATCH_TOKEN
+    inline basl::Token & getCATCH_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get LPAREN_TOKEN
+    inline basl::Token & getLPAREN_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get catch-decl
+    inline basl::Nonterm & getCatchDecl () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get RPAREN_TOKEN
+    inline basl::Token & getRPAREN_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+
+    // get LBRACE_TOKEN
+    inline basl::Token & getLBRACE_TOKEN () const
+    {
+      return getChild (5).getToken ();
+    }
+
+    // get block-opt
+    inline basl::Token & getBlockOpt () const
+    {
+      return getChild (6).getToken ();
+    }
+
+    // get RBRACE_TOKEN
+    inline basl::Token & getRBRACE_TOKEN () const
+    {
+      return getChild (7).getToken ();
+    }
+  }
+
+  // tmpl-decl * -> tmpl-spec tmpl-spec-decl
+  class TmplDeclNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "TmplDeclNode", accept_66 };
+
+    // constructor
+    inline TmplDeclNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get tmpl-spec
+    inline basl::Nonterm & getTmplSpec () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get tmpl-spec-decl
+    inline basl::Nonterm & getTmplSpecDecl () const
+    {
+      return getChild (2).getNonterm ();
+    }
+  }
+
+  // tmpl-spec * -> TEMPLATE_TOKEN LT_TOKEN tmpl-param-list-opt GT_TOKEN
+  class TmplSpecNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "TmplSpecNode", accept_67 };
+
+    // constructor
+    inline TmplSpecNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get TEMPLATE_TOKEN
+    inline basl::Token & getTEMPLATE_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get LT_TOKEN
+    inline basl::Token & getLT_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get tmpl-param-list-opt
+    inline basl::Nonterm & getTmplParamListOpt () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get GT_TOKEN
+    inline basl::Token & getGT_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+  }
+
+  // type-param <* -> type-key + obj-name
+  class TypeParam1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "TypeParam1Node", accept_68 };
+
+    // constructor
+    inline TypeParam1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get type-key
+    inline basl::Token & getTypeKey () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (2).getNonterm ();
+    }
+  }
+
+  // type-param <* -> type-key + obj-name ASSIGN_TOKEN abstract-decl
+  class TypeParam2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "TypeParam2Node", accept_69 };
+
+    // constructor
+    inline TypeParam2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get type-key
+    inline basl::Token & getTypeKey () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (2).getNonterm ();
+    }
+
+    // get ASSIGN_TOKEN
+    inline basl::Token & getASSIGN_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+
+    // get abstract-decl
+    inline basl::Nonterm & getAbstractDecl () const
+    {
+      return getChild (4).getNonterm ();
+    }
+  }
+
+  // tmpl-tmpl-param <* -> TEMPLATE_TOKEN LT_TOKEN tmpl-param-list-opt GT_TOKEN CLASS_TOKEN obj-name
+  class TmplTmplParam1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "TmplTmplParam1Node", accept_70 };
+
+    // constructor
+    inline TmplTmplParam1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get TEMPLATE_TOKEN
+    inline basl::Token & getTEMPLATE_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get LT_TOKEN
+    inline basl::Token & getLT_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get tmpl-param-list-opt
+    inline basl::Nonterm & getTmplParamListOpt () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get GT_TOKEN
+    inline basl::Token & getGT_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+
+    // get CLASS_TOKEN
+    inline basl::Token & getCLASS_TOKEN () const
+    {
+      return getChild (5).getToken ();
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (6).getNonterm ();
+    }
+  }
+
+  // tmpl-tmpl-param <* -> TEMPLATE_TOKEN LT_TOKEN tmpl-param-list-opt GT_TOKEN CLASS_TOKEN obj-name ASSIGN_TOKEN obj-name
+  class TmplTmplParam2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "TmplTmplParam2Node", accept_71 };
+
+    // constructor
+    inline TmplTmplParam2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get TEMPLATE_TOKEN
+    inline basl::Token & getTEMPLATE_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get LT_TOKEN
+    inline basl::Token & getLT_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get tmpl-param-list-opt
+    inline basl::Nonterm & getTmplParamListOpt () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get GT_TOKEN
+    inline basl::Token & getGT_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+
+    // get CLASS_TOKEN
+    inline basl::Token & getCLASS_TOKEN () const
+    {
+      return getChild (5).getToken ();
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName1 () const
+    {
+      return getChild (6).getNonterm ();
+    }
+
+    // get ASSIGN_TOKEN
+    inline basl::Token & getASSIGN_TOKEN () const
+    {
+      return getChild (7).getToken ();
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName2 () const
+    {
+      return getChild (8).getNonterm ();
+    }
+  }
+
+  // tmpl-inst * -> tmpl-inst-begin tmpl-inst-decl
+  class TmplInstNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "TmplInstNode", accept_72 };
+
+    // constructor
+    inline TmplInstNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get tmpl-inst-begin
+    inline basl::Nonterm & getTmplInstBegin () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get tmpl-inst-decl
+    inline basl::Nonterm & getTmplInstDecl () const
+    {
+      return getChild (2).getNonterm ();
+    }
+  }
+
+  // tmpl-inst-begin <* -> TEMPLATE_TOKEN
+  class TmplInstBeginNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "TmplInstBeginNode", accept_73 };
+
+    // constructor
+    inline TmplInstBeginNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get TEMPLATE_TOKEN
+    inline basl::Token & getTEMPLATE_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+  }
+
+  // lazy-ctor * -> lazy-ctor-begin <* LBRACE_TOKEN mbr-decl-seq-opt RBRACE_TOKEN semi-opt
+  class LazyCtorNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "LazyCtorNode", accept_74 };
+
+    // constructor
+    inline LazyCtorNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get lazy-ctor-begin
+    inline basl::Nonterm & getLazyCtorBegin () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get LBRACE_TOKEN
+    inline basl::Token & getLBRACE_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get mbr-decl-seq-opt
+    inline basl::Nonterm & getMbrDeclSeqOpt () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get RBRACE_TOKEN
+    inline basl::Token & getRBRACE_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+
+    // get semi-opt
+    inline basl::Token & getSemiOpt () const
+    {
+      return getChild (5).getToken ();
+    }
+  }
+
+  // lazy-ctor-begin -> class-key dll-api-opt obj-name param-decl-1-body > RPAREN_TOKEN lazy-base-clause-opt
+  class LazyCtorBegin1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "LazyCtorBegin1Node", accept_75 };
+
+    // constructor
+    inline LazyCtorBegin1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get class-key
+    inline basl::Token & getClassKey () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get dll-api-opt
+    inline basl::Token & getDllApiOpt () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get param-decl-1-body
+    inline basl::Nonterm & getParamDecl1Body () const
+    {
+      return getChild (4).getNonterm ();
+    }
+
+    // get RPAREN_TOKEN
+    inline basl::Token & getRPAREN_TOKEN () const
+    {
+      return getChild (5).getToken ();
+    }
+
+    // get lazy-base-clause-opt
+    inline basl::Nonterm & getLazyBaseClauseOpt () const
+    {
+      return getChild (6).getNonterm ();
+    }
+  }
+
+  // lazy-ctor-begin -> xxxS-decl-spec-seq class-key dll-api-opt obj-name param-decl-1-body > RPAREN_TOKEN lazy-base-clause-opt
+  class LazyCtorBegin2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "LazyCtorBegin2Node", accept_76 };
+
+    // constructor
+    inline LazyCtorBegin2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get xxxS-decl-spec-seq
+    inline basl::Nonterm & getXxxSDeclSpecSeq () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get class-key
+    inline basl::Token & getClassKey () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get dll-api-opt
+    inline basl::Token & getDllApiOpt () const
+    {
+      return getChild (3).getToken ();
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (4).getNonterm ();
+    }
+
+    // get param-decl-1-body
+    inline basl::Nonterm & getParamDecl1Body () const
+    {
+      return getChild (5).getNonterm ();
+    }
+
+    // get RPAREN_TOKEN
+    inline basl::Token & getRPAREN_TOKEN () const
+    {
+      return getChild (6).getToken ();
+    }
+
+    // get lazy-base-clause-opt
+    inline basl::Nonterm & getLazyBaseClauseOpt () const
+    {
+      return getChild (7).getNonterm ();
+    }
+  }
+
+  // lazy-base-spec * -> obj-name base-init
+  class LazyBaseSpec1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "LazyBaseSpec1Node", accept_77 };
+
+    // constructor
+    inline LazyBaseSpec1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get base-init
+    inline basl::Nonterm & getBaseInit () const
+    {
+      return getChild (2).getNonterm ();
+    }
+  }
+
+  // lazy-base-spec * -> VIRTUAL_TOKEN access-opt obj-name base-init
+  class LazyBaseSpec2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "LazyBaseSpec2Node", accept_78 };
+
+    // constructor
+    inline LazyBaseSpec2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get VIRTUAL_TOKEN
+    inline basl::Token & getVIRTUAL_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get access-opt
+    inline basl::Token & getAccessOpt () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get base-init
+    inline basl::Nonterm & getBaseInit () const
+    {
+      return getChild (4).getNonterm ();
+    }
+  }
+
+  // lazy-base-spec * -> access virtual-opt obj-name base-init
+  class LazyBaseSpec3Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "LazyBaseSpec3Node", accept_79 };
+
+    // constructor
+    inline LazyBaseSpec3Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get access
+    inline basl::Token & getAccess () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get virtual-opt
+    inline basl::Token & getVirtualOpt () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get base-init
+    inline basl::Nonterm & getBaseInit () const
+    {
+      return getChild (4).getNonterm ();
+    }
+  }
+
+  // functor-direct-dcl -> obj-dcl-id param-decl-1-body param-decl-2-body RPAREN_TOKEN cv-spec-seq-opt throw-spec-opt
+  class DirectDcl5Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "DirectDcl5Node", accept_80 };
+
+    // constructor
+    inline DirectDcl5Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get obj-dcl-id
+    inline basl::Nonterm & getObjDclId () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get param-decl-1-body
+    inline basl::Nonterm & getParamDecl1Body () const
+    {
+      return getChild (2).getNonterm ();
+    }
+
+    // get param-decl-2-body
+    inline basl::Nonterm & getParamDecl2Body () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get RPAREN_TOKEN
+    inline basl::Token & getRPAREN_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+
+    // get cv-spec-seq-opt
+    inline basl::Nonterm & getCvSpecSeqOpt () const
+    {
+      return getChild (5).getNonterm ();
+    }
+
+    // get throw-spec-opt
+    inline basl::Nonterm & getThrowSpecOpt () const
+    {
+      return getChild (6).getNonterm ();
+    }
+  }
+
+  // functor-def * -> functor-decl lazy-base-clause-opt try-opt LBRACE_TOKEN block-opt 7 RBRACE_TOKEN handler-seq-opt
+  class FunctorDefNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "FunctorDefNode", accept_81 };
+
+    // constructor
+    inline FunctorDefNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get functor-decl
+    inline basl::Nonterm & getFunctorDecl () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get lazy-base-clause-opt
+    inline basl::Nonterm & getLazyBaseClauseOpt () const
+    {
+      return getChild (2).getNonterm ();
+    }
+
+    // get try-opt
+    inline basl::Token & getTryOpt () const
+    {
+      return getChild (3).getToken ();
+    }
+
+    // get LBRACE_TOKEN
+    inline basl::Token & getLBRACE_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+
+    // get block-opt
+    inline basl::Token & getBlockOpt () const
+    {
+      return getChild (5).getToken ();
+    }
+
+    // get RBRACE_TOKEN
+    inline basl::Token & getRBRACE_TOKEN () const
+    {
+      return getChild (6).getToken ();
+    }
+
+    // get handler-seq-opt
+    inline basl::Nonterm & getHandlerSeqOpt () const
+    {
+      return getChild (7).getNonterm ();
+    }
+  }
+
+  // simple-functor-decl -> functor-decl lazy-base-clause-opt SEMI_TOKEN
+  class FunctorDeclTypeNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "FunctorDeclTypeNode", accept_82 };
+
+    // constructor
+    inline FunctorDeclTypeNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get functor-decl
+    inline basl::Nonterm & getFunctorDecl () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get lazy-base-clause-opt
+    inline basl::Nonterm & getLazyBaseClauseOpt () const
+    {
+      return getChild (2).getNonterm ();
+    }
+
+    // get SEMI_TOKEN
+    inline basl::Token & getSEMI_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+  }
+
+  // enum-def * -> ENUM_TOKEN obj-name-opt <* LBRACE_TOKEN enum-body-opt RBRACE_TOKEN semi-opt
+  class EnumDefNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "EnumDefNode", accept_83 };
+
+    // constructor
+    inline EnumDefNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get ENUM_TOKEN
+    inline basl::Token & getENUM_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get obj-name-opt
+    inline basl::Nonterm & getObjNameOpt () const
+    {
+      return getChild (2).getNonterm ();
+    }
+
+    // get LBRACE_TOKEN
+    inline basl::Token & getLBRACE_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+
+    // get enum-body-opt
+    inline basl::Nonterm & getEnumBodyOpt () const
+    {
+      return getChild (4).getNonterm ();
+    }
+
+    // get RBRACE_TOKEN
+    inline basl::Token & getRBRACE_TOKEN () const
+    {
+      return getChild (5).getToken ();
+    }
+
+    // get semi-opt
+    inline basl::Token & getSemiOpt () const
+    {
+      return getChild (6).getToken ();
+    }
+  }
+
+  // enumtor-decl <* -> obj-name
+  class EnumtorDecl1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "EnumtorDecl1Node", accept_84 };
+
+    // constructor
+    inline EnumtorDecl1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (1).getNonterm ();
+    }
+  }
+
+  // enumtor-decl <* -> obj-name ASSIGN_TOKEN BLOCK_TOKEN 9
+  class EnumtorDecl2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "EnumtorDecl2Node", accept_85 };
+
+    // constructor
+    inline EnumtorDecl2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get ASSIGN_TOKEN
+    inline basl::Token & getASSIGN_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get BLOCK_TOKEN
+    inline basl::Token & getBLOCK_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+  }
+
+  // using-decl * -> USING_TOKEN obj-name SEMI_TOKEN
+  class UsingDeclNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "UsingDeclNode", accept_86 };
+
+    // constructor
+    inline UsingDeclNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get USING_TOKEN
+    inline basl::Token & getUSING_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (2).getNonterm ();
+    }
+
+    // get SEMI_TOKEN
+    inline basl::Token & getSEMI_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+  }
+
+  // using-dir * -> USING_TOKEN NAMESPACE_TOKEN obj-name SEMI_TOKEN
+  class UsingDirNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "UsingDirNode", accept_87 };
+
+    // constructor
+    inline UsingDirNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get USING_TOKEN
+    inline basl::Token & getUSING_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get NAMESPACE_TOKEN
+    inline basl::Token & getNAMESPACE_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get SEMI_TOKEN
+    inline basl::Token & getSEMI_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+  }
+
+  // linkage-spec * -> linkage-block-begin <* LBRACE_TOKEN decl-seq-opt RBRACE_TOKEN
+  class LinkageSpecNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "LinkageSpecNode", accept_88 };
+
+    // constructor
+    inline LinkageSpecNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get linkage-block-begin
+    inline basl::Nonterm & getLinkageBlockBegin () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get LBRACE_TOKEN
+    inline basl::Token & getLBRACE_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get decl-seq-opt
+    inline basl::Nonterm & getDeclSeqOpt () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get RBRACE_TOKEN
+    inline basl::Token & getRBRACE_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+  }
+
+  // linkage-block-begin -> EXTERN_TOKEN LITERAL_STRING_TOKEN
+  class LinkageBlockBeginNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "LinkageBlockBeginNode", accept_89 };
+
+    // constructor
+    inline LinkageBlockBeginNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get EXTERN_TOKEN
+    inline basl::Token & getEXTERN_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get LITERAL_STRING_TOKEN
+    inline basl::Token & getLITERAL_STRING_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+  }
+
+  // linkage-decl-begin -> EXTERN_TOKEN LITERAL_STRING_TOKEN
+  class LinkageDeclBeginNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "LinkageDeclBeginNode", accept_90 };
+
+    // constructor
+    inline LinkageDeclBeginNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get EXTERN_TOKEN
+    inline basl::Token & getEXTERN_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get LITERAL_STRING_TOKEN
+    inline basl::Token & getLITERAL_STRING_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+  }
+
+  // nav-def * -> nav-head LBRACE_TOKEN nav-spec-seq-opt RBRACE_TOKEN
+  class NavDefNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "NavDefNode", accept_91 };
+
+    // constructor
+    inline NavDefNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get nav-head
+    inline basl::Nonterm & getNavHead () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get LBRACE_TOKEN
+    inline basl::Token & getLBRACE_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get nav-spec-seq-opt
+    inline basl::Nonterm & getNavSpecSeqOpt () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get RBRACE_TOKEN
+    inline basl::Token & getRBRACE_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+  }
+
+  // nav-head * -> NAVIGATOR_TOKEN nav-decl lazy-base-clause-opt
+  class NavHeadNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "NavHeadNode", accept_92 };
+
+    // constructor
+    inline NavHeadNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get NAVIGATOR_TOKEN
+    inline basl::Token & getNAVIGATOR_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get nav-decl
+    inline basl::Nonterm & getNavDecl () const
+    {
+      return getChild (2).getNonterm ();
+    }
+
+    // get lazy-base-clause-opt
+    inline basl::Nonterm & getLazyBaseClauseOpt () const
+    {
+      return getChild (3).getNonterm ();
+    }
+  }
+
+  // nav-direct-dcl -> obj-dcl-id LPAREN_TOKEN nav-node-type RPAREN_TOKEN param-decl-1-body RPAREN_TOKEN
+  class NavDirectDcl1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "NavDirectDcl1Node", accept_93 };
+
+    // constructor
+    inline NavDirectDcl1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get obj-dcl-id
+    inline basl::Nonterm & getObjDclId () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get LPAREN_TOKEN
+    inline basl::Token & getLPAREN_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get nav-node-type
+    inline basl::Nonterm & getNavNodeType () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get RPAREN_TOKEN
+    inline basl::Token & getRPAREN_TOKEN1 () const
+    {
+      return getChild (4).getToken ();
+    }
+
+    // get param-decl-1-body
+    inline basl::Nonterm & getParamDecl1Body () const
+    {
+      return getChild (5).getNonterm ();
+    }
+
+    // get RPAREN_TOKEN
+    inline basl::Token & getRPAREN_TOKEN2 () const
+    {
+      return getChild (6).getToken ();
+    }
+  }
+
+  // nav-visit-func-def * -> obj-name LPAREN_TOKEN (>)3 obj-name RPAREN_TOKEN LBRACE_TOKEN block-opt 7 RBRACE_TOKEN
+  class NavVisitFuncDefNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "NavVisitFuncDefNode", accept_94 };
+
+    // constructor
+    inline NavVisitFuncDefNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName1 () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get LPAREN_TOKEN
+    inline basl::Token & getLPAREN_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName2 () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get RPAREN_TOKEN
+    inline basl::Token & getRPAREN_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+
+    // get LBRACE_TOKEN
+    inline basl::Token & getLBRACE_TOKEN () const
+    {
+      return getChild (5).getToken ();
+    }
+
+    // get block-opt
+    inline basl::Token & getBlockOpt () const
+    {
+      return getChild (6).getToken ();
+    }
+
+    // get RBRACE_TOKEN
+    inline basl::Token & getRBRACE_TOKEN () const
+    {
+      return getChild (7).getToken ();
+    }
+  }
+
+  // return-stmt * -> RETURN_TOKEN BLOCK_TOKEN 10 SEMI_TOKEN
+  class ReturnStmtNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "ReturnStmtNode", accept_95 };
+
+    // constructor
+    inline ReturnStmtNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get RETURN_TOKEN
+    inline basl::Token & getRETURN_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get BLOCK_TOKEN
+    inline basl::Token & getBLOCK_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get SEMI_TOKEN
+    inline basl::Token & getSEMI_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+  }
+
+  // vdf-def * -> vdf-head LBRACE_TOKEN vdf-spec-seq-opt RBRACE_TOKEN
+  class VdfDefNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "VdfDefNode", accept_96 };
+
+    // constructor
+    inline VdfDefNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get vdf-head
+    inline basl::Nonterm & getVdfHead () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get LBRACE_TOKEN
+    inline basl::Token & getLBRACE_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get vdf-spec-seq-opt
+    inline basl::Nonterm & getVdfSpecSeqOpt () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get RBRACE_TOKEN
+    inline basl::Token & getRBRACE_TOKEN () const
+    {
+      return getChild (4).getToken ();
+    }
+  }
+
+  // vdf-head * -> VDF_TOKEN func-decl
+  class VdfHeadNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "VdfHeadNode", accept_97 };
+
+    // constructor
+    inline VdfHeadNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get VDF_TOKEN
+    inline basl::Token & getVDF_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get func-decl
+    inline basl::Nonterm & getFuncDecl () const
+    {
+      return getChild (2).getNonterm ();
+    }
+  }
+
+  // vdf-functor-def * -> obj-name > param-decl-1-body RPAREN_TOKEN try-opt LBRACE_TOKEN block-opt 7 RBRACE_TOKEN handler-seq-opt
+  class VdfFunctorDefNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "VdfFunctorDefNode", accept_98 };
+
+    // constructor
+    inline VdfFunctorDefNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get obj-name
+    inline basl::Nonterm & getObjName () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get param-decl-1-body
+    inline basl::Nonterm & getParamDecl1Body () const
+    {
+      return getChild (2).getNonterm ();
+    }
+
+    // get RPAREN_TOKEN
+    inline basl::Token & getRPAREN_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+
+    // get try-opt
+    inline basl::Token & getTryOpt () const
+    {
+      return getChild (4).getToken ();
+    }
+
+    // get LBRACE_TOKEN
+    inline basl::Token & getLBRACE_TOKEN () const
+    {
+      return getChild (5).getToken ();
+    }
+
+    // get block-opt
+    inline basl::Token & getBlockOpt () const
+    {
+      return getChild (6).getToken ();
+    }
+
+    // get RBRACE_TOKEN
+    inline basl::Token & getRBRACE_TOKEN () const
+    {
+      return getChild (7).getToken ();
+    }
+
+    // get handler-seq-opt
+    inline basl::Nonterm & getHandlerSeqOpt () const
+    {
+      return getChild (8).getNonterm ();
+    }
+  }
+
+  // vdf-short-data-def * -> xUxx-decl-spec-seq IDENT_TOKEN vdf-data-param-list-alt-opt vdf-direct-obj-init-opt SEMI_TOKEN
+  class VdfShortData1DefNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "VdfShortData1DefNode", accept_99 };
+
+    // constructor
+    inline VdfShortData1DefNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get xUxx-decl-spec-seq
+    inline basl::Nonterm & getXUxxDeclSpecSeq () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get IDENT_TOKEN
+    inline basl::Token & getIDENT_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get vdf-data-param-list-alt-opt
+    inline basl::Nonterm & getVdfDataParamListAltOpt () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get vdf-direct-obj-init-opt
+    inline basl::Nonterm & getVdfDirectObjInitOpt () const
+    {
+      return getChild (4).getNonterm ();
+    }
+
+    // get SEMI_TOKEN
+    inline basl::Token & getSEMI_TOKEN () const
+    {
+      return getChild (5).getToken ();
+    }
+  }
+
+  // vdf-short-data-def * -> xUxx-decl-spec-seq LITERAL_STRING_TOKEN vdf-data-param-list-alt-opt vdf-direct-obj-init-opt SEMI_TOKEN
+  class VdfShortData2DefNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "VdfShortData2DefNode", accept_100 };
+
+    // constructor
+    inline VdfShortData2DefNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get xUxx-decl-spec-seq
+    inline basl::Nonterm & getXUxxDeclSpecSeq () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get LITERAL_STRING_TOKEN
+    inline basl::Token & getLITERAL_STRING_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get vdf-data-param-list-alt-opt
+    inline basl::Nonterm & getVdfDataParamListAltOpt () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get vdf-direct-obj-init-opt
+    inline basl::Nonterm & getVdfDirectObjInitOpt () const
+    {
+      return getChild (4).getNonterm ();
+    }
+
+    // get SEMI_TOKEN
+    inline basl::Token & getSEMI_TOKEN () const
+    {
+      return getChild (5).getToken ();
+    }
+  }
+
+  // vdf-data-param-list -> LPAREN_TOKEN block-opt 2 RPAREN_TOKEN
+  class VdfDataParamListNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "VdfDataParamListNode", accept_101 };
+
+    // constructor
+    inline VdfDataParamListNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get LPAREN_TOKEN
+    inline basl::Token & getLPAREN_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get block-opt
+    inline basl::Token & getBlockOpt () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get RPAREN_TOKEN
+    inline basl::Token & getRPAREN_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+  }
+
+  // vdf-direct-obj-init -> LPAREN_TOKEN BLOCK_TOKEN 2 RPAREN_TOKEN
+  class ObjInit4Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "ObjInit4Node", accept_102 };
+
+    // constructor
+    inline ObjInit4Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get LPAREN_TOKEN
+    inline basl::Token & getLPAREN_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get BLOCK_TOKEN
+    inline basl::Token & getBLOCK_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get RPAREN_TOKEN
+    inline basl::Token & getRPAREN_TOKEN () const
+    {
+      return getChild (3).getToken ();
+    }
+  }
+
+  // vdf-block-data-def * -> vdf-block-data-head LBRACE_TOKEN simple-vdf-obj-decl-seq-opt return-stmt-opt RBRACE_TOKEN
+  class VdfBlockDataDefNode : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "VdfBlockDataDefNode", accept_103 };
+
+    // constructor
+    inline VdfBlockDataDefNode (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get vdf-block-data-head
+    inline basl::Nonterm & getVdfBlockDataHead () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get LBRACE_TOKEN
+    inline basl::Token & getLBRACE_TOKEN () const
+    {
+      return getChild (2).getToken ();
+    }
+
+    // get simple-vdf-obj-decl-seq-opt
+    inline basl::Nonterm & getSimpleVdfObjDeclSeqOpt () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get return-stmt-opt
+    inline basl::Nonterm & getReturnStmtOpt () const
+    {
+      return getChild (4).getNonterm ();
+    }
+
+    // get RBRACE_TOKEN
+    inline basl::Token & getRBRACE_TOKEN () const
+    {
+      return getChild (5).getToken ();
+    }
+  }
+
+  // vdf-block-data-head <* -> IDENT_TOKEN vdf-data-param-list-alt-opt
+  class VdfBlockDataHead1Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "VdfBlockDataHead1Node", accept_104 };
+
+    // constructor
+    inline VdfBlockDataHead1Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get IDENT_TOKEN
+    inline basl::Token & getIDENT_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get vdf-data-param-list-alt-opt
+    inline basl::Nonterm & getVdfDataParamListAltOpt () const
+    {
+      return getChild (2).getNonterm ();
+    }
+  }
+
+  // vdf-block-data-head <* -> LITERAL_STRING_TOKEN vdf-data-param-list-alt-opt
+  class VdfBlockDataHead2Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "VdfBlockDataHead2Node", accept_105 };
+
+    // constructor
+    inline VdfBlockDataHead2Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get LITERAL_STRING_TOKEN
+    inline basl::Token & getLITERAL_STRING_TOKEN () const
+    {
+      return getChild (1).getToken ();
+    }
+
+    // get vdf-data-param-list-alt-opt
+    inline basl::Nonterm & getVdfDataParamListAltOpt () const
+    {
+      return getChild (2).getNonterm ();
+    }
+  }
+
+  // vdf-obj-b-direct-dcl -> vdf-obj-b-direct-dcl vdf-data-param-list cv-spec-seq-opt throw-spec-opt
+  class DirectDcl6Node : public basl::NontermProxy
+  {
+  public:
+    // nonterm info
+    static basl::NontermInfo const info = { "DirectDcl6Node", accept_106 };
+
+    // constructor
+    inline DirectDcl6Node (basl::Nonterm & nonterm)
+      : basl::NontermProxy (nonterm)
+    {
+    }
+
+    // get vdf-obj-b-direct-dcl
+    inline basl::Nonterm & getVdfObjBDirectDcl () const
+    {
+      return getChild (1).getNonterm ();
+    }
+
+    // get vdf-data-param-list
+    inline basl::Nonterm & getVdfDataParamList () const
+    {
+      return getChild (2).getNonterm ();
+    }
+
+    // get cv-spec-seq-opt
+    inline basl::Nonterm & getCvSpecSeqOpt () const
+    {
+      return getChild (3).getNonterm ();
+    }
+
+    // get throw-spec-opt
+    inline basl::Nonterm & getThrowSpecOpt () const
+    {
+      return getChild (4).getNonterm ();
+    }
+  }
+}

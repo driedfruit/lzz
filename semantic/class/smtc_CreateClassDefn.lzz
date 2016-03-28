@@ -1,0 +1,22 @@
+// smtc_CreateClassDefn.lzz
+//
+
+namespace smtc
+{
+  // create class defn
+  ClassDefnPtr createClassDefn (ClassKey key, NamePtr const & name, bool is_dll_api, BaseSpecPtrVector const & base_spec_set)
+  {
+    return new ClassDefn (key, name, is_dll_api, base_spec_set);
+  }
+}
+
+#hdr
+#include "smtc_BaseSpecPtrVector.h"
+#include "smtc_ClassDefnPtr.h"
+#include "smtc_ClassKey.h"
+#include "smtc_NamePtr.h"
+#end
+
+#src
+#include "smtc_ClassDefn.h"
+#end

@@ -1,0 +1,27 @@
+// smtc_CreateTdef.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+#include "smtc_TdefPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_Tdef.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class Linkage;
+  class CvType;
+
+  // create typedef
+  TdefPtr createTdef (Linkage const & linkage, CvType const & cv_type, NamePtr const & name)
+  {
+    return new Tdef (linkage, cv_type, name);
+  }
+}

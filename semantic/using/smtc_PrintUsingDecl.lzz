@@ -1,0 +1,48 @@
+// smtc_PrintUsingDecl.lzz
+//
+// print using declaration
+//
+
+$hdr
+// semantic
+#include "smtc_FilePtr.h"
+#include "smtc_NsPtr.h"
+#include "smtc_SectionKind.h"
+#include "smtc_UsingDeclPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_GetNameLoc.h"
+#include "smtc_NameToString.h"
+#include "smtc_PrintCode.h"
+#include "smtc_PrintNsClose.h"
+#include "smtc_PrintNsOpen.h"
+#include "smtc_UsingDecl.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // print using decl in ns
+  void printUsingDecl (FilePtr const & file, SectionKind skind, UsingDeclPtr const & using_decl, NsPtr const & ns)
+  {
+    int ns_depth = printNsOpen (file, skind, ns);
+    printUsingDecl (file, skind, using_decl);
+    printNsClose (file, skind, ns_depth);
+  }
+
+  // print using decl
+  void printUsingDecl (FilePtr const & file, SectionKind skind, UsingDeclPtr const & using_decl)
+  {
+    using namespace util;
+    String str = "using";
+    NamePtr const & name = using_decl->getName ();
+    appendWithSpace (str, nameToString (name));
+    str += ';';
+    printLine (file, skind, getNameLoc (name), str);
+  }
+}

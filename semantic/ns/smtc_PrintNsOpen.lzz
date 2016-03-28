@@ -1,0 +1,148 @@
+// smtc_PrintNsOpen.lzz
+//
+// print namespace open code (names and opening braces)
+//
+
+$hdr
+// semantic
+#include "smtc_FilePtr.h"
+#include "smtc_NsPtr.h"
+#include "smtc_SectionKind.h"
+$end
+
+$src
+// semantic
+#include "smtc_BaseNameToString.h"
+#include "smtc_IdentBaseName.h"
+#include "smtc_LinkageNs.h"
+#include "smtc_NameVisitor.h"
+#include "smtc_NamedNs.h"
+#include "smtc_NonTmplName.h"
+#include "smtc_NsVisitor.h"
+#include "smtc_PrintCode.h"
+#include "smtc_QualName.h"
+#include "smtc_UnnamedNs.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// private namespace
+namespace
+{
+  // using semantic and util
+  using namespace smtc;
+  using namespace util;
+
+  // print ns name and open brace
+  void printNsName (FilePtr const & file, Loc const & loc, String const & name = String ())
+  {
+  }
+
+  // print ns name
+  struct PrintNsName (FilePtr const & file, SectionKind skind, int & depth)
+    : NameVisitor ()
+  {
+    // qual name
+    void visit (QualName const & name) const
+    {
+      name.getQualName ()->accept (* this);
+      name.getUnqlName ()->accept (* this);
+    }
+
+    // non tmpl name
+    void visit (NonTmplName const & name) const
+    {
+      using namespace util;
+      BaseNamePtr const & base_name = name.getBaseName ();
+      String line = "namespace";
+      appendWithSpace (line, baseNameToString (base_name));
+      printLine (file, skind, base_name->getLoc (), line);
+      printOpenBrace (file, skind);
+      ++ depth;
+    }
+  }
+
+  // print ns open
+  struct PrintNsOpen (FilePtr const & file, SectionKind skind, int & depth)
+    : NsVisitor ()
+  {
+    // global
+    void visit (GlobalNs const & ns) const
+    {
+      depth = 0;
+    }
+
+    // named
+    void visit (NamedNs const & ns) const
+    {
+      visitEnclNs (ns);
+      ns.getName ()->accept (PrintNsName (file, skind, depth));
+    }
+
+    // unnamed
+    void visit (UnnamedNs const & ns) const
+    {
+      using namespace util;
+      visitEnclNs (ns);
+      printLine (file, skind, ns.getLoc (), "namespace");
+      printOpenBrace (file, skind);
+      ++ depth;
+    }
+
+    // linkage
+    void visit (LinkageNs const & ns) const
+    {
+      using namespace util;
+      visitEnclNs (ns);
+      String line = "extern";
+      appendWithSpace (line, ns.getLinkage ().c_str ());
+      printLine (file, skind, ns.getLoc (), line);
+      printOpenBrace (file, skind);
+      ++ depth;
+    }
+
+    // visit enclosing ns
+    inline void visitEnclNs (NestedNs const & ns) const
+    {
+      ns.getEnclNs ()->accept (* this);
+    }
+  }
+}
+
+// semantic
+namespace smtc
+{
+  // print namespace open code, return depth of namespace nesting
+  int printNsOpen (FilePtr const & file, SectionKind skind, NsPtr const & ns)
+  {
+    int depth = 0;
+    ns->accept (PrintNsOpen (file, skind, depth));
+    return depth;
+  }
+
+  // print ns open if ns is set
+  int printNsOpenIfSet (FilePtr const & file, SectionKind skind, NsPtr const & ns)
+  {
+    int depth = 0;
+    if (ns.isSet ())
+    {
+      depth = printNsOpen (file, skind, ns);
+    }
+    return depth;
+  }
+
+#if 0
+  // print namespace open code, return depth of namespace nesting
+  int printNsOpen (FilePtr const & file, NsPtr const & ns)
+  {
+    return printNsOpen (file, BODY_SECTION, ns);
+  }
+
+  // print ns open if ns is set
+  int printNsOpenIfSet (FilePtr const & file, NsPtr const & ns)
+  {
+    return printNsOpenIfSet (file, BODY_SECTION, ns);
+  }  
+#endif
+}

@@ -1,0 +1,11 @@
+CC=gcc
+CXX=g++
+ifeq ($(DEBUG),)
+  DEBUG=-g
+endif
+ifeq ($(COMPILERFLAGS),)
+  COMPILERFLAGS = -Wreturn-type -Wunused -Wno-deprecated
+endif
+DEPENDFLAGS=-MM
+INCFLAGS=-I$(GENCODEDIR) -I$(INCDIR)
+DEFFLAGS=-DDEBUG_BUILD -DBASIL_USE_NODE_POOL

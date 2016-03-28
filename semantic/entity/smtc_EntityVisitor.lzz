@@ -1,0 +1,210 @@
+// smtc_EntityVisitor.lzz
+//
+
+$hdr
+$end
+
+$src
+// semantic
+#include "smtc_LazyClassEntity.h"
+#include "smtc_NavClassEntity.h"
+#include "smtc_NavSubmitFuncDefnEntity.h"
+#include "smtc_TmplLazyClassEntity.h"
+#include "smtc_VdfClassEntity.h"
+#include "smtc_VdfDataFuncDefnEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class NsEntity;
+  class EnumEntity;
+  class ObjEntity;
+  class FuncDeclEntity;
+  class ClassDeclEntity;
+  class ClassDefnEntity;
+  class FuncDefnEntity;
+  class FrndClassDeclEntity;
+  class TdefEntity;
+  class FrndFuncDefnEntity;
+  class FrndFuncDeclEntity;
+  class TmplClassDeclEntity;
+  class FrndTmplClassDeclEntity;
+  class TmplClassDefnEntity;
+  class TmplFuncDeclEntity;
+  class TmplFuncDefnEntity;
+  class FrndTmplFuncDeclEntity;
+  class FrndTmplFuncDefnEntity;
+  class AccessSpecEntity;
+  class ClassInstEntity;
+  class FuncInstEntity;
+  class LazyClassEntity;
+  class TmplLazyClassEntity;
+  class UsingDeclEntity;
+  class UsingDirEntity;
+  // prl extensions
+  class NavClassEntity;
+  class VdfClassEntity;
+  class NavSubmitFuncDefnEntity;
+  class VdfDataFuncDefnEntity;
+
+  // EntityVisitor
+  struct EntityVisitor
+  {
+    // ns entity
+    virtual void visit (NsEntity const & entity) const
+    {
+    }
+
+    // obj entity
+    virtual void visit (ObjEntity const & entity) const
+    {
+    }
+
+    // func decl entity
+    virtual void visit (FuncDeclEntity const & entity) const
+    {
+    }
+
+    // class decl entity
+    virtual void visit (ClassDeclEntity const & entity) const
+    {
+    }
+
+    // class defn entity
+    virtual void visit (ClassDefnEntity const & entity) const
+    {
+    }
+
+    // func defn entity
+    virtual void visit (FuncDefnEntity const & entity) const
+    {
+    }
+
+    // friend class decl entity
+    virtual void visit (FrndClassDeclEntity const & entity) const
+    {
+    }
+
+    // typedef entity
+    virtual void visit (TdefEntity const & entity) const
+    {
+    }
+
+    // frnd func defn entity
+    virtual void visit (FrndFuncDefnEntity const & entity) const
+    {
+    }
+
+    // frnd func decl entity
+    virtual void visit (FrndFuncDeclEntity const & entity) const
+    {
+    }
+
+    // template class decl entity
+    virtual void visit (TmplClassDeclEntity const & entity) const
+    {
+    }
+
+    // friend template class decl entity
+    virtual void visit (FrndTmplClassDeclEntity const & entity) const
+    {
+    }
+
+    // template class defn entity
+    virtual void visit (TmplClassDefnEntity const & entity) const
+    {
+    }
+
+    // template func decl entity
+    virtual void visit (TmplFuncDeclEntity const & entity) const
+    {
+    }
+
+    // template func defn entity
+    virtual void visit (TmplFuncDefnEntity const & entity) const
+    {
+    }
+
+    // friend template func decl entity
+    virtual void visit (FrndTmplFuncDeclEntity const & entity) const
+    {
+    }
+
+    // friend template func defn entity
+    virtual void visit (FrndTmplFuncDefnEntity const & entity) const
+    {
+    }
+
+    // access spec entity
+    virtual void visit (AccessSpecEntity const & entity) const
+    {
+    }
+
+    // class explicit instantiation entity
+    virtual void visit (ClassInstEntity const & entity) const
+    {
+    }
+
+    // function explicit instantiation entity
+    virtual void visit (FuncInstEntity const & entity) const
+    {
+    }
+
+    // lazy class entity
+    virtual void visit (LazyClassEntity const & entity) const
+    {
+      visit (static_cast <ClassDefnEntity const &> (entity));
+    }
+
+    // tmpl lazy class entity
+    virtual void visit (TmplLazyClassEntity const & entity) const
+    {
+      visit (static_cast <TmplClassDefnEntity const &> (entity));
+    }
+
+    // enum entity
+    virtual void visit (EnumEntity const & entity) const
+    {
+    }
+
+    // using decl entity
+    virtual void visit (UsingDeclEntity const & entity) const
+    {
+    }
+
+    // using dir entity
+    virtual void visit (UsingDirEntity const & entity) const
+    {
+    }
+
+    //
+    // prl extensions
+    //
+    
+    // nav class entity
+    virtual void visit (NavClassEntity const & entity) const
+    {
+      visit (static_cast <ClassDefnEntity const &> (entity));
+    }
+
+    // nav submit func defn entity
+    virtual void visit (NavSubmitFuncDefnEntity const & entity) const
+    {
+      visit (static_cast <FuncDeclEntity const &> (entity));
+    }
+
+    // vdf class entity
+    virtual void visit (VdfClassEntity const & entity) const
+    {
+      visit (static_cast <ClassDefnEntity const &> (entity));
+    }
+
+    // vdf data func defn entity
+    virtual void visit (VdfDataFuncDefnEntity const & entity) const
+    {
+      visit (static_cast <FuncDeclEntity const &> (entity));
+    }
+  }
+}

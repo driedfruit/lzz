@@ -1,0 +1,24 @@
+// smtc_NonTypeParamPtr.lzz
+//
+
+$hdr
+// util
+#include "util_DPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_NonTypeParam.h"
+
+// util
+#include "util_DPtr.tpl"
+$end
+
+// semantic
+namespace smtc
+{
+  class Param;
+  class NonTypeParam;
+  typedef util::DPtr <NonTypeParam, Param> NonTypeParamPtr;
+}
+template class util::DPtr <smtc::NonTypeParam, smtc::Param>;

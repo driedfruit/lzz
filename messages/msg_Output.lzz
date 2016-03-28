@@ -1,0 +1,71 @@
+// msg_Output.lzz
+//
+
+#hdr
+#include <iostream>
+#end
+
+#src
+// std lib
+#include <cassert>
+
+// message
+#include "msg_Message.h"
+#include "msg_Recorder.h"
+
+// util
+#include "util_LocToString.h"
+#end
+
+// private namespace
+namespace
+{
+  // output stream for messages
+  // referred to only my setMessageOutput and getMessageOut  
+  std::ostream * msg_os = 0;
+}
+
+// util
+namespace util
+{
+  // types
+  class Loc;
+}
+
+// msg
+namespace msg
+{
+  // types
+  class Message;
+
+  // initialize message output
+  void setMessageOut (std::ostream & os)
+  {
+    msg_os = & os;
+  }
+
+  // get message output
+  std::ostream & getMessageOut ()
+  {
+    // std::cout if not previously set
+    return msg_os == 0 ? std::cout : * msg_os;
+  }
+
+  // print message with location
+  void print (util::Loc const & loc, Message const & msg)
+  {
+    util::String const & str = msg.getString ();
+    assert (str.find ('%') == util::String::npos);
+    getMessageOut () << util::locToString (loc) << str << std::endl;
+    recordSeverity (msg.getSeverity ());
+  }
+
+  // print message
+  void print (Message const & msg)
+  {
+    util::String const & str = msg.getString ();
+    assert (str.find ('%') == util::String::npos);
+    getMessageOut () << str << std::endl;
+    recordSeverity (msg.getSeverity ());
+  }
+}

@@ -1,0 +1,47 @@
+// smtc_NavClassScope.lzz
+//
+// navigator class scope
+//
+
+$hdr
+// semantic
+#include "smtc_ClassScope.h"
+#include "smtc_NavClassPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_ScopeVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // NavClassScope
+  class NavClassScope : public ClassScope
+  {
+  public:
+    // constructor
+    NavClassScope (NavClassPtr const & nav_class)
+      : ClassScope (nav_class)
+    {
+    }
+
+    // destructor
+    ~ NavClassScope ()
+    {
+    }
+
+    // accept visitor
+    void accept (ScopeVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get nav class
+    inline NavClassPtr getNavClass () const
+    {
+      return getClassDefn ();
+    }
+  }
+}

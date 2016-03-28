@@ -1,0 +1,33 @@
+// smtc_CreateLinkageSpecScope.lzz
+//
+
+#hdr
+// semantic
+#include "smtc_ScopePtr.h"
+#end
+
+#src
+// semantic
+#include "smtc_LinkageSpecScope.h"
+#end
+
+// util
+namespace util
+{
+  // types
+  class Ident;
+  class Loc;
+}
+
+// semantic
+namespace smtc
+{
+  // types
+  class Linkage;
+
+  // create linkage spec scope
+  ScopePtr createLinkageSpecScope (ScopePtr const & parent, util::Loc const & loc, Linkage const & linkage)
+  {
+    return new LinkageSpecScope (parent, loc, linkage);
+  }
+}

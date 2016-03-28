@@ -1,0 +1,35 @@
+// util_GetRealPath.lzz
+//
+// get real path for file
+//
+
+$hdr
+// util
+#include "util_String.h"
+$end
+
+$src
+#include <cstdlib>
+#include <climits>
+$end
+
+// util
+namespace util
+{
+  // get real path for file, return true if successful
+  bool getRealPath (util::String const & file, util::String & real_file)
+  {
+    bool result = false;
+    char resolved_path [PATH_MAX];
+#ifdef WIN32
+    if (_fullpath (resolved_path, file.c_str (), PATH_MAX) == resolved_path)
+#else
+    if (realpath (file.c_str (), resolved_path) == resolved_path)
+#endif
+    {
+      real_file = resolved_path;
+      result = true;
+    }
+    return result;
+  }
+}

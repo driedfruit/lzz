@@ -1,0 +1,42 @@
+// smtc_NameVisitor.lzz
+//
+
+$hdr
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class QualName;
+  class BitfName;
+  class TmplName;
+  class NonTmplName;
+
+  // NameVisitor
+  struct NameVisitor ()
+  {
+    // qual name
+    virtual void visit (QualName const & name) const
+    {
+    }
+
+    // tmpl name
+    virtual void visit (TmplName const & name) const
+    {
+    }
+
+    // non tmpl name
+    virtual void visit (NonTmplName const & name) const
+    {
+    }
+
+    // bitf name
+    virtual void visit (BitfName const & name) const
+    {
+    }
+  }
+}

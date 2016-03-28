@@ -1,0 +1,48 @@
+// smtc_PrintUsingDir.lzz
+//
+// print using directive
+//
+
+$hdr
+// semantic
+#include "smtc_FilePtr.h"
+#include "smtc_NsPtr.h"
+#include "smtc_SectionKind.h"
+#include "smtc_UsingDirPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_GetNameLoc.h"
+#include "smtc_NameToString.h"
+#include "smtc_PrintCode.h"
+#include "smtc_PrintNsClose.h"
+#include "smtc_PrintNsOpen.h"
+#include "smtc_UsingDir.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // print using dir in ns
+  void printUsingDir (FilePtr const & file, SectionKind skind, UsingDirPtr const & using_dir, NsPtr const & ns)
+  {
+    int ns_depth = printNsOpen (file, skind, ns);
+    printUsingDir (file, skind, using_dir);
+    printNsClose (file, skind, ns_depth);
+  }
+
+  // print using dir
+  void printUsingDir (FilePtr const & file, SectionKind skind, UsingDirPtr const & using_dir)
+  {
+    using namespace util;
+    String str = "using namespace";
+    NamePtr const & name = using_dir->getName ();
+    appendWithSpace (str, nameToString (name));
+    str += ';';
+    printLine (file, skind, getNameLoc (name), str);
+  }
+}

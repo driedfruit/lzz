@@ -1,0 +1,23 @@
+// smtc_CreateEnumEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EntityPtr.h"
+#include "smtc_EnumPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_EnumEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create enum entity
+  EntityPtr createEnumEntity (EnumPtr const & en)
+  {
+    return new EnumEntity (en);
+  }
+}

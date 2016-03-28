@@ -1,0 +1,88 @@
+// smtc_LazyClass.lzz
+//
+
+namespace smtc
+{
+  // LazyClass
+  class LazyClass : public ClassDefn
+  {
+    // flags
+    int m_flags;
+
+    // ctor param set
+    ParamPtrVector m_param_set;
+
+    // true if ctor has var args
+    bool m_vararg;
+
+    // ctor member init set
+    MbrInitPtrVector m_mbr_init_set;
+
+    // true if dtor is virtual
+    bool m_vdtor;
+
+  public:
+    // constructor
+    LazyClass (int flags, ClassKey key, NamePtr const & name, bool is_dll_api, ParamPtrVector const & param_set,
+        bool vararg, BaseSpecPtrVector const & base_spec_set)
+      : ClassDefn (key, name, is_dll_api, base_spec_set), m_flags (flags), m_param_set (param_set),
+        m_vararg (vararg), m_vdtor (false)
+    {
+      // build mbr init set
+      buildLazyClassMbrInitSet (base_spec_set, m_mbr_init_set);
+    }
+
+    // add param (for navigators) 
+    void addParam (ParamPtr const & param)
+    {
+      m_param_set.push_back (param);
+    }
+
+    // get param set
+    inline ParamPtrVector const & getParamSet () const
+    {
+      return m_param_set;
+    }
+
+    // true if ctor has vararg
+    inline bool hasVarArg () const
+    {
+      return m_vararg;
+    }
+
+    // get mbr init set
+    inline MbrInitPtrVector const & getMbrInitSet () const
+    {
+      return m_mbr_init_set;
+    }
+
+    // add mbr init (for non-static member objects with initializers)
+    void addMbrInit (MbrInitPtr const & mbr_init)
+    {
+      m_mbr_init_set.push_back (mbr_init);
+    }
+
+    // set virtual dtor
+    void setVirtualDtor ()
+    {
+      m_vdtor = true;
+    }
+
+    // has virtual dtor
+    bool hasVirtualDtor () const
+    {
+      return m_vdtor;
+    }
+  }
+}
+
+#hdr
+#include "smtc_ClassDefn.h"
+#include "smtc_MbrInitPtrVector.h"
+#include "smtc_ParamPtrVector.h"
+#end
+
+#src
+#include "smtc_BuildLazyClassMbrInitSet.h"
+#end
+

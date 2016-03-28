@@ -1,0 +1,70 @@
+// smtc_LinkageSpecScope.lzz
+//
+
+#hdr
+// semantic
+#include "smtc_Scope.h"
+#include "smtc_Linkage.h"
+#include "smtc_ScopePtr.h"
+// util
+#include "util_Loc.h"
+#include "util_Ident.h"
+#end
+
+#src
+// semantic
+#include "smtc_ScopeVisitor.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // LinkageSpecScope
+  class LinkageSpecScope : public Scope
+  {
+    // parent scope
+    ScopePtr m_parent;
+
+    // location of specifier
+    util::Loc m_loc;
+
+    // linkage
+    Linkage m_linkage;
+
+  public:
+    // constructor
+    inline LinkageSpecScope (ScopePtr const & parent, util::Loc const & loc, Linkage const & linkage)
+      : m_parent (parent), m_loc (loc), m_linkage (linkage)
+    {
+    }
+
+    // destructor
+    ~ LinkageSpecScope ()
+    {
+    }
+
+    // accept visitor
+    void accept (ScopeVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get parent
+    inline ScopePtr const & getParent () const
+    {
+      return m_parent;
+    }
+
+    // get loc
+    inline util::Loc const & getLoc () const
+    {
+      return m_loc;
+    }
+
+    // get linkage
+    inline Linkage const & getLinkage () const
+    {
+      return m_linkage;
+    }
+  }
+}

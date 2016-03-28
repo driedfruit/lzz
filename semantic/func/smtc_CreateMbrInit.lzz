@@ -1,0 +1,36 @@
+// smtc_CreateMbrInit.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_MbrInitPtr.h"
+#include "smtc_NamePtr.h"
+
+// gram
+#include "gram_BlockVector.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// semantic
+#include "smtc_ArgListToString.h"
+#include "smtc_MbrInit.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create mbr init
+  MbrInitPtr createMbrInit (NamePtr const & name, util::String const & arg_set)
+  {
+    return new MbrInit (name, arg_set);
+  }
+
+  // create mbr init
+  MbrInitPtr createMbrInit (NamePtr const & name, gram::BlockVector const & arg_set)
+  {
+    return createMbrInit (name, argListToString (arg_set));
+  }
+}

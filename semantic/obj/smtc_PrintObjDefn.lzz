@@ -1,0 +1,38 @@
+// smtc_PrintObjDefn.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_PrintObjDecl.h"
+$end
+
+$src
+// semantic
+$end
+
+// semantic
+namespace smtc
+{
+  // PrintObjDefn: object with init if set
+  struct PrintObjDefn : PrintObjDecl
+  {
+    // constructor
+    inline PrintObjDefn (NamePtr const & qual_name = NamePtr ())
+      : PrintObjDecl (qual_name)
+    {
+      with_init = true;
+    }
+
+    // print obj in ns
+    void print (FilePtr const & file, SectionKind skind, ObjPtr const & obj, NsPtr const & ns) const
+    {
+      PrintObjDecl::print (file, skind, obj, ns);
+    }
+
+    // print obj
+    void print (FilePtr const & file, SectionKind skind, ObjPtr const & obj) const
+    {
+      PrintObjDecl::print (file, skind, obj);
+    }
+  }
+}

@@ -1,0 +1,24 @@
+// smtc_CreateTmplParam.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+#include "smtc_ParamPtr.h"
+#include "smtc_ParamPtrVector.h"
+$end
+
+$src
+// semantic
+#include "smtc_TmplParam.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create template param
+  ParamPtr createTmplParam (NamePtr const & name, ParamPtrVector const & param_set, NamePtr const & def_name)
+  {
+    return new TmplParam (name, param_set, def_name);
+  }
+}

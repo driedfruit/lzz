@@ -1,0 +1,33 @@
+// smtc_Scope.lzz
+//
+
+$hdr
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  class ScopeVisitor;
+
+  // Scope
+  class Scope
+  {
+  public:
+    // constructor
+    Scope ()
+    {
+    }
+
+    // destructor
+    virtual ~ Scope ()
+    {
+    }
+
+    // accept visitor
+    virtual void accept (ScopeVisitor const & visitor) const = 0;
+  }
+}

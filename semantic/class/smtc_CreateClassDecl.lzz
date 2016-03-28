@@ -1,0 +1,22 @@
+// smtc_CreateClassDecl.lzz
+//
+
+namespace smtc
+{
+  // create class decl
+  ClassDeclPtr createClassDecl (ClassKey key, NamePtr const & name, bool is_dll_api)
+  {
+    return new ClassDecl (key, name, is_dll_api);
+  }
+}
+
+#hdr
+#include "smtc_ClassDeclPtr.h"
+#include "smtc_ClassKey.h"
+#include "smtc_NamePtr.h"
+#end
+
+#src
+#include "smtc_ClassDecl.h"
+#end
+

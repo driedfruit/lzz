@@ -1,0 +1,48 @@
+// smtc_NsEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_Entity.h"
+#include "smtc_NsPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_EntityVisitor.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // NsEntity
+  class NsEntity : public Entity
+  {
+    // namespace
+    NsPtr m_ns;
+
+  public:
+    // constructor
+    NsEntity (NsPtr const & ns)
+      : m_ns (ns)
+    {
+    }
+
+    // destructor
+    ~ NsEntity ()
+    {
+    }
+
+    // accept visitor
+    void accept (EntityVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+
+    // get namespace
+    inline NsPtr const & getNs () const
+    {
+      return m_ns;
+    }
+  }
+}

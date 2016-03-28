@@ -1,0 +1,25 @@
+// smtc_CreateFile.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_FilePtr.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+// semantic
+#include "smtc_File.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create file
+  FilePtr createFile (util::String const & fullname, util::String const & name, util::String const & ext, bool has_hash_lines, bool smart_write)
+  {
+    return new File (fullname, name, ext, has_hash_lines, smart_write);
+  }
+}

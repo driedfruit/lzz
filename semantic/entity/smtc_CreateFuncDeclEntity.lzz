@@ -1,0 +1,23 @@
+// smtc_CreateFuncDeclEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EntityPtr.h"
+#include "smtc_FuncDeclPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_FuncDeclEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create func decl entity
+  EntityPtr createFuncDeclEntity (FuncDeclPtr const & func_decl)
+  {
+    return new FuncDeclEntity (func_decl);
+  }
+}

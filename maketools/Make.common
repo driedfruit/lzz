@@ -1,0 +1,204 @@
+# suffixes
+.SUFFIXES: .cpp
+
+# keep generated files around
+.PRECIOUS: %.cpp
+
+# Default definitions for compiler:
+# May be overridden by Make.$(CONFIG)
+
+# Object file extension
+EXTOBJ=o
+
+# Linker to use
+LINK=$(CXX)
+
+# code generator tools 
+ifeq ($(LZZ),)
+LZZ=lzz
+endif
+
+# set CONFIGDIR
+ifeq ($(CONFIGDIR),)
+CONFIGDIR=$(PRJDIR)/$(CONFIG)
+endif
+
+# include dir
+INCDIR=$(PRJDIR)/include
+
+# generated code dir
+GENCODEDIR=$(CONFIGDIR)/gencode
+
+# object dir
+OBJDIR=$(CONFIGDIR)/objs
+
+# library dir
+LIBDIR=$(CONFIGDIR)/libs
+
+# this directory
+MAKETOOLSDIR=$(PRJDIR)/maketools
+
+# lzz options
+ifeq ($(PRJLZZOPTIONS),)
+PRJLZZOPTIONS=-i -c -hl -sl -il -tl -nl -hd -d
+endif
+# always generating files in gencode directory
+LZZ_OPTIONS=$(PRJLZZOPTIONS) -x -o $(GENCODEDIR) $(DEFFLAGS)
+
+# include compiler and os options
+include $(MAKETOOLSDIR)/Make.$(CONFIG)
+
+# compiler flags
+CPPFLAGS+=$(COMPILERFLAGS) $(EXTRACPPFLAGS) $(WARNINGS) $(DEBUG) $(INCFLAGS) $(DEFFLAGS)
+
+# include files
+ifeq ($(strip $(INCFILES)),)
+INCFILES=$(wildcard *.h *.inl *.tpl *.tnl)
+endif
+
+# proxy include files
+PROXYINCFILES=$(addprefix $(INCDIR)/,$(INCFILES))
+
+# library lzz files
+ifeq ($(strip $(LIBLZZFILES)),)
+LIBLZZFILES=$(wildcard *.lzz)
+endif
+
+# library source files
+ifeq ($(strip $(LIBCPPFILES)),)
+LIBCPPFILES=$(wildcard *.cpp)
+endif
+
+# library object files
+LIBOBJFILES=$(addprefix $(OBJDIR)/,$(LIBLZZFILES:.lzz=.o) $(LIBCPPFILES:.cpp=.o))
+
+# program object files
+PRGOBJFILES=$(addprefix $(OBJDIR)/,$(PRGLZZFILES:.lzz=.o) $(PRGCPPFILES:.cpp=.o))
+
+# lzz files
+LZZFILES=$(LIBLZZFILES) $(PRGLZZFILES)
+
+# generated source files
+GENCPPFILES=$(addprefix $(GENCODEDIR)/,$(LZZFILES:.lzz=.cpp))
+
+# source files
+CPPFILES=$(LIBCPPFILES) $(GENCPPFILES)
+
+# all
+all: gencode libs programs
+
+# depend
+.PHONY: depend
+ifneq ($(strip $(SUBDIRS)),)
+depend: do-depend sub-depend
+else
+depend: do-depend
+endif
+
+# do depend
+.PHONY: do-depend
+do-depend:
+ifneq ($(strip $(CPPFILES)),)
+	$(CXX) $(DEPENDFLAGS) $(CPPFLAGS) $(CPPFILES) > dep$$$$ ; \
+	sed 's;\([^ ]*\)\.o:;$$(OBJDIR)/\1.$$(EXTOBJ):;' dep$$$$ > .depend.$(CONFIG) ; \
+	rm dep$$$$
+endif
+
+# gencode
+.PHONY: gencode
+ifneq ($(strip $(SUBDIRS)),)
+gencode: do-gencode sub-gencode
+else
+gencode: do-gencode
+endif
+
+# do gencode
+.PHONY: do-gencode
+do-gencode: $(GENCODEDIR) $(GENCPPFILES)
+#do-gencode: $(GENCPPFILES)
+
+# include
+.PHONY: include
+ifneq ($(strip $(SUBDIRS)),)
+include: do-include sub-include
+else
+include: do-include
+endif
+
+# do include
+.PHONY: do-include
+do-include: $(PROXYINCFILES)
+
+# library
+.PHONY: libs
+ifneq ($(strip $(SUBDIRS)),)
+libs: do-lib sub-libs
+else
+libs: do-lib
+endif
+
+# do library
+.PHONY: do-lib
+do-lib: $(OBJDIR) $(LIBOBJFILES) $(LIBDIR)
+ifneq ($(strip $(PACKAGE)),)
+	$(AR) -sruv $(LIBDIR)/lib$(PACKAGE).a $(LIBOBJFILES)
+endif
+
+# programs
+.PHONY: programs
+ifneq ($(strip $(SUBDIRS)),)
+programs: $(PROGRAMS) sub-programs
+else
+programs: $(PROGRAMS)
+endif
+
+# make config dir
+$(CONFIGDIR):
+ifeq ($(wildcard $(CONFIGDIR)),)
+	mkdir $(CONFIGDIR)
+endif
+
+# make lib dir
+$(LIBDIR):
+ifeq ($(wildcard $(LIBDIR)),)
+	mkdir $(LIBDIR)
+endif
+
+# make lzz generated files
+$(GENCODEDIR): $(CONFIGDIR)
+ifeq ($(wildcard $(GENCODEDIR)),)
+	mkdir $(GENCODEDIR)
+endif
+$(GENCODEDIR)/%.cpp: %.lzz
+	$(LZZ) $(LZZ_OPTIONS) $<
+
+# make object files
+$(OBJDIR): $(CONFIGDIR)
+ifeq ($(wildcard $(OBJDIR)),)
+	mkdir $(OBJDIR)
+endif
+$(OBJDIR)/%.o: $(GENCODEDIR)/%.cpp
+	$(COMPILE.cc) $< $(OUTPUT_OPTION)
+$(OBJDIR)/%.o: %.cpp
+	$(COMPILE.cc) $< $(OUTPUT_OPTION)
+
+# make include file
+$(INCDIR):
+	mkdir $(INCDIR)
+$(INCDIR)/% : %
+ifeq ($(strip $(WINDOWS)),)
+	ln -f -s ../$(SRCDIR)/$< $@
+else
+	echo "#include \"../$(DIR)/$<\"" > $@
+endif
+
+# make subdirectories
+sub-%:
+	@for dir in $(SUBDIRS) ; do \
+	  $(MAKE) -C $$dir $* ; \
+	done;
+
+# include .depend file if any source files
+ifneq ($(strip $(CPPFILES)),)
+sinclude .depend.$(CONFIG)
+endif

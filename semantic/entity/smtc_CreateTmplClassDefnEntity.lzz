@@ -1,0 +1,23 @@
+// smtc_CreateTmplClassDefnEntity.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_EntityPtr.h"
+#include "smtc_TmplClassDefnPtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_TmplClassDefnEntity.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create template class defn entity
+  EntityPtr createTmplClassDefnEntity (TmplClassDefnPtr const & tmpl_class_defn)
+  {
+    return new TmplClassDefnEntity (tmpl_class_defn);
+  }
+}

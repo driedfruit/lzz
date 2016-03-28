@@ -1,0 +1,29 @@
+// gram_DeclSpecToString.lzz
+//
+
+$hdr
+$end
+
+$src
+// gram
+#include "gram_DeclSpecFlags.h"
+$end
+
+// gram
+namespace gram
+{
+  // decl specifier to string
+  char const * declSpecToString (int flag)
+  {
+    char const * str;
+    if (flag == TYPEDEF_SPEC)
+    {
+      str = "typedef";
+    }
+    else
+    {
+      str = "friend";
+    }
+    return str;
+  }
+}

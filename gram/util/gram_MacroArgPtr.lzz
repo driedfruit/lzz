@@ -1,0 +1,19 @@
+// gram_MacroArgPtr.lzz
+//
+
+$hdr
+#include "util_BPtr.h"
+$end
+
+$src
+#include "gram_MacroArg.h"
+#include "util_BPtr.tpl"
+$end
+
+// gram
+namespace gram
+{
+  class MacroArg;
+  typedef util::BPtr <MacroArg> MacroArgPtr;
+}
+template class util::BPtr <gram::MacroArg>;

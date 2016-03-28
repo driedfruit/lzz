@@ -1,0 +1,33 @@
+// smtc_Entity.lzz
+//
+
+$hdr
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // types
+  struct EntityVisitor;
+
+  // Entity
+  class Entity
+  {
+  public:
+    // constructor
+    inline Entity ()
+    {
+    }
+
+    // destructor
+    inline virtual ~ Entity ()
+    {
+    }
+
+    // accept visitor
+    virtual void accept (EntityVisitor const & visitor) const = 0;
+  }
+}

@@ -1,0 +1,92 @@
+// util_Ident.lzz
+//
+// a unique char const *
+//
+// Copyright (C) 2002, Michael Spencer
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, subject to the following
+// restrictions:
+// 
+//   1. The origin of this software must not be misrepresented; you must
+//      not claim that you wrote the original software. If you use this
+//      software in a product, an acknowledgment in the product
+//      documentation would be appreciated but is not required.
+// 
+//   2. Altered source versions must be plainly marked as such, and must
+//      not be misrepresented as being the original software.
+// 
+// Basil documentation, as well as the latest version, is available at
+// http://www.lazycplusplus.com/basil.
+//
+// Send comments and bug reports to michael_spencer@lazycplusplus.com.
+// 
+
+$hdr
+// library
+#include <cstddef>
+$end
+
+$src
+$end
+
+// util
+namespace util
+{
+  // Ident
+  class Ident
+  {
+    // key (memory managed in identifier table, or elsewhere) 
+    char const * m_key;
+
+  public:
+
+    // default constructor
+    inline Ident ()
+      : m_key (0)
+    {
+    }
+    
+    // constructor
+    inline Ident (char const * key)
+      : m_key (key)
+    {
+    }
+
+    // true if set
+    inline bool isSet () const
+    {
+      return m_key != 0;
+    }
+
+    // get c-string
+    inline const char * c_str () const
+    {
+      return m_key;
+    }
+
+    // conversion to char *
+    operator const char * () const
+    {
+      return m_key;
+    }
+
+    // get unique handle
+    inline size_t getHandle () const
+    {
+      return (size_t) m_key;
+    }
+  }
+
+  // a == b
+  inline bool operator == (Ident const & a, Ident const & b)
+  {
+    return a.c_str () == b.c_str ();
+  }
+
+  // a != b
+  inline bool operator != (Ident const & a, Ident const & b)
+  {
+    return ! (a == b);
+  }
+}

@@ -1,0 +1,40 @@
+// smtc_GlobalNs.lzz
+//
+// global namespace
+//
+
+#hdr
+// semantic
+#include "smtc_Ns.h"
+#end
+
+#src
+// semantic
+#include "smtc_NsVisitor.h"
+#end
+
+// semantic
+namespace smtc
+{
+  // NamedNs
+  class GlobalNs : public Ns
+  {
+  public:
+    // constructor
+    GlobalNs ()
+      : Ns ()
+    {
+    }
+
+    // destructor
+    ~ GlobalNs ()
+    {
+    }
+
+    // accept visitor
+    void accept (NsVisitor const & visitor) const
+    {
+      visitor.visit (* this);
+    }
+  }
+}

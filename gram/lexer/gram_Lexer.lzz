@@ -1,0 +1,1289 @@
+// G_Lexer.lzz
+//
+// all errors condtions in the lexer throw a util::Exception
+//
+
+$hdr
+// gram
+#include "gram_LineReader.h"
+
+// basil
+#include "basl_Token.h"
+$end
+
+$src
+// std lib
+#include <cassert>
+#include <cstdio>
+
+// gram
+#include "gram_GetIdent.h"
+#include "gram_MacroTable.h"
+#include "gram_Message.h"
+#include "gram_OperTable.h"
+#include "gram_TokenNumber.h"
+
+// util
+#include "util_Exception.h"
+#include "util_GetIdentTable.h"
+$end
+
+// private namespace
+namespace
+{
+  // using gram
+  using namespace gram;
+
+  // character kinds
+  enum CharKind
+  {
+    // hex letters 
+    C_D,           // 'D' 68
+                   // 'd' 100
+    C_E,           // 'E' 69
+                   // 'e' 101
+    C_F,           // 'F' 70
+                   // 'f' 102
+    C_HEX_LETTER,  // other hex letters
+
+    // hex letters above (<= C_HEX_LETTER)
+
+    // other letters
+    C_L,           // 'L' 76
+                   // 'l' 108
+    C_U,           // 'U' 85
+    C_u,           // 'u' 117
+    C_LETTER,      // other letters
+
+    // all letters above (<= C_LETTER)
+
+    // decimal digits
+    C_DIGIT,       // '0' to '9' 
+
+    // non digits, not including a universal character, are above (<= C_DIGIT)
+
+    // operators
+    C_PLUS,        // '+' 43
+    C_MINUS,       // '-' 45
+
+    // non digit or sign above (<= C_MINUS)
+
+    C_TIMES,       // '*' 42
+    C_DIVIDE,      // '/' 47
+    C_EQ,          // '=' 61
+    C_LT,          // '<' 60
+    C_GT,          // '>' 62
+    C_BANG,        // '!' 33
+    C_AMPERSAND,   // '&' 38
+    C_BAR,         // '|' 124
+    C_CARET,       // '^' 94
+    C_PERCENT,     // '%' 37
+    C_DOT,         // '.' 46
+    C_SQUOTE,      // ''' 39
+    C_DQUOTE,      // '"' 34
+    C_BACKSLASH,   // '\' 92
+    C_COLON,       // ':' 58
+    C_HASH,        // '#' 35
+
+    // other operators
+    C_OP,          // '?' 63
+                   // '~' 126
+                   // '(' 40
+                   // ')' 41
+                   // '{' 123
+                   // '}' 125
+                   // '[' 91
+                   // ']' 93
+                   // ';' 59
+                   // '$' 36
+                   // ',' 44
+
+    // white space
+    C_WS,          // SP  32
+                   // HT  9
+                   // VT  11
+                   // FF  12
+    
+    C_LF,          // LF  10
+    C_OTHER,       // other non-whitespace characters (like '@' and '`')
+    C_NAC,         // illegal characters
+    C_EOF,         // end of file
+  }
+  
+  // char index
+  CharKind char_index [] =
+  {
+    // 0
+    C_NAC, C_NAC, C_NAC, C_NAC, C_NAC, C_NAC, C_NAC, C_NAC, C_NAC, C_WS,
+    // 10
+    C_LF, C_WS, C_WS, C_NAC, C_NAC, C_NAC, C_NAC, C_NAC, C_NAC, C_NAC,
+    // 20
+    C_NAC, C_NAC, C_NAC, C_NAC, C_NAC, C_NAC, C_NAC, C_NAC, C_NAC, C_NAC,
+    // 30
+    C_NAC, C_NAC, C_WS, C_BANG, C_DQUOTE, C_HASH, C_OP, C_PERCENT, C_AMPERSAND, C_SQUOTE,
+    // 40
+    C_OP, C_OP, C_TIMES, C_PLUS, C_OP, C_MINUS, C_DOT, C_DIVIDE, C_DIGIT, C_DIGIT,
+    // 50
+    C_DIGIT, C_DIGIT, C_DIGIT, C_DIGIT, C_DIGIT, C_DIGIT, C_DIGIT, C_DIGIT, C_COLON, C_OP,
+    // 60
+    C_LT, C_EQ, C_GT, C_OP, C_OTHER, C_HEX_LETTER, C_HEX_LETTER, C_HEX_LETTER, C_D, C_E,
+    // 70
+    C_F, C_LETTER, C_LETTER, C_LETTER, C_LETTER, C_LETTER, C_L, C_LETTER, C_LETTER, C_LETTER,
+    // 80
+    C_LETTER, C_LETTER, C_LETTER, C_LETTER, C_LETTER, C_U, C_LETTER, C_LETTER, C_LETTER, C_LETTER,
+    // 90
+    C_LETTER, C_OP, C_BACKSLASH, C_OP, C_CARET, C_LETTER, C_OTHER, C_HEX_LETTER, C_HEX_LETTER, C_HEX_LETTER,
+    // 100
+    C_D, C_E, C_F, C_LETTER, C_LETTER, C_LETTER, C_LETTER, C_LETTER, C_L, C_LETTER,
+    // 110
+    C_LETTER, C_LETTER, C_LETTER, C_LETTER, C_LETTER, C_LETTER, C_LETTER, C_u, C_LETTER, C_LETTER,
+    // 120
+    C_LETTER, C_LETTER, C_LETTER, C_OP, C_BAR, C_OP, C_OP, C_NAC,
+  };
+
+  // peek next char kind from reader
+  CharKind peekCharKind (LineReader & reader, int n = 0)
+  {
+    CharKind ch_kind = C_EOF;
+    char ch;
+    if (reader.peekChar (ch, n))
+    {
+      ch_kind = (ch >= 0 && ch <= 127) ? char_index [ch] : C_LETTER;
+    }
+    return ch_kind;
+  }
+
+  // lex states
+  enum State
+  {
+    // ** start states **
+
+    // start state
+    S_START,
+
+    // ** states with lexemes **
+
+    // identifier
+    S_IDENT,
+
+    // universal char in identifier
+    S_IDENT_U_CHAR,
+
+    // counting hex characters in universal char
+    S_IDENT_U_CHAR_HEX_COUNT,
+
+    // l
+    S_L,
+
+    // pp number
+    S_PP_NUMBER,
+
+    // pp number E
+    S_PP_NUMBER_E,
+
+    // universal char in pp number
+    S_PP_NUMBER_U_CHAR,
+
+    // counting hex characters in universal char
+    S_PP_NUMBER_U_CHAR_HEX_COUNT,
+
+    // .
+    S_DOT,
+
+    // ..
+    S_DOT_DOT,
+
+    // #
+    S_HASH,
+
+    // !
+    S_BANG,
+
+    // operator
+    S_OP,
+
+    // <
+    S_LT,
+
+    // >
+    S_GT,
+
+    // +
+    S_PLUS,
+
+    // -
+    S_MINUS,
+
+    // ->
+    S_ARROW,
+
+    // |
+    S_BAR,
+
+    // &
+    S_AMPERSAND,
+
+    // :
+    S_COLON,
+
+    // %
+    S_PERCENT,
+
+    // %:
+    S_PERCENT_COLON,
+
+    // char begin
+    S_CHAR_BEG,
+
+    // char
+    S_CHAR,
+
+    // char end
+    S_CHAR_END,
+
+    // char escape
+    S_CHAR_ESC,
+
+    // string
+    S_STRING,
+
+    // string escape
+    S_STRING_ESC,
+
+    // string end
+    S_STRING_END,
+
+    // system filename
+    S_SYS_FILENAME,
+
+    // unknown token (non-whitespace char not start of other token)
+    S_UNKNOWN,
+
+    // ** comments **
+
+    // c and c++ comment bodies
+    S_CPP_COMMENT_BODY,
+    S_C_COMMENT_BODY,
+
+    // ** whitespace **
+
+    // whitespace
+    S_WS,
+
+    /*
+    // line feed
+    S_LF,
+    */
+    
+    // / next * or /
+    S_COMMENT_BEG,
+
+    // c++ comment begin
+    S_CPP_COMMENT_BEG,
+
+    // c begin and end
+    S_C_COMMENT_BEG,
+    S_C_COMMENT_END,
+  }
+
+  // Create an int token, octal_error true if octal digits beyond radix.
+  // This function simply issues a messages if the literal is an invalid octal then creates a token; this
+  // function saves us from doing this everywhere we find an integer.
+  basl::Token createIntToken (int kind, util::Loc const & loc, util::Ident const & lexeme, bool octal_error)
+  {
+    // found an integer, warn if started off as an octal
+    if (octal_error)
+    {
+      msg::octalHasDigitsBeyondRadix (loc, lexeme);
+    }
+    return basl::Token (kind, loc, lexeme);
+  }
+}
+
+// gram
+namespace gram
+{
+  // lex states
+  enum LexState
+  {
+    // normal lex state
+    NORMAL_LEX_STATE = 0,
+    
+    // include (just after #include)
+    INCLUDE_LEX_STATE = 2,
+  }
+
+  // Lexer
+  class Lexer
+  {
+    // reader
+    LineReader m_reader;
+
+    // true if lexing file
+    bool m_from_string;
+
+  public:
+    // constructor
+    Lexer (util::Filename const & filename)
+      : m_reader (filename), m_from_string (false)
+    {
+    }
+
+    // constructor with string at location
+    Lexer (util::String const & str, util::Loc const & loc)
+      : m_reader (str, loc), m_from_string (true)
+    {
+    }
+
+    // true if lexing from string
+    bool fromString () const
+    {
+      return m_from_string;
+    }
+
+    // true if lexing from file
+    inline bool fromFile () const
+    {
+      return ! fromString ();
+    }
+
+    // peekChar and readChar are needed by BLOCK lexer (lexBlock())
+
+    // peek n chars, return true if successful
+    inline bool peekChar (char & ch, int n = 0)
+    {
+      return m_reader.peekChar (ch, n);
+    }
+
+    // read char, return true if successful
+    inline bool readChar (char & ch)
+    {
+      return m_reader.readChar (ch);
+    }
+
+    // discard rest of line
+    void discardRestOfLine ()
+    {
+      char ch;
+      do
+      {
+        m_reader.readChar (ch);
+      }
+      while (ch != '\n');
+    }
+
+    // skip white space characters (to be used before getRestOfLine, for example)
+    void discardWs ()
+    {
+      while (peekCharKind (m_reader) == C_WS)
+      {
+        char ch;
+        m_reader.readChar (ch);
+      }
+    }
+
+    // get rest of line as string, return false if end of file
+    void getRestOfLine (util::String & str)
+    {
+      // should not have eof
+      if (! readLine (str))
+      {
+        assert (false);
+      }
+    }
+
+    // read line as string, return false if end of file
+    bool readLine (util::String & str)
+    {
+      bool result = false;
+      char ch;
+      if (m_reader.readChar (ch))
+      {
+        result = true;
+        while (ch != '\n')
+        {
+          str += ch;
+          m_reader.readChar (ch);
+        }
+      }
+      return result;
+    }
+
+    // get current location (called before readLine(), for example)
+    util::Loc getLoc ()
+    {
+      return m_reader.getLocation ();
+    }
+
+    // get next token, return true if not end of line, set location of token or end of line
+    bool getNextToken (LexState lex_state, util::Loc & loc, basl::Token & token)
+    {
+      util::IdentTable & ident_table = util::getIdentTable ();
+      CharKind ch_kind = peekCharKind (m_reader);
+      bool found_lf = false;
+      bool ws_before = false;
+      // remaining hex digits in universal char
+      int num_hex_digits = 0;
+      for (bool found = false; ! found;)
+      {
+        loc = m_reader.getLocation ();
+        bool found_ws = false;
+        int state = S_START;
+        for (;;)
+        {
+          switch (state)
+          {
+            // start
+            case S_START:
+            {
+              switch (ch_kind)
+              {
+                // letter
+                case C_D:
+                case C_E:
+                case C_F:
+                case C_U:
+                case C_u:
+                case C_HEX_LETTER:
+                case C_LETTER:
+                {
+                  state = S_IDENT;
+                  break;
+                }
+                // l
+                case C_L:
+                {
+                  state = S_L;
+                  break;
+                }
+                // digit
+                case C_DIGIT:
+                {
+                  state = S_PP_NUMBER;
+                  break;
+                }
+                // dot
+                case C_DOT:
+                {
+                  state = S_DOT;
+                  break;
+                }
+                // '
+                case C_SQUOTE:
+                {
+                  state = S_CHAR_BEG;
+                  break;
+                }
+                // "
+                case C_DQUOTE:
+                {
+                  state = S_STRING;
+                  break;
+                }
+                // op
+                case C_OP:
+                {
+                  state = S_OP;
+                  break;
+                }
+                // #
+                case C_HASH:
+                {
+                  state = S_HASH;
+                  break;
+                }
+                // ! = * ^
+                case C_BANG:
+                case C_EQ:
+                case C_CARET:
+                case C_TIMES:
+                {
+                  state = S_BANG;
+                  break;
+                }
+                // <
+                case C_LT:
+                {
+                  if (lex_state != INCLUDE_LEX_STATE)
+                  {
+                    state = S_LT;
+                  }
+                  else
+                  {
+                    state = S_SYS_FILENAME;
+                  }
+                  break;
+                }
+                // >
+                case C_GT:
+                {
+                  state = S_GT;
+                  break;
+                }
+                // +
+                case C_PLUS:
+                {
+                  state = S_PLUS;
+                  break;
+                }
+                // -
+                case C_MINUS:
+                {
+                  state = S_MINUS;
+                  break;
+                }
+                // |
+                case C_BAR:
+                {
+                  state = S_BAR;
+                  break;
+                }
+                // &
+                case C_AMPERSAND:
+                {
+                  state = S_AMPERSAND;
+                  break;
+                }
+                // :
+                case C_COLON:
+                {
+                  state = S_COLON;
+                  break;
+                }
+                // %
+                case C_PERCENT:
+                {
+                  state = S_PERCENT;
+                  break;
+                }
+                // /
+                case C_DIVIDE:
+                {
+                  int next_ch_kind = peekCharKind (m_reader, 1);
+                  if (next_ch_kind == C_DIVIDE || next_ch_kind == C_TIMES)
+                  {
+                    state = S_COMMENT_BEG;
+                  }
+                  else
+                  {
+                    state = S_BANG;
+                  }
+                  break;
+                }
+                // white space
+                case C_WS:
+                {
+                  state = S_WS;
+                  break;
+                }
+                // backslash
+                case C_BACKSLASH:
+                {
+                  // check if start of universal char
+                  int next_ch_kind = peekCharKind (m_reader, 1);
+                  if (next_ch_kind == C_U || next_ch_kind == C_u)
+                  {
+                    state = S_IDENT_U_CHAR;
+                  }
+                  else
+                  {
+                    state = S_UNKNOWN;
+                  }
+                  break;
+                }
+                // non-whitespace characters not part of other another token
+                case C_OTHER:
+                {
+                  state = S_UNKNOWN;
+                  break;
+                }
+                // eof
+                case C_EOF:
+                {
+                  token = basl::Token (EOT, loc, util::Ident ("end of file"));
+                  found = true;
+                  break;
+                }
+                // new line
+                case C_LF:
+                {
+                  // read newline, but don't yet read next char on line! (#line will set wrong line number)
+                  char ch;
+                  m_reader.readChar (ch);
+                  found_lf = true;
+                  found = true;
+                  break;
+                }
+                // nac
+                case C_NAC:
+                {
+                  msg::invalidChar (loc);
+                  throw util::Exception ();
+                }
+              }
+              break;
+            }
+            // ident
+            case S_IDENT:
+            {
+              if (ch_kind > C_DIGIT)
+              {
+                if (ch_kind == C_BACKSLASH)
+                {
+                  // might be universal char
+                  int next_ch_kind = peekCharKind (m_reader, 1);
+                  if (next_ch_kind == C_U || next_ch_kind == C_u)
+                  {
+                    state = S_IDENT_U_CHAR;
+                  }
+                }
+                if (state == S_IDENT)
+                {
+                  util::Ident lexeme = ident_table.getIdent ();
+                  token = basl::Token (isPersistentMacro (lexeme) ? MACRO_TOKEN : IDENT_TOKEN, loc, lexeme);
+                  found = true;
+                }
+              }
+              break;
+            }
+            // universal char in ident
+            case S_IDENT_U_CHAR:
+            {
+              // 4 hex digits if 'u', 8 if 'U'
+              num_hex_digits = ch_kind == C_U ? 8 : 4;
+              state = S_IDENT_U_CHAR_HEX_COUNT;
+              break;
+            }
+            // counting chars in universal char
+            case S_IDENT_U_CHAR_HEX_COUNT:
+            {
+              if (ch_kind <= C_HEX_LETTER || ch_kind == C_DIGIT)
+              {
+                if (-- num_hex_digits == 0)
+                {
+                  state = S_IDENT; 
+                }
+              }
+              else
+              {
+                // insufficent hex digits
+                msg::invalidUniversalChar (loc);
+                // create identifier anyway or continue lexing identifier
+                if (ch_kind > C_DIGIT)
+                {
+                  util::Ident lexeme = ident_table.getIdent ();
+                  token = basl::Token (isPersistentMacro (lexeme) ? MACRO_TOKEN : IDENT_TOKEN, loc, lexeme);
+                  found = true;
+                }
+                else
+                {
+                  state = S_IDENT;
+                }
+              }
+              break;
+            }
+            // l
+            case S_L:
+            {
+              if (ch_kind == C_SQUOTE)
+              {
+                state = S_CHAR_BEG;
+              }
+              // can't have 'L' prefix with header file
+              else if (ch_kind == C_DQUOTE && lex_state != INCLUDE_LEX_STATE)
+              {
+                state = S_STRING;
+              }
+              else if (ch_kind <= C_DIGIT)
+              {
+                state = S_IDENT;
+              }
+              else
+              {
+                util::Ident lexeme = ident_table.getIdent ();
+                token = basl::Token (isPersistentMacro (lexeme) ? MACRO_TOKEN : IDENT_TOKEN, loc, lexeme);
+                found = true;
+              }
+              break;
+            }
+            // pp number
+            case S_PP_NUMBER:
+            {
+              if (ch_kind == C_E)
+              {
+                state = S_PP_NUMBER_E;
+              }
+              else if (ch_kind > C_DIGIT && ch_kind != C_DOT)
+              {
+                if (ch_kind == C_BACKSLASH)
+                {
+                  // might be universal char
+                  int next_ch_kind = peekCharKind (m_reader, 1);
+                  if (next_ch_kind == C_U || next_ch_kind == C_u)
+                  {
+                    state = S_PP_NUMBER_U_CHAR;
+                  }
+                }
+                if (state == S_PP_NUMBER)
+                {
+                  // not a non digit, digit nor start of universal char
+                  token = basl::Token (PP_NUMBER_TOKEN, loc, ident_table.getIdent ());
+                  found = true;
+                }
+              }
+              break;
+            }
+            // pp number followed by E or e
+            case S_PP_NUMBER_E:
+            {
+              if (ch_kind == C_E)
+              {
+                // stay in same state
+              }
+              else if (ch_kind <= C_MINUS || ch_kind == C_DOT)
+              {
+                // non digit, digit, sign or dot
+                state = S_PP_NUMBER;
+              }
+              else
+              {
+                token = basl::Token (PP_NUMBER_TOKEN, loc, ident_table.getIdent ());
+                found = true;
+              }
+              break;
+            }
+            // universal char in pp number
+            case S_PP_NUMBER_U_CHAR:
+            {
+              // 4 hex digits if 'u', 8 if 'U'
+              num_hex_digits = ch_kind == C_U ? 8 : 4;
+              state = S_PP_NUMBER_U_CHAR_HEX_COUNT;
+              break;
+            }
+            // counting chars in universal char
+            case S_PP_NUMBER_U_CHAR_HEX_COUNT:
+            {
+              if (ch_kind <= C_HEX_LETTER || ch_kind == C_DIGIT)
+              {
+                // hex letter or digit
+                if (-- num_hex_digits == 0)
+                {
+                  state = S_PP_NUMBER; 
+                }
+              }
+              else
+              {
+                // insufficent hex digits
+                msg::invalidUniversalChar (loc);
+                // try to continue lexing pp number or create a pp number token
+                if (ch_kind == C_E)
+                {
+                  state = S_PP_NUMBER_E;
+                }
+                else if (ch_kind <= C_DIGIT || ch_kind == C_DOT)
+                {
+                  // digit, non digit or dot
+                  state = S_PP_NUMBER;
+                }
+                else
+                {
+                  token = basl::Token (PP_NUMBER_TOKEN, loc, ident_table.getIdent ());
+                  found = true;
+                }
+              }
+              break;
+            }
+            // dot
+            case S_DOT:
+            {
+              if (ch_kind == C_DIGIT)
+              {
+                state = S_PP_NUMBER;
+              }
+              else if (ch_kind == C_DOT && peekCharKind (m_reader, 1) == C_DOT)
+              {
+                state = S_DOT_DOT;
+              }
+              else if (ch_kind == C_TIMES)
+              {
+                state = S_OP;
+              }
+              else
+              {
+                token = basl::Token (DOT_TOKEN, loc, ident_table.getIdent ());
+                found = true;
+              }
+              break;
+            }
+            // .. next . or %:% next :
+            case S_DOT_DOT:
+            {
+              state = S_OP;
+              break;
+            }
+            // #
+            case S_HASH:
+            {
+              if (ch_kind == C_HASH)
+              {
+                state = S_OP;
+              }
+              else
+              {
+                token = basl::Token (HASH_TOKEN, loc, ident_table.getIdent ());
+                found = true;
+              }
+              break;
+            }
+            // ! = * ^ /
+            case S_BANG:
+            {
+              if (ch_kind == C_EQ)
+              {
+                state = S_OP;
+              }
+              else
+              {
+                util::Ident lexeme = ident_table.getIdent ();
+                token = basl::Token (getOperKind (lexeme), loc, lexeme);
+                found = true;
+              }
+              break;
+            }
+            // op
+            case S_OP:
+            {
+              util::Ident lexeme = ident_table.getIdent ();
+              token = basl::Token (getOperKind (lexeme), loc, lexeme);
+              found = true;
+              break;
+            }
+            // <
+            case S_LT:
+            {
+              if (ch_kind == C_LT)
+              {
+                state = S_BANG;
+              }
+              else if (ch_kind == C_EQ || ch_kind == C_COLON || ch_kind == C_PERCENT)
+              {
+                state = S_OP;
+              }
+              else
+              {
+                token = basl::Token (LT_TOKEN, loc, ident_table.getIdent ());
+                found = true;
+              }
+              break;
+            }
+            // >
+            case S_GT:
+            {
+              if (ch_kind == C_GT)
+              {
+                state = S_BANG;
+              }
+              else if (ch_kind == C_EQ)
+              {
+                state = S_OP;
+              }
+              else
+              {
+                token = basl::Token (GT_TOKEN, loc, ident_table.getIdent ());
+                found = true;
+              }
+              break;
+            }
+            // +
+            case S_PLUS:
+            {
+              if (ch_kind == C_PLUS || ch_kind == C_EQ)
+              {
+                state = S_OP;
+              }
+              else
+              {
+                token = basl::Token (PLUS_TOKEN, loc, ident_table.getIdent ());
+                found = true;
+              }
+              break;
+            }
+            // -
+            case S_MINUS:
+            {
+              if (ch_kind == C_MINUS || ch_kind == C_EQ)
+              {
+                state = S_OP;
+              }
+              else if (ch_kind == C_GT)
+              {
+                state = S_ARROW;
+              }
+              else
+              {
+                token = basl::Token (MINUS_TOKEN, loc, ident_table.getIdent ());
+                found = true;
+              }
+              break;
+            }
+            // ->
+            case S_ARROW:
+            {
+              if (ch_kind == C_TIMES)
+              {
+                state = S_OP;
+              }
+              else
+              {
+                token = basl::Token (PTR_TOKEN, loc, ident_table.getIdent ());
+                found = true;
+              }
+              break;
+            }
+            // |
+            case S_BAR:
+            {
+              if (ch_kind == C_BAR || ch_kind == C_EQ)
+              {
+                state = S_OP;
+              }
+              else
+              {
+                token = basl::Token (BITOR_TOKEN, loc, ident_table.getIdent ());
+                found = true;
+              }
+              break;
+            }
+            // &
+            case S_AMPERSAND:
+            {
+              if (ch_kind == C_AMPERSAND || ch_kind == C_EQ)
+              {
+                state = S_OP;
+              }
+              else
+              {
+                token = basl::Token (BITAND_TOKEN, loc, ident_table.getIdent ());
+                found = true;
+              }
+              break;
+            }
+            // :
+            case S_COLON:
+            {
+              if (ch_kind == C_COLON || ch_kind == C_GT)
+              {
+                state = S_OP;
+              }
+              else
+              {
+                token = basl::Token (COLON_TOKEN, loc, ident_table.getIdent ());
+                found = true;
+              }
+              break;
+            }
+            // %
+            case S_PERCENT:
+            {
+              if (ch_kind == C_GT || ch_kind == C_EQ)
+              {
+                state = S_OP;
+              }
+              else if (ch_kind == C_COLON)
+              {
+                state = S_PERCENT_COLON;
+              }
+              else
+              {
+                token = basl::Token (MOD_TOKEN, loc, ident_table.getIdent ());
+                found = true;
+              }
+              break;
+            }
+            // %:
+            case S_PERCENT_COLON:
+            {
+              if (ch_kind == C_PERCENT && peekCharKind (m_reader, 1) == C_COLON)
+              {
+                state = S_DOT_DOT; 
+              }
+              else
+              {
+                token = basl::Token (HASH_TOKEN, loc, ident_table.getIdent ());
+                found = true;
+              }
+              break;
+            }
+            // char beg
+            case S_CHAR_BEG:
+            {
+              if (ch_kind == C_SQUOTE)
+              {
+                msg::emptyLiteralChar (loc);
+                // assume ' ' 
+                ident_table.push (' ');
+                state = S_CHAR_END;
+              }
+              else if (ch_kind == C_LF)
+              {
+                msg::newlineInLiteralChar (loc);
+                // assume ' '
+                ident_table.push (' ');
+                ident_table.push ('\'');
+                token = basl::Token (LITERAL_CHAR_TOKEN, loc, ident_table.getIdent ());
+                found = true;
+              }
+              else if (ch_kind == C_BACKSLASH)
+              {
+                state = S_CHAR_ESC; 
+              }
+              else
+              {
+                state = S_CHAR;
+              }
+              break;
+            }
+            // char
+            case S_CHAR:
+            {
+              if (ch_kind == C_LF)
+              {
+                msg::newlineInLiteralChar (loc);
+                // add missing end quote 
+                ident_table.push ('\'');
+                token = basl::Token (LITERAL_CHAR_TOKEN, loc, ident_table.getIdent ());
+                found = true;
+              }
+              else if (ch_kind == C_BACKSLASH)
+              {
+                state = S_CHAR_ESC;
+              }
+              else if (ch_kind == C_SQUOTE)
+              {
+                state = S_CHAR_END;
+              }
+              break;
+            }
+            // char escape
+            case S_CHAR_ESC:
+            {
+              // can't be newline
+              // accept any other character
+              state = S_CHAR;
+              break;
+            }
+            // char end
+            case S_CHAR_END:
+            {
+              token = basl::Token (LITERAL_CHAR_TOKEN, loc, ident_table.getIdent ());
+              found = true;
+              break;
+            }
+            // string
+            case S_STRING:
+            {
+              if (ch_kind == C_LF)
+              {
+                msg::newlineInLiteralString (loc);
+                // add mising end quote
+                ident_table.push ('\"');
+                util::Ident lexeme = ident_table.getIdent ();
+                int kind = LITERAL_STRING_TOKEN;
+                token = basl::Token (kind, loc, lexeme);
+                found = true;
+              }
+              else if (ch_kind == C_BACKSLASH)
+              {
+                state = S_STRING_ESC;
+              }
+              else if (ch_kind == C_DQUOTE)
+              {
+                state = S_STRING_END;
+              }
+              else
+              {
+                state = S_STRING;
+              }
+              break;
+            }
+            // string escape
+            case S_STRING_ESC:
+            {
+              // can't be newline
+              // accept any other character
+              state = S_STRING;
+              break;
+            }
+            // string end
+            case S_STRING_END:
+            {
+              util::Ident lexeme = ident_table.getIdent ();
+              int kind = LITERAL_STRING_TOKEN;
+              token = basl::Token (kind, loc, lexeme);
+              found = true;
+              break;
+            }
+            // system filename
+            case S_SYS_FILENAME:
+            {
+              if (ch_kind == C_LF)
+              {
+                msg::newlineInLiteralString (loc);
+                // add end '>'
+                ident_table.push ('>');
+                token = basl::Token (LITERAL_STRING_TOKEN, loc, ident_table.getIdent ());
+                found = true;
+              }
+              else if (ch_kind == C_GT)
+              {
+                state = S_STRING_END;
+              }
+              break;
+            }
+            // unknown
+            case S_UNKNOWN:
+            {
+              token = basl::Token (UNKNOWN_TOKEN, loc, ident_table.getIdent ());
+              found = true;
+              break;
+            }
+            // / next * or /
+            case S_COMMENT_BEG:
+            {
+              if (ch_kind == C_TIMES)
+              {
+                state = S_C_COMMENT_BEG;
+              }
+              else
+              {
+                state = S_CPP_COMMENT_BEG;
+              }
+              break;
+            }
+            // /* ...
+            case S_C_COMMENT_BEG:
+            {
+              state = S_C_COMMENT_BODY;
+              // fall through 
+            }
+            case S_C_COMMENT_BODY:
+            {
+              if (ch_kind == C_EOF)
+              {
+                msg::eofInCComment (loc);
+                // assume end
+                found_ws = true;
+              }
+              else if (ch_kind == C_TIMES && peekCharKind (m_reader, 1) == C_DIVIDE)
+              {
+                state = S_C_COMMENT_END;
+              }
+              break;
+            }
+            // /* ... * next /
+            case S_C_COMMENT_END:
+            {
+              state = S_WS;
+              break;
+            }
+            // // ...
+            case S_CPP_COMMENT_BEG:
+            {
+              state = S_CPP_COMMENT_BODY;
+              // fall through
+            }
+            case S_CPP_COMMENT_BODY:
+            {
+              if (ch_kind == C_LF)
+              {
+                found_ws = true;
+              }
+              break;
+            }
+            // white space
+            case S_WS:
+            {
+              if (ch_kind != C_WS)
+              {
+                found_ws = true;
+              }
+              break;
+            }
+          }
+          // break if found token (or newline) or whitespace
+          if (found)
+          {
+            break;
+          }
+          if (found_ws)
+          {
+            ws_before = true;
+            break;
+          }
+          // get next char
+          char ch;
+          m_reader.readChar (ch);
+          if (state <= S_UNKNOWN)
+          {
+            // push ident char
+            ident_table.push (ch);
+          }
+          ch_kind = peekCharKind (m_reader);
+        }
+      }
+      if (found_lf)
+      {
+        return false;
+      }
+      if (ws_before)
+      {
+        token.setSpaceBefore ();
+      }
+      return true;
+    }
+
+    // get next token
+    inline bool getNextToken (basl::Token & token)
+    {
+      util::Loc loc;
+      return getNextToken (NORMAL_LEX_STATE, loc, token);
+    }
+
+    // get next token
+    inline bool getNextToken (util::Loc & loc, basl::Token & token)
+    {
+      return getNextToken (NORMAL_LEX_STATE, loc, token);
+    }
+
+    // get next token
+    inline bool getNextToken (LexState lex_state, basl::Token & token)
+    {
+      util::Loc loc;
+      return getNextToken (lex_state, loc, token);
+    }
+
+    // get filename
+    inline util::Filename const & getFilename () const
+    {
+      return m_reader.getFilename ();
+    }
+
+    // set line
+    inline void setLine (int line)
+    {
+      m_reader.setLine (line);
+    }
+
+    // set line and filename
+    inline void setLine (int line, util::Filename const & filename)
+    {
+      m_reader.setLine (line, filename);
+    }
+
+    // pause
+    inline void pause ()
+    {
+      m_reader.pause ();
+    }
+  }
+}

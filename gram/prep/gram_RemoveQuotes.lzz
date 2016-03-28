@@ -1,0 +1,27 @@
+// gram_RemoveQuotes.lzz
+//
+// remove quotes from string literal lexeme
+//
+
+$hdr
+// util
+#include "util_String.h"
+#include "util_Ident.h"
+$end
+
+$src
+// std lib
+#include <cstring>
+$end
+
+// gram
+namespace gram
+{
+  // remove quotes from lexeme, return as string
+  util::String removeQuotes (util::Ident const & lexeme)
+  {
+    char const * str = lexeme.c_str ();
+    ++ str;
+    return util::String (str, strlen (str) - 1);
+  }
+}

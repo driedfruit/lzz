@@ -1,0 +1,61 @@
+// smtc_PtrType.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_CvType.h"
+#include "smtc_Type.h"
+$end
+
+$src
+// semantic
+#include "smtc_AppendCv.h"
+
+// util
+#include "util_AppendWithSpace.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // PtrType
+  class PtrType : public Type
+  {
+    // to type
+    CvType m_to_cv_type;
+
+  public:
+    // constructor
+    PtrType (CvType const & to_cv_type)
+      : m_to_cv_type (to_cv_type)
+    {
+    }
+
+    // destructor
+    ~ PtrType ()
+    {
+    }
+
+    // get kind
+    TypeKind getKind () const
+    {
+      return PTR_TYPE;
+    }
+
+    // to string
+    util::String toString (util::String const & dcl, bool c, bool v) const
+    {
+      util::String str;
+      str = '*';
+      appendCv (str, c, v);
+      util::appendWithSpace (str, dcl);
+      return m_to_cv_type.toString (str);
+    }
+
+    // get to cv type
+    inline CvType const & getToCvType () const
+    {
+      return m_to_cv_type;
+    }
+  }
+}

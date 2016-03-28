@@ -1,0 +1,39 @@
+// smtc_UsingDir.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_NamePtr.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // UsingDir
+  class UsingDir
+  {
+    // name
+    NamePtr m_name;
+
+  public:
+    // constructor
+    UsingDir (NamePtr const & name)
+      : m_name (name)
+    {
+    }
+
+    // destructor
+    ~ UsingDir ()
+    {      
+    }
+
+    // get name
+    inline NamePtr const & getName () const
+    {
+      return m_name;
+    }
+  }
+}

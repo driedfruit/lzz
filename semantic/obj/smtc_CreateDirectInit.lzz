@@ -1,0 +1,28 @@
+// smtc_CreateDirectInit.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_InitPtr.h"
+
+// gram
+#include "gram_BlockVector.h"
+
+// util
+#include "util_Loc.h"
+$end
+
+$src
+// semantic
+#include "smtc_DirectInit.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create direct init
+  InitPtr createDirectInit (util::Loc const & loc, gram::BlockVector const & block_set)
+  {
+    return new DirectInit (loc, block_set);
+  }
+}

@@ -1,0 +1,23 @@
+// smtc_CreateUsingDecl.lzz
+//
+
+$hdr
+// semantic
+#include "smtc_UsingDeclPtr.h"
+#include "smtc_NamePtr.h"
+$end
+
+$src
+// semantic
+#include "smtc_UsingDecl.h"
+$end
+
+// semantic
+namespace smtc
+{
+  // create using decl
+  UsingDeclPtr createUsingDecl (NamePtr const & name)
+  {
+    return new UsingDecl (name);
+  }
+}

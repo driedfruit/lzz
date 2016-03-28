@@ -1,0 +1,45 @@
+// smtc_ParamDecl.lzz
+//
+
+$hdr
+// navg
+#include "smtc_NamePtr.h"
+
+// util
+#include "util_String.h"
+$end
+
+$src
+$end
+
+// semantic
+namespace smtc
+{
+  // ParamDecl
+  class ParamDecl
+  {
+    // name
+    NamePtr m_name;
+
+  public:
+    // constructor
+    ParamDecl (NamePtr const & name)
+      : m_name (name)
+    {
+    }
+
+    // destructor
+    virtual ~ ParamDecl ()
+    {
+    }
+
+    // get dcl
+    NamePtr const & getName () const
+    {
+      return m_name;
+    }
+
+    // to string, is_decl true if param is declaration (has default arg)
+    virtual util::String toString (bool is_decl) const = 0;
+  }
+}
